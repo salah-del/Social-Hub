@@ -3,65 +3,6 @@ const MainPage = () => {
     return (
         <div>
             <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
-            <p>MainPage</p>
         </div>
     )
 }
