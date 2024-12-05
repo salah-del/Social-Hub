@@ -1,17 +1,18 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { LuEye, LuEyeOff } from "react-icons/lu";
-// import signUpBackground from "../assets/signUpBackground.webp";
 import Loader from "./../utils/Loader";
-import { Link } from "react-router-dom";
-
-const signUp = () => {
+import { Link, useNavigate } from "react-router-dom";
+import { API } from "../Api/Api";
+import axios from "axios";
+const SignUp = () => {
   const [values, setValues] = useState({
-    username: "",
+    name: "",
     email: "",
     password: "",
   });
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
   const toggleShowPassword = () => {
     setShowPassword((prev) => !prev);
   };
@@ -25,13 +26,13 @@ const signUp = () => {
   const validateForm = (values) => {
     const errors = {};
 
-    // Username Validation
-    if (!values.username) {
-      errors.username = "Username is required";
-    } else if (values.username.length < 3 || values.username.length > 20) {
-      errors.username = "Username must be between 3 and 20 characters";
-    } else if (!/^[a-zA-Z0-9]+$/.test(values.username)) {
-      errors.username = "Username can only contain letters and numbers";
+    // User Name Validation
+    if (!values.name) {
+      errors.name = "User Name is required";
+    } else if (values.name.length < 3 || values.name.length > 20) {
+      errors.name = "User Name must be between 3 and 20";
+    } else if (!/^[a-zA-Z0-9 ]+$/.test(values.name)) {
+      errors.name = "User Name can only contain letters, numbers, and spaces";
     }
 
     // Email Validation
@@ -53,21 +54,38 @@ const signUp = () => {
     return errors; // Returns an object with validation error messages
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validateForm(values);
+    console.log(Object.keys(validationErrors).length);
+
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors); // Show errors
+      return;
     } else {
+      setErrors(validationErrors);
       console.log("Form submitted:", values);
+    }
+
+    try {
+      const response = await axios.post(API.signup, values);
+      // navigate("/login");
+      console.log(response);
+    } catch (error) {
+      console.log(error);
     }
   };
 
+  // useEffect(() => {
+  //   setErrors(validateForm(values));
+
+  // }, [values]);
+
   return (
     <div className="w-full h-[calc(100vh-72px)] md:h-[calc(100vh-70px)] flex items-center justify-center">
-      <div className="bg-white p-4 sm:p-8 rounded-lg shadow-md border w-11/12 sm:w-[450px]">
+      <div className="bg-white p-4 sm:p-8 rounded-lg shadow-md border w-11/12 sm:w-[550px]">
         <h2 className="text-2xl font-bold text-center mb-2">
-          Create an Account444
+          Create an Account
         </h2>
         <p className="text-gray-600 text-center text-sm mb-6">
           Create your account by filling in the details below
@@ -76,23 +94,23 @@ const signUp = () => {
           <div className={`focus:border-main-color `}>
             <div className=" w-full  flex items-center justify-between  text-sm font-medium text-gray-700 ">
               <p className="mb-2">User Name:</p>
-              {errors.username && (
+              {errors.name && (
                 <p className="py-0.5 px-4 mb-1 bg-red-100 text-red-500 rounded-sm">
-                  {errors.username}
+                  {errors.name}
                 </p>
               )}
             </div>
             <input
               type="text"
-              name="username"
-              value={values.username}
+              name="name"
+              value={values.name}
               onChange={handleChange}
               className={`w-full p-2 outline-1 border-2 rounded-md bg-gray-50 ${
-                errors.username
+                errors.name
                   ? "outline-red-400 border-red-400"
                   : "focus:outline-gray-400"
               }  `}
-              placeholder="Enter your username"
+              placeholder="Enter your name"
             />
           </div>
           <div className={`focus:border-main-color `}>
@@ -114,7 +132,7 @@ const signUp = () => {
                   ? "outline-red-400 border-red-400"
                   : "focus:outline-gray-400"
               }  `}
-              placeholder="Enter your username"
+              placeholder="Enter your email"
             />
           </div>
 
@@ -144,7 +162,7 @@ const signUp = () => {
                 <button
                   type="button"
                   onClick={toggleShowPassword}
-                  className=" absolute top-1/2 -translate-y-1/2 right-2 "
+                  className=" absolute top-1/2 -translate-y-1/2 right-2 bg-[#f9fafb] p-2"
                 >
                   {showPassword && <LuEyeOff />}
                   {!showPassword && <LuEye />}
@@ -189,4 +207,4 @@ const signUp = () => {
   );
 };
 
-export default signUp;
+export default SignUp;
