@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LuEye, LuEyeOff } from "react-icons/lu";
 import { Link, useNavigate } from "react-router-dom";
 import { API } from "../../Api/Api";
@@ -9,16 +9,23 @@ const SignUp = () => {
     email: "",
     password: "",
   });
+  const handleChange = (e) => {
+    setValues({
+      ...values,
+      [e.target.name]: e.target.value,
+    });
+  };
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const toggleShowPassword = () => {
     setShowPassword((prev) => !prev);
   };
-  const handleChange = (e) => {
-    setValues({
-      ...values,
-      [e.target.name]: e.target.value,
+  const [touched, setTouched] = useState({});
+  const handleBlur = (e) => {
+    setTouched({
+      ...touched,
+      [e.target.name]: true,
     });
   };
 
@@ -62,23 +69,26 @@ const SignUp = () => {
       setErrors(validationErrors); // Show errors
       return;
     } else {
-      setErrors(validationErrors);
+      // setErrors(validationErrors);
       console.log("Form submitted:", values);
     }
 
     try {
       const response = await axios.post(API.signup, values);
-      // navigate("/login");
-      console.log(response);
+      console.log("Done");
+      // toast.success("تم التسجيل بنجاح!");
+      console.log("Response:", response.data);
+      navigate("/login");
     } catch (error) {
-      console.log(error);
+      console.log("Error");
+      console.error("Error:", error.response || error.message);
+      toast.error(error.response?.data?.message || "حدث خطأ ما، حاول لاحقًا!");
     }
   };
 
-  // useEffect(() => {
-  //   setErrors(validateForm(values));
-
-  // }, [values]);
+  useEffect(() => {
+    setErrors(validateForm(values));
+  }, [values]);
 
   return (
     <div className="w-full h-[calc(100vh-72px)] md:h-[calc(100vh-70px)] flex items-center justify-center">

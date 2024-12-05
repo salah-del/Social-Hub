@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import LazyImage from '../../Utils/LazyImage';
 
 const HeroSection = () => {
-    // This is edit test
     return (
         <div  className='relative overflow-y-hidden h-[calc(100vh-72px)] md:h-[calc(100vh-70px)] max-md:justify-between flex flex-col gap-16 pt-16 w-full bg-contain md:bg-cover bg-center  '>
             <div className='flex flex-col gap-10 items-center justify-center w-full'>
