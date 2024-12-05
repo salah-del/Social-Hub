@@ -1,46 +1,44 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
 import React, { lazy, Suspense } from "react";
-import Loader from "./utils/Loader";
-import Navbar from "./Components/layout/Navbar/Navbar";
+import { useSelector } from "react-redux";
+import { Navigate, Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import Footer from "./Components/layout/Footer";
-import MainPage from "./Pages/MainPage";
-import ProtectedRoute from "./Pages/ProtectedRoute";
+import LandingPageLayout from "./Pages/LandingPage/LandingPageLayout";
+import Loader from "./Utils/Loader";
 
-const LandingPage = lazy(() => import('./Pages/LandingPage') );
-const About = lazy(() => import('./Pages/About') );
-const Login = lazy(() => import('./Pages/Login') );
-const SignUp = lazy(() => import('./Pages/SignUp') );
-
-
-const routes = [
-  {path:'/', element: <LandingPage />, isProtected: false,loader: <div className="w-full h-screen flex items-center justify-center"><Loader /></div>},
-  {path:'/login', element: <Login />, isProtected: false,loader: <div className="w-full h-screen flex items-center justify-center"><Loader /></div>},
-  {path:'/signup', element: <SignUp />, isProtected: false,loader: <div className="w-full h-screen flex items-center justify-center"><Loader /></div>},
-  {path:'*', element: <h1>Not Found</h1>, isProtected: false,loader: <div className="w-full h-screen flex items-center justify-center"><Loader /></div>},
-  {path:'/about', element: <About />, isProtected: true,loader: <div className="w-full h-screen flex items-center justify-center"><Loader /></div>},
-  {path:'/mainPage', element: <MainPage />, isProtected: true,loader: <div className="w-full h-screen flex items-center justify-center"><Loader /></div>},
-]
-
+const LandingPage = lazy(() => import('./Pages/LandingPage/LandingPage'));
+const About = lazy(() => import('./Pages/About'));
+const Login = lazy(() => import('./Pages/LandingPage/Login'));
+const SignUp = lazy(() => import('./Pages/LandingPage/SignUp'));
+const MainPage = lazy(() => import('./Pages/MainPage'));
 
 function App() {
+  // get user from redux
+  const user = useSelector((state) => state.user.user); 
+  const isAuthenticated = user ? true : false ; // if user has value (isAuth = true) else (isAuth = false)
   return (
     <Router>
       <div className="flex flex-col min-h-screen">
-        <Navbar />
         <main className="flex-grow">
+          <Suspense fallback={<div className="w-full h-screen flex items-center justify-center"><Loader /></div>}>
             <Routes>
-              {
-                routes.map(({ path, element, isProtected ,loader}) => (
-                    <Route key={path} path={path} element={
-                      
-                      <Suspense fallback={loader}>
-                        {isProtected ? element : <ProtectedRoute>{element}</ProtectedRoute>}
-                      </Suspense>
-                    } />
-                  ))
-              }
+              {/* Redirect to MainPage if already logged in */}
+              <Route path="/" element={isAuthenticated ? <Navigate to="/mainPage" replace /> : <LandingPageLayout />}>
+                
+                <Route index element={isAuthenticated ? <Navigate to="/mainPage" replace /> : <LandingPage />} />
+                <Route path="/login" element={isAuthenticated ? <Navigate to="/mainPage" replace /> : <Login />} />
+                <Route path="/signup" element={isAuthenticated ? <Navigate to="/mainPage" replace /> : <SignUp />} />
+              
+              </Route>
+              
+              {/* Public routes */}
+              
+              {/* Protected route */}
+              <Route path="/mainPage" element={isAuthenticated ? <MainPage /> : <Navigate to="/login" replace />} />
+              
+              {/* Fallback for unknown routes */}
+              <Route path="*" element={<h1>Not Found</h1>} />
             </Routes>
+          </Suspense>
         </main>
         <Footer />
       </div>

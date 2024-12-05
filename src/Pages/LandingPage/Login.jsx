@@ -1,7 +1,10 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { LuEye, LuEyeOff } from "react-icons/lu";
 // import loginBackground from "../assets/loginBackground.webp";
-import Loader from './../utils/Loader';
+import Loader from '../../Utils/Loader';
+import { Link, Navigate } from 'react-router-dom';
+import { loginUser } from '../../Redux/slices/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 const  Login = () => {
@@ -9,9 +12,10 @@ const  Login = () => {
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [usernameError, setUsernameError] = useState('')
-    const [passwordError, setPasswordError] = useState('')
-    
-    
+    const [passwordError, setPasswordError] = useState('');
+
+    const {user, status, error} = useSelector((state) => state.user);
+    const dispatch = useDispatch();
     const handleSubmit = ((e) => {
         e.preventDefault();
         let valid = true ;
@@ -20,10 +24,9 @@ const  Login = () => {
         if (valid) { 
             // login
             console.log("Fine");
-            
+            dispatch(loginUser({name: username, password: password}))
         }
     });
-    
     
     const changeusername = (e) => { 
         setUsername(e.target.value);
@@ -31,7 +34,7 @@ const  Login = () => {
     const changePassword = (e) => { 
         setPassword(e.target.value);
     }
-
+    
     const checkIfUsernameValid = useCallback(() => { 
         
         if (!username){
@@ -52,11 +55,14 @@ const  Login = () => {
         setPasswordError("");
         return true ;
     }, [password])
-
+    
     const toggleShowPassword = () => { 
         setShowPassword(prev => !prev);
     }
     
+    
+    if (user && !error)
+        return <Navigate to={'/mainPage'} replace />
     
     return (
         <div className="w-full h-[calc(100vh-72px)] md:h-[calc(100vh-70px)] flex items-center justify-center">
@@ -117,16 +123,18 @@ const  Login = () => {
                         </a>
                     </div> */}
                     
-                    {<button
+                    {status !== 'loading' && <button
                         type="submit"
-                        className={`w-full bg-sec-color text-white border-[1px] border-main-color py-2 rounded-md hover:bg-main-color trans `}
+                        className={`w-full bg-main-color text-white border-[1px] border-main-color py-2 rounded-md hover:bg-sec-color hover:border-sec-color trans `}
                     >
                         Login
                     </button>}
-                    {/* {<div className='w-full justify-center h-[41px] mt-[16px] flex items-center'>
+                    {status === 'loading' && <div className='w-full justify-center h-[41px] mt-[16px] flex items-center'>
                         <Loader /> 
-                    </div>} */}
+                    </div>}
+
                 </form>
+                <Link to={'/signup'} className='flex  items-center justify-center text-sec-color mt-2 underline hover:no-underline w-full'>Already have an account?</Link>
                 
             </div>
         </div>
