@@ -1,7 +1,9 @@
-const Loader = () => {
+import { memo } from "react"
+
+const Loader = memo(({width}) => {
     return (
-        <img src="/public/loadingSpinner.svg" alt="Loading..." className="w-10" />
+        <img src="/public/loader.svg" alt="Loading..." style={{width: width ? width : "40px"}} />
     )
-}
+})
 
 export default Loader

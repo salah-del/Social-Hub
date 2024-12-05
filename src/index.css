@@ -6,6 +6,9 @@
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
+
+  --main-color : #DC3237;
+  --sec-color : #EB585C;
 }
 
 body {
@@ -14,12 +17,9 @@ body {
   min-height: 100vh;
 }
 
-@layer components {
-  .btn-primary {
-    @apply bg-primary text-white px-4 py-2 rounded-md hover:bg-opacity-90 transition-colors;
-  }
-  
-  .btn-secondary {
-    @apply bg-secondary text-white px-4 py-2 rounded-md hover:bg-opacity-90 transition-colors;
+@layer base { 
+  .trans { 
+    @apply transition-all duration-200;
   }
 }
+
