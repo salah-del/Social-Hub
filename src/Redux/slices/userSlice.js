@@ -4,33 +4,34 @@ import { API } from "../../Api/Api";
 
 export const loginUser = createAsyncThunk(
     'user/loginUser',
-    async ({ name, password }, { rejectWithValue }) => {
+async ({ name, password }, { rejectWithValue }) => {
+        console.log(name, password)
         try {
-        const response = await axios.post(API.signin, { name, password });
+            const response = await axios.post(API.signin, { name, password });
 
-        // If backend returns error status code (e.g., 400 or 401), manually throw an error
-        // to excute loginUser.rejected 
-        if (response.status !== 200) {
-            throw new Error(response.data.message || 'Something went wrong with the backend.');
-        }
-        return response.data; // Return the data if everything is fine
+            // If backend returns error status code (e.g., 400 or 401), manually throw an error
+            // to excute loginUser.rejected 
+            if (response.status !== 200) {
+                throw new Error(response.data.message || 'Something went wrong with the backend.');
+            }
+            return response.data; // Return the data if everything is fine
         } catch (error) {
         // Handle network errors (e.g., no connection, server is down)
-        if (!error.response) {
-            console.error('Network error:', error.message);
-            return rejectWithValue('Network error, please check your connection and try again.');
-        }
+            if (!error.response) {
+                console.error('Network error:', error.message);
+                return rejectWithValue('Network error, please check your connection and try again.');
+            }
 
-        // Handle backend errors (e.g., wrong email/password)
-        if (error.response?.data) {
-            console.error('Backend error:', error.response.data);
-            return rejectWithValue(error.response.data.message || 'Something went wrong with the backend.');
-        }
+            // Handle backend errors (e.g., wrong email/password)
+            if (error.response?.data) {
+                console.error('Backend error:', error.response.data);
+                return rejectWithValue(error.response.data.message || 'Something went wrong with the backend.');
+            }
 
-        // Fallback for other types of errors
-        console.error('Unexpected error:', error.message);
-        return rejectWithValue(error.message || 'An unexpected error occurred.');
-        }
+            // Fallback for other types of errors
+            console.error('Unexpected error:', error.message);
+            return rejectWithValue(error.message || 'An unexpected error occurred.');
+            }
     }
 );
 
@@ -70,7 +71,6 @@ const userSlice = createSlice({
         })
         .addCase(loginUser.rejected, (state, action) => {
             state.status = "failed";
-            console.log("Enter reject ",action);
             state.error = action.payload;
         })
         .addCase(logUserOut.pending, (state) => {

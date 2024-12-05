@@ -1,19 +1,23 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { LuEye, LuEyeOff } from "react-icons/lu";
-// import loginBackground from "../assets/loginBackground.webp";
-import Loader from '../../Utils/Loader';
-import { Link, Navigate } from 'react-router-dom';
-import { loginUser } from '../../Redux/slices/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { loginUser } from '../../Redux/slices/userSlice';
+import Loader from '../../Utils/Loader';
 
 
 const  Login = () => {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+    const [inputs, setInputs] = useState({
+        name: '',
+        password: '',
+    })
+    const [errors, setErrors] = useState({
+        nameError: '',
+        passwordError: '',
+    })
+    
     const [showPassword, setShowPassword] = useState(false);
-    const [usernameError, setUsernameError] = useState('')
-    const [passwordError, setPasswordError] = useState('');
-
+    
     const {user, status, error} = useSelector((state) => state.user);
     const dispatch = useDispatch();
     const handleSubmit = ((e) => {
@@ -23,106 +27,86 @@ const  Login = () => {
         if (!checkIfPasswordValid() ) valid = false ;
         if (valid) { 
             // login
-            console.log("Fine");
-            dispatch(loginUser({name: username, password: password}))
+            console.log("Working Fine");
+            dispatch(loginUser({name: inputs.name, password: inputs.password}))
         }
     });
     
-    const changeusername = (e) => { 
-        setUsername(e.target.value);
-    }
-    const changePassword = (e) => { 
-        setPassword(e.target.value);
+    const handleInputsChange = (e) => { 
+        setInputs({...inputs, [e.target.name]: e.target.value });
     }
     
     const checkIfUsernameValid = useCallback(() => { 
         
-        if (!username){
-            setUsernameError("Please enter your username");
+        if (!inputs.name){
+            setErrors({...errors, nameError:"Please enter your username"});
             return false;
         }
-        setUsernameError("");
+        setErrors({});
         return true ;
-    }, [username])
+    }, [inputs])
     
     const checkIfPasswordValid = useCallback(() => { 
         
-        if (!password) { 
-            setPasswordError("Please enter your password");
+        if (!inputs.password) { 
+            setErrors({...errors, passwordError:"Please enter your password"});
             return false;
         }
-        
-        setPasswordError("");
+        setErrors({});
         return true ;
-    }, [password])
+    }, [inputs])
     
     const toggleShowPassword = () => { 
         setShowPassword(prev => !prev);
     }
     
     
-    if (user && !error)
-        return <Navigate to={'/mainPage'} replace />
     
     return (
         <div className="w-full h-[calc(100vh-72px)] md:h-[calc(100vh-70px)] flex items-center justify-center">
         
-            <div className="bg-white p-4 sm:p-8 rounded-lg shadow-md border w-11/12 sm:w-[450px]">
+            <div className="bg-white p-4 sm:p-8 rounded-lg shadow-md border w-11/12 sm:w-[550px]">
                 <h2 className="text-2xl font-bold text-center mb-2">Login to Account</h2>
                 <p className="text-gray-600 text-center text-sm mb-6">
                     Please enter your username and password to continue
                 </p>
-                
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div className={`focus:border-main-color `}>
                         <div className=" w-full  flex items-center justify-between  text-sm font-medium text-gray-700 ">
                         <p className='mb-2'>User name:</p>
-                        {usernameError && <p className='py-0.5 px-4 mb-1 bg-red-100 text-red-500 rounded-sm'>{usernameError}</p>}
+                        {errors.nameError && <p className='py-0.5 px-4 mb-1 bg-red-100 text-red-500 rounded-sm'>{errors.nameError}</p>}
                         </div>
                         <input
                             type="text"
-                            value={username}
-                            onChange={changeusername}
-                            className={`w-full p-2 outline-1 border-2 rounded-md bg-gray-50 ${usernameError ? "outline-red-400 border-red-400" : "focus:outline-gray-400"}  `}
+                            name='name'
+                            value={inputs.name}
+                            onChange={handleInputsChange}
+                            className={`w-full p-2 outline-1 border-2 rounded-md bg-gray-50 ${errors.nameError ? "outline-red-400 border-red-400" : "focus:outline-gray-400"}  `}
                             placeholder="Enter your username"
-                        />
+                            />
                     </div>
-                    
                     <div className=''>
                         <div className="flex w-full items-center justify-between text-sm font-medium text-gray-700 ">
                         <p className='mb-2'>Password:</p>
-                        {passwordError && <p className='py-0.5 px-4 mb-1 bg-red-100 text-red-500 rounded-sm'>{passwordError}</p>}
+                        {errors.passwordError && <p className='py-0.5 px-4 mb-1 bg-red-100 text-red-500 rounded-sm'>{errors.passwordError}</p>}
                         </div>
                         <div className='relative'>
                         <input
                             type={showPassword ? "text" :"password"}
+                            name='password'
                             placeholder='• • • • • • • • •'
-                            value={password}
-                            onChange={changePassword}
-                            className={`w-full relative p-2 outline-1 border-2 rounded-md bg-gray-50 ${passwordError ? "outline-red-400 border-red-400" : "focus:outline-gray-400"} `}
+                            value={inputs.password}
+                            onChange={handleInputsChange}
+                            className={`w-full relative p-2 outline-1 border-2 rounded-md bg-gray-50 ${errors.passwordError ? "outline-red-400 border-red-400" : "focus:outline-gray-400"} `}
                             
                         />
-                        {password.length > 0 &&<button type='button' onClick={toggleShowPassword} className=' absolute top-1/2 -translate-y-1/2 right-2 '>
+                        {inputs.password.length > 0 &&<button type='button' onClick={toggleShowPassword} className='bg-gray-50 w-10 flex justify-end absolute top-1/2 -translate-y-1/2 right-2 '>
                             {showPassword && <LuEyeOff />}
                             {!showPassword && <LuEye />}
                         </button>}
                         
                         </div>
                     </div>
-                    
-                    {/* <div className="flex items-center justify-between ">
-                        <label className="flex items-center text-sm text-gray-600 cursor-pointer select-none">
-                        <input
-                            type="checkbox"
-                            className="mr-1 mt-0.5 cursor-pointer"
-                        />
-                        Remember me
-                        </label>
-                        <a href="#" className="text-sm text-blue-500 hover:underline">
-                        Forget Password?
-                        </a>
-                    </div> */}
-                    
                     {status !== 'loading' && <button
                         type="submit"
                         className={`w-full bg-main-color text-white border-[1px] border-main-color py-2 rounded-md hover:bg-sec-color hover:border-sec-color trans `}
@@ -134,7 +118,12 @@ const  Login = () => {
                     </div>}
 
                 </form>
-                <Link to={'/signup'} className='flex  items-center justify-center text-sec-color mt-2 underline hover:no-underline w-full'>Already have an account?</Link>
+                <p className="text-gray-600 mt-4 text-center">
+                    Create a new account?{" "}
+                    <Link to="/signup" className="text-main-color hover:underline">
+                        Sign up
+                    </Link>
+                </p>
                 
             </div>
         </div>
