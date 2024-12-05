@@ -52,4 +52,5 @@ export const API = {
   sendMasgageToChatGPT: `${BASE_URL}/chatRoutes/chatBot`,
   /* ======= Owners ======= */
   /* ======= Premium ======= */
+  /* ======= Test 222 ======= */
 };
