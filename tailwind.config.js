@@ -5,6 +5,7 @@ export default {
       colors: {
         "main-color": "var(--main-color)",
         "sec-color": "var(--sec-color)",
+        "third-color": "var(--third-color)",
       },
     },
   },

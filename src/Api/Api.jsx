@@ -1,4 +1,4 @@
-export const BASE_URL = `http://localhost:8800/api`;
+export const BASE_URL = `http://localhost:5173/api`;
 
 export const API = {
   /* ======= Authentication ======= */
