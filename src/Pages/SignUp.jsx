@@ -22,8 +22,6 @@ const SignUp = () => {
     setShowPassword((prev) => !prev);
   };
   const [touched, setTouched] = useState({});
-
-  // عند التفاعل مع أي حقل
   const handleBlur = (e) => {
     setTouched({
       ...touched,
