@@ -4,40 +4,25 @@ export const API = {
   /* ======= Authentication ======= */
   signup: `${BASE_URL}/auth/signup`,
   signin: `${BASE_URL}/auth/signin`,
-
-
-
-
-  /* ======= User ======= */
-  showUsers: `${BASE_URL}/user/show`,
-  createUser: `${BASE_URL}/user/create`,
-  getUser: `${BASE_URL}/user/showbyid`,
-  updateUser: `${BASE_URL}/user/update`,
-  deleteUser: `${BASE_URL}/user/delete`,
-  /* ======= Product ======= */
-  showProducts: `${BASE_URL}/product/show`,
-  createProduct: `${BASE_URL}/product/create`,
-  getProduct: `${BASE_URL}/product/showbyid`,
-  updateProduct: `${BASE_URL}/product/update`,
-  deleteProduct: `${BASE_URL}/product/delete`,
-  /* ======= Category ======= */
-  getAllCategories: `${BASE_URL}/category/`,
-  addCategory: `${BASE_URL}/category/`,
-  updateCategory: `${BASE_URL}/category/`,
-  deleteCategory: `${BASE_URL}/category/`,
-  getSpecificCategory: `${BASE_URL}/category/`,
-  /* ======= subcategory ======= */
-  getAllSubcategories: `${BASE_URL}/subcategory/`,
-  addSubcategory: `${BASE_URL}/subcategory/`,
-  updateSubcategory: `${BASE_URL}/subcategory/`,
-  deleteSubcategory: `${BASE_URL}/subcategory/`,
-  getSpecificSubcategory: (subcategoryId) => `${BASE_URL}/subcategory/${subcategoryId}`,
-  getAllSubcategoriesForSpecificCategory: (categoryId) =>  `${BASE_URL}/category/${categoryId}/subcategories/`,
-  /* ======= Orders ======= */
-  showOrders: `${BASE_URL}/order/show`,
-  createOrder: `${BASE_URL}/order/create`,
-  getOrder: `${BASE_URL}/order/showbyid`,
-  updateOrder: `${BASE_URL}/order/update`,
-  deleteOrder: `${BASE_URL}/order/delete`,
-
+  /* ======= Posts ======= */
+  addPost: `${BASE_URL}/routPost`,
+  deletePost: `${BASE_URL}/routPost`, //     /:idPost
+  getPosts: `${BASE_URL}/routPost/random`, //     /:idUser
+  updatePost: `${BASE_URL}/routPost`, //     /:idPost
+  likePost: (idPost) => `${BASE_URL}/routPost/${idPost}/like`,
+  dislikePost: (idPost) => `${BASE_URL}/routPost/${idPost}/dislike`,
+  copyUrlForPost: (idPost) => `${BASE_URL}/routPost/${idPost}/copyUrl`,
+  savePost: `${BASE_URL}/routPost/savePost`, //     /:idPost
+  unsavePost: `${BASE_URL}/routPost/unsavePost`, //     /:idPost
+  /* ======= Comments ======= */
+  addComment: `${BASE_URL}/comments`,
+  replyComment: `${BASE_URL}/comments`,
+  getComments: `${BASE_URL}/comments`, //     /:idPost
+  deleteComment: `${BASE_URL}/comments`, //     /:idComment
+  /* ======= Notifications ======= */
+  showNotifications: `${BASE_URL}/notification`, //     /:idUser
+  /* ======= Communities ======= */
+  addCommunity: `${BASE_URL}/communities/create`,
+  inviteToCommunity: `${BASE_URL}/communities/invite`,
+  acceptInvitation: `${BASE_URL}/communities/accept-invitation`,
 };
