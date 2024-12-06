@@ -12,9 +12,11 @@ import Loader from "./Utils/Loader";
 import toast, { Toaster } from "react-hot-toast";
 const LandingPage = lazy(() => import("./Pages/LandingPage/LandingPage"));
 const About = lazy(() => import("./Pages/About"));
-const Login = lazy(() => import("./Pages/LandingPage/Login"));
-const SignUp = lazy(() => import("./Pages/LandingPage/SignUp"));
-const MainPage = lazy(() => import("./Pages/MainPage"));
+const Login = lazy(() => import("./Pages/Auth/Login"));
+const SignUp = lazy(() => import("./Pages/Auth/SignUp"));
+const MainPageLayout = lazy(() => import("./Pages/MainWebsite/MainPageLayout"));
+const MainPage = lazy(() => import("./Pages/MainWebsite/MainPage"));
+const Trends = lazy(() => import("./Pages/MainWebsite/Trends"));
 
 function App() {
   const handleClick = () => {
@@ -36,7 +38,9 @@ function App() {
             }
           >
             <Routes>
-              {/* Redirect to MainPage if already logged in */}
+
+              
+              {/* Start of landing page routes (landingPage, login, signUp) */}
               <Route
                 path="/"
                 element={
@@ -78,11 +82,12 @@ function App() {
                   }
                 />
               </Route>
+              {/* End of landing page routes */}
 
-              {/* Public routes */}
+              
 
-              {/* Protected route */}
-              <Route
+              {/* Protected layout (main website) */}
+              {/* <Route
                 path="/mainPage"
                 element={
                   isAuthenticated ? (
@@ -91,7 +96,18 @@ function App() {
                     <Navigate to="/login" replace />
                   )
                 }
-              />
+              /> */}
+              <Route
+                path="/mainPage"
+                element={(
+                    <MainPageLayout />
+                  ) 
+                }
+              >
+                <Route index element={<MainPage />} />
+                <Route path={'trends'} element={<Trends />} />
+
+              </Route>
 
               {/* Fallback for unknown routes */}
               <Route path="*" element={<h1>Not Found</h1>} />
@@ -99,7 +115,7 @@ function App() {
           </Suspense>
         </main>
         <Footer />
-        <button onClick={handleClick}>اضغط هنا</button>
+        {/* <button onClick={handleClick}>اضغط هنا</button> */}
         <Toaster />
       </div>
     </Router>

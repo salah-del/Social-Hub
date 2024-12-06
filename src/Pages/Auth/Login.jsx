@@ -22,12 +22,8 @@ const  Login = () => {
     const dispatch = useDispatch();
     const handleSubmit = ((e) => {
         e.preventDefault();
-        let valid = true ;
-        if (!checkIfUsernameValid() ) valid = false ;
-        if (!checkIfPasswordValid() ) valid = false ;
-        if (valid) { 
+        if (checkIfInputsValid()) { 
             // login
-            console.log("Working Fine");
             dispatch(loginUser({name: inputs.name, password: inputs.password}))
         }
     });
@@ -36,25 +32,27 @@ const  Login = () => {
         setInputs({...inputs, [e.target.name]: e.target.value });
     }
     
-    const checkIfUsernameValid = useCallback(() => { 
-        
-        if (!inputs.name){
-            setErrors({...errors, nameError:"Please enter your username"});
-            return false;
+    const checkIfInputsValid = useCallback(() => { 
+        let isValid = true ; 
+        if (!inputs.name && !inputs.password) {
+            setErrors({ passwordError: "Please enter your password", nameError:"Please enter your username"});
+            isValid = false ;
         }
-        setErrors({});
-        return true ;
+        else if (!inputs.name) { 
+            setErrors({...errors, nameError:"Please enter your name"});
+            isValid = false ;
+        }
+        else if (!inputs.password) { 
+            setErrors({...errors, passwordError:"Please enter your password"});
+            isValid = false ;
+        }
+        if (isValid) { 
+            setErrors({});
+            return true
+        }
+        return false ;
     }, [inputs])
     
-    const checkIfPasswordValid = useCallback(() => { 
-        
-        if (!inputs.password) { 
-            setErrors({...errors, passwordError:"Please enter your password"});
-            return false;
-        }
-        setErrors({});
-        return true ;
-    }, [inputs])
     
     const toggleShowPassword = () => { 
         setShowPassword(prev => !prev);

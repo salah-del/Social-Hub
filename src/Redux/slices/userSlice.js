@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { API } from "../../Api/Api";
+import { showToast } from "../../Utils/showToast";
 
 export const loginUser = createAsyncThunk(
     'user/loginUser',
@@ -14,11 +15,13 @@ async ({ name, password }, { rejectWithValue }) => {
             if (response.status !== 200) {
                 throw new Error(response.data.message || 'Something went wrong with the backend.');
             }
+
             return response.data; // Return the data if everything is fine
         } catch (error) {
         // Handle network errors (e.g., no connection, server is down)
             if (!error.response) {
                 console.error('Network error:', error.message);
+                
                 return rejectWithValue('Network error, please check your connection and try again.');
             }
 
@@ -30,7 +33,7 @@ async ({ name, password }, { rejectWithValue }) => {
 
             // Fallback for other types of errors
             console.error('Unexpected error:', error.message);
-            return rejectWithValue(error.message || 'An unexpected error occurred.');
+                return rejectWithValue(error.message || 'An unexpected error occurred.');
             }
     }
 );
@@ -67,11 +70,13 @@ const userSlice = createSlice({
         .addCase(loginUser.fulfilled, (state, action) => {
             state.user = action.payload;
             state.status = "succeeded";
+            showToast("success", "User successfully logged in");
             
         })
         .addCase(loginUser.rejected, (state, action) => {
             state.status = "failed";
             state.error = action.payload;
+            showToast("error", action.payload);
         })
         .addCase(logUserOut.pending, (state) => {
             state.status = "loading";

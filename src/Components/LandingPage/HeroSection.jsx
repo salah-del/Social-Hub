@@ -12,7 +12,7 @@ const HeroSection = () => {
                     <Link to={'/signup'} type="button" className="text-white bg-sec-color font-medium rounded-md  px-6 py-3 text-center text-sm hover:bg-main-color trans w-fit mx-auto">Get started</Link>
                 </div>
             </div>
-            <LazyImage  style={{boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px"}} src="/public/testHero.png" alt="heroIMG" className=' rounded-t-md w-3/4 sm:w-[60%] border-2    mx-auto  border-b-0 shadow-[0px_7px_29px_0px_rgba(0, 0, 0, 1)]' loader={<div className='w-3/4 sm:w-[60%] h-60 md:h-96 bg-gray-100 mx-auto rounded-md  animate-pulse' />} />
+            <LazyImage  style={{boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px"}} src="/src/assets/testHero.png" alt="heroIMG" className=' rounded-t-md w-3/4 sm:w-[60%] border-2    mx-auto  border-b-0 shadow-[0px_7px_29px_0px_rgba(0, 0, 0, 1)]' loader={<div className='w-3/4 sm:w-[60%] h-60 md:h-96 bg-gray-100 mx-auto rounded-md  animate-pulse' />} />
         </div>
     )
 }
