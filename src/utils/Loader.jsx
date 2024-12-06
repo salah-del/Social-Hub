@@ -2,7 +2,7 @@ import { memo } from "react"
 
 const Loader = memo(({width}) => {
     return (
-        <img src="/public/loader.svg" alt="Loading..." style={{width: width ? width : "40px"}} />
+        <img src="/src/assets/loader.svg" alt="Loading..." style={{width: width ? width : "40px"}} />
     )
 })
 
