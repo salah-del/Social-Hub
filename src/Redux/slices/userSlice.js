@@ -24,7 +24,7 @@ async ({ name, password }, { rejectWithValue }) => {
 
             // Handle backend errors (e.g., wrong email/password)
             if (error.response?.data) {
-                console.error('Backend error:', error.response.data);
+                // console.error('Backend error:', error.response.data);
                 return rejectWithValue(error.response.data.message || 'Something went wrong with the backend.');
             }
 
