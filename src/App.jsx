@@ -9,24 +9,20 @@ import {
 import Footer from "./Components/layout/Footer";
 import LandingPageLayout from "./Pages/LandingPage/LandingPageLayout";
 import Loader from "./Utils/Loader";
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 const LandingPage = lazy(() => import("./Pages/LandingPage/LandingPage"));
 const About = lazy(() => import("./Pages/About"));
-const Login = lazy(() => import("./Pages/LandingPage/Login"));
-const SignUp = lazy(() => import("./Pages/LandingPage/SignUp"));
+const Login = lazy(() => import("./Pages/Auth/Login"));
+const SignUp = lazy(() => import("./Pages/Auth/SignUp"));
 const MainPage = lazy(() => import("./Pages/MainPage"));
 
 function App() {
-  const handleClick = () => {
-    toast.success("تم النقر على الزر بنجاح!");
-  };
   // get user from redux
   const user = useSelector((state) => state.user.user);
   const isAuthenticated = user ? true : false; // if user has value (isAuth = true) else (isAuth = false)
   return (
     <Router>
       <div className="flex flex-col min-h-screen">
-        
         <main className="flex-grow">
           <Suspense
             fallback={
@@ -99,7 +95,6 @@ function App() {
           </Suspense>
         </main>
         <Footer />
-        <button onClick={handleClick}>اضغط هنا</button>
         <Toaster />
       </div>
     </Router>
