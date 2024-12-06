@@ -22,6 +22,7 @@ const  Login = () => {
     const dispatch = useDispatch();
     const handleSubmit = ((e) => {
         e.preventDefault();
+
         if (checkIfInputsValid()) { 
             // login
             dispatch(loginUser({name: inputs.name, password: inputs.password}))
@@ -32,6 +33,7 @@ const  Login = () => {
         setInputs({...inputs, [e.target.name]: e.target.value });
     }
     
+
     const checkIfInputsValid = useCallback(() => { 
         let isValid = true ; 
         if (!inputs.name && !inputs.password) {
@@ -52,7 +54,6 @@ const  Login = () => {
         }
         return false ;
     }, [inputs])
-    
     
     const toggleShowPassword = () => { 
         setShowPassword(prev => !prev);

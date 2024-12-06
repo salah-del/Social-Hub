@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { LuEye, LuEyeOff } from "react-icons/lu";
 import { Link, useNavigate } from "react-router-dom";
 import { API } from "../../Api/Api";
+import toast from "react-hot-toast";
+
 const SignUp = () => {
   const [values, setValues] = useState({
     name: "",
@@ -36,7 +38,7 @@ const SignUp = () => {
     if (!values.name) {
       errors.name = "User Name is required";
     } else if (values.name.length < 3 || values.name.length > 20) {
-      errors.name = "User Name must be between 3 and 20";
+      errors.name = "User Name must be between 3 and 20 characters";
     } else if (!/^[a-zA-Z0-9 ]+$/.test(values.name)) {
       errors.name = "User Name can only contain letters, numbers, and spaces";
     }
@@ -59,9 +61,17 @@ const SignUp = () => {
 
     return errors; // Returns an object with validation error messages
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // touched تحديد كل الحقول كـ
+    const allTouched = Object.keys(values).reduce((acc, key) => {
+      acc[key] = true;
+      return acc;
+    }, {});
+
+    setTouched(allTouched);
+
     const validationErrors = validateForm(values);
     console.log(Object.keys(validationErrors).length);
 
@@ -69,20 +79,18 @@ const SignUp = () => {
       setErrors(validationErrors); // Show errors
       return;
     } else {
-      // setErrors(validationErrors);
+      setErrors(validationErrors);
       console.log("Form submitted:", values);
     }
 
     try {
       const response = await axios.post(API.signup, values);
-      console.log("Done");
-      // toast.success("تم التسجيل بنجاح!");
-      console.log("Response:", response.data);
+      toast.success(response.data);
+      console.log("Done Response:", response);
       navigate("/login");
     } catch (error) {
-      console.log("Error");
-      console.error("Error:", error.response || error.message);
-      toast.error(error.response?.data?.message || "حدث خطأ ما، حاول لاحقًا!");
+      toast.error(`Error: ${error.response.data.message.slice(50)}`);
+      console.log("Error:", error);
     }
   };
 
@@ -100,10 +108,10 @@ const SignUp = () => {
           Create your account by filling in the details below
         </p>
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className={`focus:border-main-color `}>
-            <div className=" w-full  flex items-center justify-between  text-sm font-medium text-gray-700 ">
+          <div className="username">
+            <div className=" w-full  flex items-center justify-between gap-1  text-sm font-medium text-gray-700 ">
               <p className="mb-2">User Name:</p>
-              {errors.name && (
+              {touched.name && errors.name && (
                 <p className="py-0.5 px-4 mb-1 bg-red-100 text-red-500 rounded-sm">
                   {errors.name}
                 </p>
@@ -114,18 +122,19 @@ const SignUp = () => {
               name="name"
               value={values.name}
               onChange={handleChange}
+              onBlur={handleBlur}
               className={`w-full p-2 outline-1 border-2 rounded-md bg-gray-50 ${
-                errors.name
+                touched.name && errors.name
                   ? "outline-red-400 border-red-400"
                   : "focus:outline-gray-400"
               }  `}
               placeholder="Enter your name"
             />
           </div>
-          <div className={`focus:border-main-color `}>
-            <div className=" w-full  flex items-center justify-between  text-sm font-medium text-gray-700 ">
+          <div className="email">
+            <div className=" w-full  flex items-center justify-between gap-1  text-sm font-medium text-gray-700 ">
               <p className="mb-2">Email:</p>
-              {errors.email && (
+              {touched.email && errors.email && (
                 <p className="py-0.5 px-4 mb-1 bg-red-100 text-red-500 rounded-sm">
                   {errors.email}
                 </p>
@@ -136,19 +145,19 @@ const SignUp = () => {
               name="email"
               value={values.email}
               onChange={handleChange}
+              onBlur={handleBlur}
               className={`w-full p-2 outline-1 border-2 rounded-md bg-gray-50 ${
-                errors.email
+                touched.email && errors.email
                   ? "outline-red-400 border-red-400"
                   : "focus:outline-gray-400"
               }  `}
               placeholder="Enter your email"
             />
           </div>
-
-          <div className="">
-            <div className="flex w-full items-center justify-between text-sm font-medium text-gray-700 ">
+          <div className="password">
+            <div className="flex w-full items-center justify-between gap-1  text-sm font-medium text-gray-700 ">
               <p className="mb-2">Password:</p>
-              {errors.password && (
+              {touched.password && errors.password && (
                 <p className="py-0.5 px-4 mb-1 bg-red-100 text-red-500 rounded-sm">
                   {errors.password}
                 </p>
@@ -161,8 +170,9 @@ const SignUp = () => {
                 name="password"
                 value={values.password}
                 onChange={handleChange}
+                onBlur={handleBlur}
                 className={`w-full relative p-2 outline-1 border-2 rounded-md bg-gray-50 ${
-                  errors.password
+                  touched.password && errors.password
                     ? "outline-red-400 border-red-400"
                     : "focus:outline-gray-400"
                 } `}
