@@ -80,7 +80,6 @@ const SignUp = () => {
       return;
     } else {
       setErrors(validationErrors);
-      console.log("Form submitted:", values);
     }
 
     try {
@@ -189,28 +188,12 @@ const SignUp = () => {
               )}
             </div>
           </div>
-
-          {/* <div className="flex items-center justify-between ">
-                        <label className="flex items-center text-sm text-gray-600 cursor-pointer select-none">
-                        <input
-                            type="checkbox"
-                            className="mr-1 mt-0.5 cursor-pointer"
-                        />
-                        Remember me
-                        </label>
-                        <a href="#" className="text-sm text-blue-500 hover:underline">
-                        Forget Password?
-                        </a>
-                    </div> */}
-
-          {
-            <button
-              type="submit"
-              className={`w-full bg-sec-color text-white border-[1px] border-main-color py-2 rounded-md hover:bg-main-color trans `}
-            >
-              Sign Up
-            </button>
-          }
+          <button
+            type="submit"
+            className={`w-full bg-sec-color text-white border-[1px] border-main-color py-2 rounded-md hover:bg-main-color trans `}
+          >
+            Sign Up
+          </button>
           {/* {<div className='w-full justify-center h-[41px] mt-[16px] flex items-center'>
                         <Loader /> 
                     </div>} */}

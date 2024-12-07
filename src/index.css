@@ -6,10 +6,9 @@
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
-  --main-color : #DC3237;
-  --sec-color : #EB585C;
-  --third-color: #F18487;
+  --main-color: #dc3237;
+  --sec-color: #eb585c;
+  --third-color: #f18487;
 }
 
 body {
@@ -18,8 +17,8 @@ body {
   min-height: 100vh;
 }
 
-@layer base { 
-  .trans { 
+@layer base {
+  .trans {
     @apply transition-all duration-200;
   }
 }

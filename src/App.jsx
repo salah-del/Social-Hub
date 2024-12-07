@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from "react";
+import { lazy, Suspense } from "react";
 import { useSelector } from "react-redux";
 import {
   Navigate,
@@ -6,18 +6,26 @@ import {
   BrowserRouter as Router,
   Routes,
 } from "react-router-dom";
-import Footer from "./Components/layout/Footer";
+import NotFound from "./Pages/NotFound";
 import LandingPageLayout from "./Pages/LandingPage/LandingPageLayout";
 import Loader from "./Utils/Loader";
 import { Toaster } from "react-hot-toast";
+
+import MainPage from "./Pages/socialHub/MainPage";
+import Trending from "./Pages/socialHub/Trending";
+import Reports from "./Pages/socialHub/Reports";
+import SocialHubLayout from "./Pages/socialHub/SocialHubLayout";
+import Friends from "./Pages/socialHub/Friends";
+import People from "./Pages/socialHub/People";
+import MyCommunities from "./Pages/socialHub/MyCommunities";
+import Plans from "./Pages/socialHub/Plans";
+import MyFavourites from "./Pages/socialHub/SavedItems";
+import MyMessages from "./Pages/socialHub/myMessages";
+import SavedItems from "./Pages/socialHub/SavedItems";
+
 const LandingPage = lazy(() => import("./Pages/LandingPage/LandingPage"));
-const About = lazy(() => import("./Pages/About"));
 const Login = lazy(() => import("./Pages/Auth/Login"));
 const SignUp = lazy(() => import("./Pages/Auth/SignUp"));
-const MainPageLayout = lazy(() => import("./Pages/MainWebsite/MainPageLayout"));
-const MainPage = lazy(() => import("./Pages/MainWebsite/MainPage"));
-const Trends = lazy(() => import("./Pages/MainWebsite/Trends"));
-
 
 function App() {
   // get user from redux
@@ -35,8 +43,6 @@ function App() {
             }
           >
             <Routes>
-
-              
               {/* Start of landing page routes (landingPage, login, signUp) */}
               <Route
                 path="/"
@@ -81,8 +87,6 @@ function App() {
               </Route>
               {/* End of landing page routes */}
 
-              
-
               {/* Protected layout (main website) */}
               {/* <Route
                 path="/mainPage"
@@ -94,25 +98,25 @@ function App() {
                   )
                 }
               /> */}
-              <Route
-                path="/mainPage"
-                element={(
-                    <MainPageLayout />
-                  ) 
-                }
-              >
-                <Route index element={<MainPage />} />
-                <Route path={'trends'} element={<Trends />} />
 
+              <Route path="/socialHub" element={<SocialHubLayout />}>
+                <Route index element={<MainPage />} />
+                <Route path="trending" element={<Trending />} />
+                <Route path="friends" element={<Friends />} />
+                <Route path="people" element={<People />} />
+                <Route path="plans" element={<Plans />} />
+                <Route path="myCommunities" element={<MyCommunities />} />
+                <Route path="savedItems" element={<SavedItems />} />
+                <Route path="myMessages" element={<MyMessages />} />
+                <Route path="reports" element={<Reports />} />
+                <Route path="*" element={<NotFound />} />
               </Route>
 
               {/* Fallback for unknown routes */}
-              <Route path="*" element={<h1>Not Found</h1>} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
         </main>
-        <Footer />
-        {/* <button onClick={handleClick}>اضغط هنا</button> */}
         <Toaster />
       </div>
     </Router>
