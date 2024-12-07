@@ -1,4 +1,5 @@
 import { FaBars, FaBell, FaSearch } from "react-icons/fa";
+import { TbMessageCircle } from "react-icons/tb";
 import UserMenu from "./UserMenu";
 
 const Navbar = ({ toggleSidebar }) => {
@@ -24,8 +25,14 @@ const Navbar = ({ toggleSidebar }) => {
 
         <div className="flex items-center space-x-6">
           <button className="text-gray-600 hover:text-gray-800 relative">
+            <TbMessageCircle size={22} />
+            <span className="absolute -top-1 -right-1 bg-main-color text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+              7
+            </span>
+          </button>
+          <button className="text-gray-600 hover:text-gray-800 relative">
             <FaBell size={20} />
-            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+            <span className="absolute -top-1 -right-1 bg-main-color text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
               3
             </span>
           </button>
