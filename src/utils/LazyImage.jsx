@@ -12,15 +12,18 @@ const LazyImage = memo(({ src, alt, className, loader }) => {
     <div ref={ref}>
       {inView && (
         <Img
-          draggable={false}
           src={src}
           alt={alt || "image"}
           className={className || null}
+          onError={(e) => {
+            e.target.src = "/src/assets/noImage.jpg";
+          }}
           loader={
             loader || (
               <div className="w-full h-full bg-gray-300 animate-pulse"></div>
             )
           }
+          
         />
       )}
     </div>

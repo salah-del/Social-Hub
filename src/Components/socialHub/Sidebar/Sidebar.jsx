@@ -13,10 +13,21 @@ import { RiCommunityLine } from "react-icons/ri";
 import { FaRegSave } from "react-icons/fa";
 import SidebarHeader from "./SidebarHeader";
 import SidebarItem from "./SidebarItem";
+import { useDispatch } from "react-redux";
+import sweetalert from './../../../Utils/sweetalert';
+import { logUserOut } from "../../../Redux/slices/userSlice";
+import React from "react";
 
-const Sidebar = ({ isOpen, onClose }) => {
+const Sidebar = React.memo(({ isOpen, onClose }) => {
   const location = useLocation();
   console.log(location.pathname);
+
+  const dispatch = useDispatch();
+  const handleLogout = async () => { 
+      const result = await sweetalert.logout();
+      if (result.isConfirmed)
+          dispatch(logUserOut())
+  }
 
   const menuItems = [
     { icon: FaHome, text: "Main Page", path: "/socialHub", scr: "/socialHub" },
@@ -104,17 +115,18 @@ const Sidebar = ({ isOpen, onClose }) => {
             ))}
           </div>
 
-          <div className="absolute bottom-0 w-full border-t border-gray-700 p-4">
+          <button onClick={handleLogout} className="absolute bottom-0 w-full border-t border-gray-700 p-4 cursor-pointer">
             <SidebarItem
               icon={FaSignOutAlt}
               text="Logout"
-              onClick={() => console.log("Logout clicked")}
+              
             />
-          </div>
+          </button>
         </nav>
       </div>
     </>
   );
-};
+}
+);
 
 export default Sidebar;
