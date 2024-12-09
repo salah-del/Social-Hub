@@ -99,7 +99,7 @@ const userSlice = createSlice({
         state.status = "succeeded";
         showToast("success", "User successfully logged in");
         Cookies.set("userID", action.payload._id);
-        window.location.href = '/socialHub';
+        window.location.href = "/socialHub";
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.status = "failed";

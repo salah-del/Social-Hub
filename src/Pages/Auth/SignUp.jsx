@@ -85,10 +85,13 @@ const SignUp = () => {
     }
 
     const res = await dispatch(signupUser(values)).unwrap();
+
     console.log(res);
-    
-    if (res) { 
-      navigate("/login", { state: { name: values.name, password : values.password } });
+
+    if (res) {
+      navigate("/login", {
+        state: { name: values.name, password: values.password },
+      });
     }
   };
 
