@@ -1,55 +1,53 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import Cookies from "js-cookie";
 import { API } from "../../Api/Api";
 import { showToast } from "../../Utils/showToast";
 
+
 export const loginUser = createAsyncThunk(
-  "user/loginUser",
-  async ({ name, password }, { rejectWithValue }) => {
-    console.log(name, password);
-    try {
-      const response = await axios.post(API.signin, { name, password });
 
-      // If backend returns error status code (e.g., 400 or 401), manually throw an error
-      // to excute loginUser.rejected
-      if (response.status !== 200) {
-        throw new Error(
-          response.data.message || "Something went wrong with the backend."
-        );
-      }
+    'user/loginUser',
+async ({ name, password }, { rejectWithValue }) => {
+        try {
+            const response = await axios.post(API.signin, { name, password });
 
-      return response.data; // Return the data if everything is fine
-    } catch (error) {
-      // Handle network errors (e.g., no connection, server is down)
-      if (!error.response) {
-        console.error("Network error:", error.message);
+            // If backend returns error status code (e.g., 400 or 401), manually throw an error
+            // to excute loginUser.rejected 
+            if (response.status !== 200) {
+                throw new Error(response.data.message || 'Something went wrong with the backend.');
+            }
+            console.log(response.data.user);
+            return response.data.user; // Return the data if everything is fine
+        } catch (error) {
+        // Handle network errors (e.g., no connection, server is down)
+                if (!error.response) {
+                    console.error('Network error:', error.message);
+                    
+                    return rejectWithValue('Network error, please check your connection and try again.');
+                }
 
-        return rejectWithValue(
-          "Network error, please check your connection and try again."
-        );
-      }
+                // Handle backend errors (e.g., wrong email/password)
+                if (error.response?.data) {
+                    // console.error('Backend error:', error.response.data);
+                    return rejectWithValue(error.response.data.message || 'Something went wrong with the backend.');
+                }
 
-      // Handle backend errors (e.g., wrong email/password)
-      if (error.response?.data) {
-        // console.error('Backend error:', error.response.data);
-        return rejectWithValue(
-          error.response.data.message ||
-            "Something went wrong with the backend."
-        );
-      }
-
-      // Fallback for other types of errors
-      console.error("Unexpected error:", error.message);
-      return rejectWithValue(error.message || "An unexpected error occurred.");
+                // Fallback for other types of errors
+                console.error('Unexpected error:', error.message);
+                return rejectWithValue(error.message || 'An unexpected error occurred.');
+            }
     }
   }
 );
 
-export const logUserOut = createAsyncThunk("user/logUserOut", async () => {
-  Cookies.remove("token");
-  window.location.href = "/";
-  return null;
-});
+
+
+export const logUserOut = createAsyncThunk('user/logUserOut', async ( ) => {
+    Cookies.remove("userID"); 
+    window.location.href = "/";
+    return null;
+
 
 export const signupUser = createAsyncThunk(
   "user/signupUser",
@@ -85,6 +83,7 @@ const userSlice = createSlice({
     setUser(state, action) {
       state.user = action.payload;
     },
+
   },
   extraReducers: (builder) => {
     builder
@@ -130,6 +129,7 @@ const userSlice = createSlice({
         showToast("error", action.payload);
       });
   },
+
 });
 
 export const { setUser } = userSlice.actions;

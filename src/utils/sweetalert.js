@@ -14,6 +14,19 @@ const sweetalert = {
       cancelButtonText: "No, cancel",
     }),
 
+  logout: () =>
+    Swal.fire({
+      title: "Do you want to log out?",
+      text : null,
+      icon: "warning",
+      iconColor: "var(--main-color)",
+      showCancelButton: true,
+      confirmButtonColor: "var(--main-color)",
+      cancelButtonColor: "",
+      confirmButtonText: "Logout",
+      cancelButtonText: "Cancel",
+    }),
+
   deletedDone: (name) =>
     Swal.fire({
       icon: "success",
