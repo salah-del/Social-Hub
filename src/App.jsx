@@ -27,8 +27,6 @@ const Reports =  lazy(() => import ("./Pages/socialHub/Reports"));
 const SavedItems =  lazy(() => import ("./Pages/socialHub/SavedItems"));
 const Trending =  lazy(() => import ("./Pages/socialHub/Trending"));
 
-
-
 function App() {
   
   const userID = Cookies.get("userID");

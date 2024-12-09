@@ -6,6 +6,7 @@ import { showToast } from "../../Utils/showToast";
 
 
 export const loginUser = createAsyncThunk(
+
     'user/loginUser',
 async ({ name, password }, { rejectWithValue }) => {
         try {
@@ -37,63 +38,98 @@ async ({ name, password }, { rejectWithValue }) => {
                 return rejectWithValue(error.message || 'An unexpected error occurred.');
             }
     }
+  }
 );
+
 
 
 export const logUserOut = createAsyncThunk('user/logUserOut', async ( ) => {
     Cookies.remove("userID"); 
     window.location.href = "/";
     return null;
-});
 
 
-
+export const signupUser = createAsyncThunk(
+  "user/signupUser",
+  async (values, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(API.signup, values);
+      if (response.status !== 200) {
+        throw new Error(
+          response.data.message || "Something went wrong with the backend."
+        );
+      }
+      return response.data; // response نجاح العملية بيرجع الـ
+    } catch (error) {
+      if (error.response && error.response.data) {
+        return rejectWithValue(
+          error.response.data.message.slice(50) ||
+            "Something went wrong with the backend."
+        );
+      }
+      return rejectWithValue(error.message || "An unexpected error occurred.");
+    }
+  }
+);
 
 const userSlice = createSlice({
-    name: 'user',
-    initialState: {
-        user: null,
-        status: "idle",
-        error: null,
+  name: "user",
+  initialState: {
+    user: null,
+    status: "idle",
+    error: null,
+  },
+  reducers: {
+    setUser(state, action) {
+      state.user = action.payload;
     },
-    reducers: {
-        setUser(state, action) {
-            state.user = action.payload;
-        },
-    },
-    extraReducers: (builder) => {
-        builder
-        // Login user
-        .addCase(loginUser.pending, (state) => {
-            state.status = "loading";
-            state.error = null;
-        })
-        .addCase(loginUser.fulfilled, (state, action) => { // user obj 
-            state.user = action.payload;
-            state.status = "succeeded";
-            Cookies.set("userID", action.payload._id);
-            window.location.href = '/socialHub';
-        })
-        .addCase(loginUser.rejected, (state, action) => {
-            state.status = "failed";
-            state.error = action.payload;
-            showToast("error", action.payload);
-        })
-        .addCase(logUserOut.pending, (state) => {
-            state.status = "loading";
-            state.error = null;
-        })
-        .addCase(logUserOut.fulfilled, (state, action) => {
-            state.user = action.payload;
-            state.status = "succeeded";
-            
-        })
-        .addCase(logUserOut.rejected, (state, action) => {
-            state.status = "failed";
-            state.error = action.error.message;
-        })
-        
-    }
+
+  },
+  extraReducers: (builder) => {
+    builder
+      // Login user
+      .addCase(loginUser.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(loginUser.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.status = "succeeded";
+        showToast("success", "User successfully logged in");
+      })
+      .addCase(loginUser.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+        showToast("error", action.payload);
+      })
+      .addCase(logUserOut.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(logUserOut.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.status = "succeeded";
+      })
+      .addCase(logUserOut.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(signupUser.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(signupUser.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.status = "succeeded";
+        showToast("success", "User successfully signed up");
+      })
+      .addCase(signupUser.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+        showToast("error", action.payload);
+      });
+  },
+
 });
 
 export const { setUser } = userSlice.actions;
