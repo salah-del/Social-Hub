@@ -7,6 +7,8 @@ import Loader from '../../Utils/Loader';
 
 
 const  Login = () => {
+    const usernameFromSignup = location.state?.name || "";
+    const passwordFromSignup = location.state?.password || "";
     const [inputs, setInputs] = useState({
         name: '',
         password: '',
@@ -23,12 +25,16 @@ const  Login = () => {
     const dispatch = useDispatch();
     const handleSubmit = ((e) => {
         e.preventDefault();
+        if (usernameFromSignup && passwordFromSignup) { 
+            dispatch(loginUser({name: usernameFromSignup, password: passwordFromSignup}))
 
-        if (checkIfInputsValid()) { 
+        }
+        else if (checkIfInputsValid()) { 
             // login
             dispatch(loginUser({name: inputs.name, password: inputs.password}))
         }
     });
+    
     
     const handleInputsChange = (e) => { 
         setInputs({...inputs, [e.target.name]: e.target.value });

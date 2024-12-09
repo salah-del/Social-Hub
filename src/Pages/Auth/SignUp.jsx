@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { LuEye, LuEyeOff } from "react-icons/lu";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { signupUser } from "../../Redux/slices/userSlice";
 import Loader from "../../Utils/Loader";
@@ -60,7 +60,7 @@ const SignUp = () => {
 
     return errors; // Returns an object with validation error messages
   };
-
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user, status, error } = useSelector((state) => state.user);
   const handleSubmit = async (e) => {
@@ -84,7 +84,12 @@ const SignUp = () => {
       setErrors(validationErrors);
     }
 
-    dispatch(signupUser(values));
+    const res = await dispatch(signupUser(values)).unwrap();
+    console.log(res);
+    
+    if (res) { 
+      navigate("/login", { state: { name: values.name, password : values.password } });
+    }
   };
 
   useEffect(() => {
