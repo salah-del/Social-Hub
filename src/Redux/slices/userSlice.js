@@ -38,7 +38,6 @@ async ({ name, password }, { rejectWithValue }) => {
                 return rejectWithValue(error.message || 'An unexpected error occurred.');
             }
     }
-  }
 );
 
 
@@ -47,7 +46,7 @@ export const logUserOut = createAsyncThunk('user/logUserOut', async ( ) => {
     Cookies.remove("userID"); 
     window.location.href = "/";
     return null;
-
+});
 
 export const signupUser = createAsyncThunk(
   "user/signupUser",
@@ -93,9 +92,10 @@ const userSlice = createSlice({
         state.error = null;
       })
       .addCase(loginUser.fulfilled, (state, action) => {
-        state.user = action.payload;
-        state.status = "succeeded";
-        showToast("success", "User successfully logged in");
+            state.user = action.payload;
+            state.status = "succeeded";
+            Cookies.set("userID", action.payload._id);
+            window.location.href = '/socialHub';
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.status = "failed";

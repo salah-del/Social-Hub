@@ -1,12 +1,18 @@
 import { useCallback, useState } from 'react';
 import { LuEye, LuEyeOff } from "react-icons/lu";
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { loginUser } from '../../Redux/slices/userSlice';
 import Loader from '../../Utils/Loader';
 
 
 const  Login = () => {
+
+    const location = useLocation();
+
+    // if there is name and password coming from signup page
+    const usernameFromSignup = location.state?.name || "";
+    const passwordFromSignup = location.state?.password || "";
     const [inputs, setInputs] = useState({
         name: '',
         password: '',
@@ -23,8 +29,13 @@ const  Login = () => {
     const dispatch = useDispatch();
     const handleSubmit = ((e) => {
         e.preventDefault();
+        if (usernameFromSignup && passwordFromSignup) { 
+            console.log(usernameFromSignup, passwordFromSignup);
+            
+            dispatch(loginUser({name: usernameFromSignup, password: passwordFromSignup}))
 
-        if (checkIfInputsValid()) { 
+        }
+        else if (checkIfInputsValid()) { 
             // login
             dispatch(loginUser({name: inputs.name, password: inputs.password}))
         }
@@ -79,7 +90,7 @@ const  Login = () => {
                         <input
                             type="text"
                             name='name'
-                            value={inputs.name}
+                            value={usernameFromSignup ? usernameFromSignup : inputs.name}
                             onChange={handleInputsChange}
                             className={`w-full p-2 outline-1 border-2 rounded-md bg-gray-50 ${errors.nameError ? "outline-red-400 border-red-400" : "focus:outline-gray-400"}  `}
                             placeholder="Enter your username"
@@ -93,14 +104,15 @@ const  Login = () => {
                         <div className='relative'>
                         <input
                             type={showPassword ? "text" :"password"}
+                            autoComplete="off"
                             name='password'
                             placeholder='• • • • • • • • •'
-                            value={inputs.password}
+                            value={passwordFromSignup ? passwordFromSignup : inputs.password}
                             onChange={handleInputsChange}
                             className={`w-full relative p-2 outline-1 border-2 rounded-md bg-gray-50 ${errors.passwordError ? "outline-red-400 border-red-400" : "focus:outline-gray-400"} `}
                             
                         />
-                        {inputs.password.length > 0 &&<button type='button' onClick={toggleShowPassword} className='bg-gray-50 w-10 flex justify-end absolute top-1/2 -translate-y-1/2 right-2 '>
+                        {(inputs.password.length > 0 || passwordFromSignup.length > 0) &&<button type='button' onClick={toggleShowPassword} className='bg-gray-50 w-10 flex justify-end absolute top-1/2 -translate-y-1/2 right-2 '>
                             {showPassword && <LuEyeOff />}
                             {!showPassword && <LuEye />}
                         </button>}

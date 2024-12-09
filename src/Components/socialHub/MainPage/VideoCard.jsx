@@ -26,9 +26,9 @@ const VideoCard = React.memo(({ title, thumbnailUrl, vidId, userId }) => {
 
   const validUrl = isValidUrl(thumbnailUrl) ? thumbnailUrl : "/src/assets/noImage.jpg";
   return (
-    <div className=" flex flex-col items-center cursor-pointer">
-      {<div className="min-w-full overflow-hidden">
-        <LazyImage src={validUrl} className={`min-w-full border rounded-md`} loader={<div className={`w-full h-56  animate-pulse`}><Skeleton height="100%" width="100%" /></div>} />
+    <div className=" flex flex-col items-center cursor-pointer trans group">
+      {<div className="min-w-full rounded-md  overflow-hidden">
+        <LazyImage src={validUrl} className={`min-w-full overflow-hidden group-hover:scale-105 trans  border rounded-md`} loader={<div className={`w-full h-36 lg:h-48 xl:h-56  animate-pulse`}><Skeleton height="100%" width="100%" /></div>} />
       </div>}
       <div className="flex gap-2 mt-2 w-full items-center">
         <div>
