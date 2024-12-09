@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { LuEye, LuEyeOff } from "react-icons/lu";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { signupUser } from "../../Redux/slices/userSlice";
 import Loader from "../../Utils/Loader";
 
 const SignUp = () => {
+  const navigate = useNavigate();
   const [values, setValues] = useState({
     name: "",
     email: "",
@@ -84,7 +85,10 @@ const SignUp = () => {
       setErrors(validationErrors);
     }
 
-    dispatch(signupUser(values));
+    const res = await dispatch(signupUser(values)).unwrap();
+    if (res) { 
+      navigate("/login", { state: { name: values.name, password: values.password } });
+    }
   };
 
   useEffect(() => {

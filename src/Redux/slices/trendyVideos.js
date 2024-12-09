@@ -3,11 +3,11 @@ import axios from "axios";
 import { API } from "../../Api/Api";
 
 
-export const getRandomVideos = createAsyncThunk(
-    'randomVideos/getRandomVideos',
+export const getTrendyVideos = createAsyncThunk(
+    'trendyVideos/getTrendyVideos',
 async (_, { rejectWithValue }) => {
         try {
-            const res = await axios.get(API.getRandomVideos);
+            const res = await axios.get(API.getTrendVideos);
             return res.data;
         } catch (error) {
         // Handle network errors (e.g., no connection, server is down)
@@ -33,8 +33,8 @@ async (_, { rejectWithValue }) => {
 
 
 
-const randomVideos = createSlice({
-    name: 'randomVideos',
+const trendyVideos = createSlice({
+    name: 'trendyVideos',
     initialState: {
         videos: null,
         status: "idle",
@@ -44,20 +44,20 @@ const randomVideos = createSlice({
     extraReducers: (builder) => {
         builder
         // Login user
-        .addCase(getRandomVideos.pending, (state) => {
+        .addCase(getTrendyVideos.pending, (state) => {
             state.status = "loading";
             state.error = null;
         })
-        .addCase(getRandomVideos.fulfilled, (state, action) => { 
+        .addCase(getTrendyVideos.fulfilled, (state, action) => { 
             state.videos = action.payload;
             state.status = "succeeded";
             state.hasFetched = true;
         })
-        .addCase(getRandomVideos.rejected, (state, action) => {
+        .addCase(getTrendyVideos.rejected, (state, action) => {
             state.status = "failed";
             state.error = action.payload;
         })
     }
 });
 
-export default randomVideos.reducer;
+export default trendyVideos.reducer;

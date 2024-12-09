@@ -34,8 +34,11 @@ function App() {
   return (
     <div className="flex flex-col min-h-screen">
       <main className="flex-grow">
-        <Suspense fallback={
-                <div className="w-full h-screen flex items-center justify-center">
+        <Suspense fallback={ !isAuthenticated ? 
+                <div className={` w-full h-screen flex items-center justify-center`}>
+                    <Loader />
+                </div>
+                : <div className={` w-full lg:ml-64 lg:w-[calc(100%-256px)] h-[calc(100vh-75px)] translate-y-[75px]  flex items-center justify-center`}>
                     <Loader />
                 </div>
                 }>
