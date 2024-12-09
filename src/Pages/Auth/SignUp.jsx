@@ -1,9 +1,9 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { LuEye, LuEyeOff } from "react-icons/lu";
-import { Link, useNavigate } from "react-router-dom";
-import { API } from "../../Api/Api";
-import toast from "react-hot-toast";
+import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { signupUser } from "../../Redux/slices/userSlice";
+import Loader from "../../Utils/Loader";
 
 const SignUp = () => {
   const [values, setValues] = useState({
@@ -19,7 +19,6 @@ const SignUp = () => {
   };
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
-  const navigate = useNavigate();
   const toggleShowPassword = () => {
     setShowPassword((prev) => !prev);
   };
@@ -61,6 +60,9 @@ const SignUp = () => {
 
     return errors; // Returns an object with validation error messages
   };
+
+  const dispatch = useDispatch();
+  const { user, status, error } = useSelector((state) => state.user);
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -82,15 +84,7 @@ const SignUp = () => {
       setErrors(validationErrors);
     }
 
-    try {
-      const response = await axios.post(API.signup, values);
-      toast.success(response.data);
-      console.log("Done Response:", response);
-      navigate("/login");
-    } catch (error) {
-      toast.error(`Error: ${error.response.data.message.slice(50)}`);
-      console.log("Error:", error);
-    }
+    dispatch(signupUser(values));
   };
 
   useEffect(() => {
@@ -188,15 +182,19 @@ const SignUp = () => {
               )}
             </div>
           </div>
-          <button
-            type="submit"
-            className={`w-full bg-sec-color text-white border-[1px] border-main-color py-2 rounded-md hover:bg-main-color trans `}
-          >
-            Sign Up
-          </button>
-          {/* {<div className='w-full justify-center h-[41px] mt-[16px] flex items-center'>
-                        <Loader /> 
-                    </div>} */}
+          {status !== "loading" && (
+            <button
+              type="submit"
+              className={`w-full bg-main-color text-white border-[1px] border-main-color py-2 rounded-md hover:bg-sec-color hover:border-sec-color trans `}
+            >
+              Sign Up
+            </button>
+          )}
+          {status === "loading" && (
+            <div className="w-full justify-center h-[41px] mt-[16px] flex items-center">
+              <Loader />
+            </div>
+          )}
         </form>
         <p className="text-gray-600 mt-4 text-center">
           Already have an account?{" "}

@@ -68,7 +68,7 @@ function App() {
                   path="/login"
                   element={
                     isAuthenticated ? (
-                      <Navigate to="/mainPage" replace />
+                      <Navigate to="/socialHub" replace />
                     ) : (
                       <Login />
                     )
@@ -78,7 +78,7 @@ function App() {
                   path="/signup"
                   element={
                     isAuthenticated ? (
-                      <Navigate to="/mainPage" replace />
+                      <Navigate to="/login" replace />
                     ) : (
                       <SignUp />
                     )

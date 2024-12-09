@@ -4,95 +4,132 @@ import { API } from "../../Api/Api";
 import { showToast } from "../../Utils/showToast";
 
 export const loginUser = createAsyncThunk(
-    'user/loginUser',
-async ({ name, password }, { rejectWithValue }) => {
-        console.log(name, password)
-        try {
-            const response = await axios.post(API.signin, { name, password });
+  "user/loginUser",
+  async ({ name, password }, { rejectWithValue }) => {
+    console.log(name, password);
+    try {
+      const response = await axios.post(API.signin, { name, password });
 
-            // If backend returns error status code (e.g., 400 or 401), manually throw an error
-            // to excute loginUser.rejected 
-            if (response.status !== 200) {
-                throw new Error(response.data.message || 'Something went wrong with the backend.');
-            }
+      // If backend returns error status code (e.g., 400 or 401), manually throw an error
+      // to excute loginUser.rejected
+      if (response.status !== 200) {
+        throw new Error(
+          response.data.message || "Something went wrong with the backend."
+        );
+      }
 
-            return response.data; // Return the data if everything is fine
-        } catch (error) {
-        // Handle network errors (e.g., no connection, server is down)
-            if (!error.response) {
-                console.error('Network error:', error.message);
-                
-                return rejectWithValue('Network error, please check your connection and try again.');
-            }
+      return response.data; // Return the data if everything is fine
+    } catch (error) {
+      // Handle network errors (e.g., no connection, server is down)
+      if (!error.response) {
+        console.error("Network error:", error.message);
 
-            // Handle backend errors (e.g., wrong email/password)
-            if (error.response?.data) {
-                // console.error('Backend error:', error.response.data);
-                return rejectWithValue(error.response.data.message || 'Something went wrong with the backend.');
-            }
+        return rejectWithValue(
+          "Network error, please check your connection and try again."
+        );
+      }
 
-            // Fallback for other types of errors
-            console.error('Unexpected error:', error.message);
-                return rejectWithValue(error.message || 'An unexpected error occurred.');
-            }
+      // Handle backend errors (e.g., wrong email/password)
+      if (error.response?.data) {
+        // console.error('Backend error:', error.response.data);
+        return rejectWithValue(
+          error.response.data.message ||
+            "Something went wrong with the backend."
+        );
+      }
+
+      // Fallback for other types of errors
+      console.error("Unexpected error:", error.message);
+      return rejectWithValue(error.message || "An unexpected error occurred.");
     }
+  }
 );
 
-
-export const logUserOut = createAsyncThunk('user/logUserOut', async ( ) => {
-    Cookies.remove("token"); 
-    window.location.href = "/";
-    return null;
+export const logUserOut = createAsyncThunk("user/logUserOut", async () => {
+  Cookies.remove("token");
+  window.location.href = "/";
+  return null;
 });
 
-
-
+export const signupUser = createAsyncThunk(
+  "user/signupUser",
+  async (values, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(API.signup, values);
+      if (response.status !== 200) {
+        throw new Error(
+          response.data.message || "Something went wrong with the backend."
+        );
+      }
+      return response.data; // response نجاح العملية بيرجع الـ
+    } catch (error) {
+      if (error.response && error.response.data) {
+        return rejectWithValue(
+          error.response.data.message.slice(50) ||
+            "Something went wrong with the backend."
+        );
+      }
+      return rejectWithValue(error.message || "An unexpected error occurred.");
+    }
+  }
+);
 
 const userSlice = createSlice({
-    name: 'user',
-    initialState: {
-        user: null,
-        status: "idle",
-        error: null,
+  name: "user",
+  initialState: {
+    user: null,
+    status: "idle",
+    error: null,
+  },
+  reducers: {
+    setUser(state, action) {
+      state.user = action.payload;
     },
-    reducers: {
-        setUser(state, action) {
-            state.user = action.payload;
-        },
-    },
-    extraReducers: (builder) => {
-        builder
-        // Login user
-        .addCase(loginUser.pending, (state) => {
-            state.status = "loading";
-            state.error = null;
-        })
-        .addCase(loginUser.fulfilled, (state, action) => {
-            state.user = action.payload;
-            state.status = "succeeded";
-            showToast("success", "User successfully logged in");
-            
-        })
-        .addCase(loginUser.rejected, (state, action) => {
-            state.status = "failed";
-            state.error = action.payload;
-            showToast("error", action.payload);
-        })
-        .addCase(logUserOut.pending, (state) => {
-            state.status = "loading";
-            state.error = null;
-        })
-        .addCase(logUserOut.fulfilled, (state, action) => {
-            state.user = action.payload;
-            state.status = "succeeded";
-            
-        })
-        .addCase(logUserOut.rejected, (state, action) => {
-            state.status = "failed";
-            state.error = action.error.message;
-        })
-        
-    }
+  },
+  extraReducers: (builder) => {
+    builder
+      // Login user
+      .addCase(loginUser.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(loginUser.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.status = "succeeded";
+        showToast("success", "User successfully logged in");
+      })
+      .addCase(loginUser.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+        showToast("error", action.payload);
+      })
+      .addCase(logUserOut.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(logUserOut.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.status = "succeeded";
+      })
+      .addCase(logUserOut.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(signupUser.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(signupUser.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.status = "succeeded";
+        showToast("success", "User successfully signed up");
+      })
+      .addCase(signupUser.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+        showToast("error", action.payload);
+      });
+  },
 });
 
 export const { setUser } = userSlice.actions;
