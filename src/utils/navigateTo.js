@@ -1,7 +1,17 @@
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 
-export const navigateTo = ({dest}) => {
+const useNavigateTo = () => {
     const nav = useNavigate();
-    nav(dest);
-}
 
+    const navigateTo = ({ dest, state } = {}) => { // Default to an empty object
+        if (!dest) {
+            console.error("Error: 'dest' is required in navigateTo");
+            return;
+        }
+        nav(dest, { state });
+    };
+
+    return navigateTo;
+};
+
+export default useNavigateTo;

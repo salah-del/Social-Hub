@@ -1,27 +1,28 @@
-import { useState } from "react";
+import axios from "axios";
+import Cookies from "js-cookie";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { Outlet } from "react-router-dom";
-import Navbar from "../../Components/socialHub/Navbar/Navbar";
-import Sidebar from "../../Components/socialHub/Sidebar/Sidebar";
-function SocialHubLayout() {
+import { API } from "../../Api/Api";
+import { setUser } from "../../Redux/slices/userSlice";
+import PersistentLayout from "./PersistentLayout";
+const  SocialHubLayout = () =>  {
+  const dispatch = useDispatch();
+  const userID = Cookies.get('userID');
+  useEffect(() => { 
+    if (userID)  {  
+      const getUserToRedux = async () => {
+        const userData = await axios.get(`${API.getUserById}/${userID}`);
+        dispatch(setUser(userData.data));        
+      }
+      getUserToRedux();
+    }
+  }, [dispatch])
   
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
-
-  
-
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
-
-      <div className={`lg:ml-64`}>
-        <Navbar toggleSidebar={toggleSidebar} />
-      </div>
-      <div className={`lg:ml-64 transition-all duration-300 p-6`}>
-        <Outlet />
-      </div>
-    </div>
+    <PersistentLayout>
+      <Outlet />
+    </PersistentLayout>
   );
 }
 

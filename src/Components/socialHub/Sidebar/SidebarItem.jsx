@@ -1,6 +1,6 @@
-import { forwardRef } from 'react';
+import { forwardRef, memo } from 'react';
 
-const SidebarItem = forwardRef(({ icon: Icon, text, onClick, isActive }, ref) => {
+const SidebarItem = memo(forwardRef(({ icon: Icon, text, onClick, isActive }, ref) => {
   return (
     <div
       ref={ref}
@@ -18,8 +18,8 @@ const SidebarItem = forwardRef(({ icon: Icon, text, onClick, isActive }, ref) =>
         <div className="absolute left-0 top-0 bottom-0 w-1 bg-main-color"></div>
       )}
     </div>
-  );
-});
+  )
+}));
 
 SidebarItem.displayName = 'SidebarItem';
 
