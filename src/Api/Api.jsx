@@ -43,7 +43,7 @@ export const API = {
   inviteToCommunity: `${BASE_URL}/communities/invite`,
   acceptInvitation: `${BASE_URL}/communities/accept-invitation`,
   /* ======= Notifications ======= */
-  showNotifications: `${BASE_URL}/notification`, //     /:idUser
+  showNotifications: `${BASE_URL}/notifications`, //     /:idUser
   /* ======= Balance ======= */
   getBalance: `${BASE_URL}/balances/get-balance`,
   deductBalance: `${BASE_URL}/balances/deduct-coins`,

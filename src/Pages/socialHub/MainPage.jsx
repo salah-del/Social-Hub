@@ -4,6 +4,7 @@ import "react-loading-skeleton/dist/skeleton.css"; // Ensure skeleton styles are
 import { useDispatch, useSelector } from "react-redux";
 import VideoGrid from "../../Components/socialHub/MainPage/VideoGrid";
 import { getRandomVideos } from "../../Redux/slices/randomVideos";
+import { useLocation } from "react-router-dom";
 
 const MainPage = () => {
   const dispatch = useDispatch();
@@ -14,21 +15,25 @@ const MainPage = () => {
       dispatch(getRandomVideos());
     }
   }, [dispatch]);
-  
+  const loc = useLocation();
+  useEffect(() => { 
+      window.scrollTo(0, 0);
+  }, [loc.pathname])
   {/* Show skeletons while loading */}
   if (status === "loading") 
     return (
         <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 xl:gap-5">
           {Array.from({ length: 9 }).map((_, index) => (
             <div key={index} className="w-full mx-auto">
-              <div className="w-full h-24 lg:h-32 xl:h-56 mb-4">
+              <div className="w-full h-48 min-[450px]:h-64 min-[550px]:h-80 sm:h-40 xl:h-40 ">
                 <Skeleton height="100%" width="100%" />
               </div>
-              <div className="w-full h-5">
+              <div className="w-full h-10 mt-3">
                 <Skeleton height="100%" width="100%" />
               </div>
             </div>
           ))}
+          
         </div>
     )
 

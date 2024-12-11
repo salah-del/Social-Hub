@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import {
   FaHome,
   FaUsers,
@@ -20,7 +20,6 @@ import React from "react";
 
 const Sidebar = React.memo(({ isOpen, onClose }) => {
   const location = useLocation();
-  console.log(location.pathname);
 
   const dispatch = useDispatch();
   const handleLogout = async () => { 
@@ -105,13 +104,13 @@ const Sidebar = React.memo(({ isOpen, onClose }) => {
         <nav className="mt-6">
           <div className="space-y-1">
             {menuItems.map((item) => (
-              <Link key={item.text} to={item.path}>
+              <NavLink key={item.text} to={item.path}>
                 <SidebarItem
                   icon={item.icon}
                   text={item.text}
                   isActive={location.pathname === item.scr}
                 />
-              </Link>
+              </NavLink>
             ))}
           </div>
 

@@ -4,6 +4,7 @@ import "react-loading-skeleton/dist/skeleton.css"; // Ensure skeleton styles are
 import { useDispatch, useSelector } from "react-redux";
 import VideoGrid from "../../Components/socialHub/MainPage/VideoGrid";
 import { getTrendyVideos } from "../../Redux/slices/trendyVideos";
+import { useLocation } from "react-router-dom";
 
 const Trending = () => {
   const dispatch = useDispatch();
@@ -15,6 +16,10 @@ const Trending = () => {
       dispatch(getTrendyVideos());
     }
   }, [dispatch]);
+  const loc = useLocation();
+  useEffect(() => { 
+      window.scrollTo(0, 0);
+  }, [loc.pathname])
   
   {/* Show skeletons while loading */}
   if (status === "loading") 
