@@ -20,7 +20,6 @@ import React from "react";
 
 const Sidebar = React.memo(({ isOpen, onClose }) => {
   const location = useLocation();
-  console.log(location.pathname);
 
   const dispatch = useDispatch();
   const handleLogout = async () => { 

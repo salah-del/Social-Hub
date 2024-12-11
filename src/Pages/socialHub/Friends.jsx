@@ -1,35 +1,55 @@
-import { FaUserPlus, FaUserCheck, FaUserClock } from 'react-icons/fa';
+import { useState, useEffect } from "react";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const Friends = () => {
-  return (
-    <div className="p-6 bg-gray-50 min-h-screen">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-800">User Management</h1>
-        <p className="text-gray-600 mt-1">Manage your user base</p>
-      </div>
+  const [isLoading, setIsLoading] = useState(true);
+  const [users, setUsers] = useState([]);
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-        <div className="p-6 border-b border-gray-100">
-          <div className="flex justify-between items-center">
-            <div className="flex space-x-4">
-              <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
-                <FaUserPlus className="inline-block mr-2" />
-                Add User
-              </button>
+  useEffect(() => {
+    // محاكاة تحميل البيانات
+    setTimeout(() => {
+      setUsers([
+        { id: 1, name: "Ahmed", avatar: "https://via.placeholder.com/50", desc: "Frontend Developer" },
+        { id: 2, name: "Sara", avatar: "https://via.placeholder.com/50", desc: "UI/UX Designer" },
+      ]);
+      setIsLoading(false);
+    }, 3000);
+  }, []);
+
+  return (
+    <div>
+      {!isLoading
+        ? Array.from({ length: 5 }).map((_, index) => (
+            <div
+              key={index}
+              className="flex items-center space-x-4 mb-4"
+              style={{ display: "flex", alignItems: "center", marginBottom: "16px" }}
+            >
+              <Skeleton circle width={50} height={50} />
+              <div>
+                <Skeleton width={150} height={20} style={{ marginBottom: "8px" }} />
+                <Skeleton width={250} height={15} />
+              </div>
             </div>
-            <div className="flex space-x-2">
-              <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">
-                <FaUserCheck className="inline-block mr-1" />
-                Active: 234
-              </span>
-              <span className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm">
-                <FaUserClock className="inline-block mr-1" />
-                Pending: 12
-              </span>
+          ))
+        : users.map((user) => (
+            <div
+              key={user.id}
+              className="flex items-center space-x-4 mb-4"
+              style={{ display: "flex", alignItems: "center", marginBottom: "16px" }}
+            >
+              <img
+                src={user.avatar}
+                alt={user.name}
+                style={{ width: 50, height: 50, borderRadius: "50%" }}
+              />
+              <div>
+                <h2 style={{ margin: 0 }}>{user.name}</h2>
+                <p style={{ margin: 0 }}>{user.desc}</p>
+              </div>
             </div>
-          </div>
-        </div>
-      </div>
+          ))}
     </div>
   );
 };
