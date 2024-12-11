@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 const Plans = () => {
+
   const loc = useLocation();
   useEffect(() => { 
       window.scrollTo(0, 0);
@@ -37,6 +38,7 @@ const Plans = () => {
             }
         </div>
     </div>
+
   );
 };
 

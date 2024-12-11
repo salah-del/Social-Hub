@@ -85,7 +85,6 @@ const SignUp = () => {
     }
 
     const res = await dispatch(signupUser(values)).unwrap();
-
     console.log(res);
 
     if (res) {
