@@ -15,7 +15,7 @@ const Plans = () => {
     {title:"Super VIP", text: "For individuals just getting started", price: '8000', isActive : false, features: ['1 User', '5GB Storage', 'Basic Support']}
   ]
   return (
-    <div className="w-full max-w-7xl">
+    <div className="w-full max-w-7xl min-h-screen">
         <h2 className="text-3xl font-bold mb-16">Choose Your Plan</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4  gap-8">
             {

@@ -12,7 +12,7 @@ const PersistentLayout = ({ children }) => {
 
     return (
         <div className="min-h-screen bg-gray-50 overflow-x-hidden">
-            <Suspense>
+            <Suspense fallback={<div className="h-screen w-64 bg-gray-800 animate-pulse " />}>
                 <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
             </Suspense>
             <div className={`lg:ml-64`}>
