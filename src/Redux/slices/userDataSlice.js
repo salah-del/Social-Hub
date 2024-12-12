@@ -36,7 +36,7 @@ export const fetchUserData = createAsyncThunk(
 const userDataSlice = createSlice({
   name: "userData", // slice اسم واضح للـ
   initialState: {
-    user: null, // dataUser بدلاً من
+    userData: null, // dataUser بدلاً من
     status: "idle", // حالة التحميل
     error: null, // خطأ في حال وجوده
     hasFetched: false,
@@ -48,7 +48,7 @@ const userDataSlice = createSlice({
         state.error = null; // لا توجد أخطاء حالياً
       })
       .addCase(fetchUserData.fulfilled, (state, action) => {
-        state.user = action.payload; // تحديث البيانات
+        state.userData = action.payload; // تحديث البيانات
         state.status = "succeeded"; // حالة النجاح
         state.hasFetched = true;
       })

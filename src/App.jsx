@@ -25,6 +25,7 @@ const Reports =  lazy(() => import ("./Pages/socialHub/Reports"));
 const SavedItems =  lazy(() => import ("./Pages/socialHub/SavedItems"));
 const Trending =  lazy(() => import ("./Pages/socialHub/Trending"));
 const VideoPlayer =  lazy(() => import ("./Pages/socialHub/VideoPlayer"));
+const Profile =  lazy(() => import ("./Pages/socialHub/Profile"));
 const NotFound =  lazy(() => import ("./Pages/NotFound"));
 
 const  App = () => {
@@ -53,7 +54,6 @@ const  App = () => {
             }
           >
             <Route index element={<Suspense fallback={<div className="w-full h-screen flex items-center justify-center"><Loader /></div>}><MainPage /></Suspense>} />
-      
             <Route path="trending" element={<Suspense fallback={<div className="w-full h-screen flex items-center justify-center"><Loader /></div>}><Trending /></Suspense>} />
             <Route path="friends" element={<Suspense fallback={<div className="w-full h-screen flex items-center justify-center"><Loader /></div>}><Friends /></Suspense>} />
             <Route path="people" element={<Suspense fallback={<div className="w-full h-screen flex items-center justify-center"><Loader /></div>}><People /></Suspense>} />
@@ -63,6 +63,7 @@ const  App = () => {
             <Route path="myMessages" element={<Suspense fallback={<div className="w-full h-screen flex items-center justify-center"><Loader /></div>}><MyMessages /></Suspense>} />
             <Route path="reports" element={<Suspense fallback={<div className="w-full h-screen flex items-center justify-center"><Loader /></div>}><Reports /></Suspense>} />
             <Route path="video/:id" element={<Suspense fallback={<div className="w-full h-screen flex items-center justify-center"><Loader /></div>}><VideoPlayer /></Suspense>} />
+            <Route path="profile/:id" element={<Suspense fallback={<div className="w-full h-screen flex items-center justify-center"><Loader /></div>}><Profile /></Suspense>} />
           </Route>
           
           <Route path="*" element={<Suspense fallback={<div className="w-full h-screen flex items-center justify-center"><Loader /></div>}><NotFound isAuth={isAuthenticated} /></Suspense>} />
