@@ -46,7 +46,7 @@ const VideoCard = React.memo(({ video}) => {
   const handleNavToVideoPlayer = () => { 
     navigateTo({
       dest: `/socialHub/video/${video._id}`,
-      state: { video: video }
+      state: { video: video, user }
     })
   }
   const handleNavToUser = () => { 

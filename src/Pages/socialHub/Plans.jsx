@@ -69,6 +69,7 @@ const Plans = () => {
     },
   ];
   return (
+
     <div className="w-full max-w-7xl">
       <div className="flex  items-center justify-between">
         <h2 className="text-3xl font-bold mb-6">Choose Your Plan</h2>
@@ -130,6 +131,7 @@ const Plans = () => {
           </div>
         ))}
       </div>
+
     </div>
   );
 };
