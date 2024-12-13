@@ -40,6 +40,7 @@ export const API = {
   updateUser: `${BASE_URL}/users`, // body params
   /* ======= Communities ======= */
   addCommunity: `${BASE_URL}/communities/create`,
+  getCommunityById: `${BASE_URL}/communities/community`, // /:idCommunity
   inviteToCommunity: `${BASE_URL}/communities/invite`,
   acceptInvitation: `${BASE_URL}/communities/accept-invitation`,
   /* ======= Notifications ======= */
