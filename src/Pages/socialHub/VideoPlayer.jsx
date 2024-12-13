@@ -1,13 +1,12 @@
-import { useLocation } from 'react-router-dom';
+import PlayingVideo from "../../Components/socialHub/VideoPlayer/PlayingVideo"
+import RecommendedVideos from "../../Components/socialHub/VideoPlayer/RecommendedVideos"
 
 const VideoPlayer = () => {
-
-    const location = useLocation();
-    const video = location.state?.video || "";
-    console.log("Video player", video);
-    
     return (
-        <div>VideoPlayer</div>
+        <div className="space-y-20">
+            <PlayingVideo />
+            <RecommendedVideos />
+        </div>
     )
 }
 

@@ -75,6 +75,29 @@ export const signupUser = createAsyncThunk(
   }
 );
 
+export const getCurrUser = createAsyncThunk(
+  "user/getCurrUser",
+  async (id, { rejectWithValue }) => {
+    try {
+      const userData = await axios.get(`${API.getUserById}/${id}`);
+      if (userData.status !== 200) {
+        throw new Error(
+          response.data.message || "Something went wrong with the backend."
+        );
+      }
+      return userData.data; 
+    } catch (error) {
+      if (error.response && error.response.data) {
+        return rejectWithValue(
+          error.response.data.message.slice(50) ||
+            "Something went wrong with the backend."
+        );
+      }
+      return rejectWithValue(error.message || "An unexpected error occurred.");
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState: {
@@ -131,6 +154,18 @@ const userSlice = createSlice({
         state.status = "failed";
         state.error = action.payload;
         showToast("error", action.payload);
+      })
+      .addCase(getCurrUser.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(getCurrUser.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.status = "succeeded";
+      })
+      .addCase(getCurrUser.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
       });
   },
 });
