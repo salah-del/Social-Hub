@@ -41,48 +41,11 @@ const App = () => {
               </PublicRoute>
             }
           >
-            <Route
-              index
-              element={
-                <Suspense
-                  fallback={
-                    <div className="w-full h-screen flex items-center justify-center">
-                      <Loader />
-                    </div>
-                  }
-                >
-                  <LandingPage />
-                </Suspense>
-              }
-            />
-            <Route
-              path="login"
-              element={
-                <Suspense
-                  fallback={
-                    <div className="w-full h-screen flex items-center justify-center">
-                      <Loader />
-                    </div>
-                  }
-                >
-                  <Login />
-                </Suspense>
-              }
-            />
-            <Route
-              path="signup"
-              element={
-                <Suspense
-                  fallback={
-                    <div className="w-full h-screen flex items-center justify-center">
-                      <Loader />
-                    </div>
-                  }
-                >
-                  <SignUp />
-                </Suspense>
-              }
-            />
+
+            <Route index element={<Suspense fallback={<div className="w-full h-[calc(100vh-70px)] flex items-center justify-center"><Loader /></div>}><LandingPage /></Suspense>} />
+            <Route path="login" element={<Suspense fallback={<div className="w-full h-[calc(100vh-70px)] flex items-center justify-center"><Loader /></div>}><Login /></Suspense>} />
+            <Route path="signup" element={<Suspense fallback={<div className="w-full h-[calc(100vh-70px)] flex items-center justify-center"><Loader /></div>}><SignUp /></Suspense>} />
+
           </Route>
           {/* End of landing page routes */}
 
