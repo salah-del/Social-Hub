@@ -10,9 +10,17 @@
   --sec-color: #eb585c;
   --third-color: #f18487;
 
-  --c-bg1: #1f2937;
+  --c-bg1: #ffffff;
+
+  --h-bg1: #eff1f4;
+
   --c-bg2: #f9fafb;
-  
+
+  /* --h-bg1: #eff1f4;
+  --c-bg2: #eff1f4; */
+
+  --c-black: #000000;
+  --c-white: #ffffff;
 }
 * {
   box-sizing: border-box;
@@ -35,7 +43,7 @@ ul {
   background-color: var(--main-color);
 }
 ::-webkit-scrollbar-track {
-  background-color: var(--c-bg1);
+  background-color: var(--c-black);
 }
 a {
   text-decoration: none;

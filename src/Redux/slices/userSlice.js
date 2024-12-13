@@ -98,8 +98,6 @@ export const getCurrUser = createAsyncThunk(
   }
 );
 
-
-
 const userSlice = createSlice({
   name: "user",
   initialState: {

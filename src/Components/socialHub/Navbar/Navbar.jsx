@@ -3,7 +3,6 @@ import { TbMessageCircle } from "react-icons/tb";
 import Notifications from "./Notifications";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { fetchUserData } from "../../../Redux/slices/userDataSlice";
 import Skeleton from "react-loading-skeleton";
 import Cookies from "js-cookie";
 import { Link } from "react-router-dom";
@@ -35,7 +34,7 @@ const Navbar = ({ toggleSidebar }) => {
             </div>
             */}
 
-          <Coins />
+          <Coins title="" className="" />
         </div>
 
         <div className="flex items-center space-x-6">
@@ -57,7 +56,7 @@ const Navbar = ({ toggleSidebar }) => {
               to={`myProfile`}
               className="flex items-center space-x-3 focus:outline-none"
             >
-              <span className="text-gray-700 font-medium">{user?.name}</span>
+              <span className="text-gray-700 font-medium max-sm:hidden">{user?.name}</span>
               {user?.profilePicture ? (
                 <LazyImage
                   src={user.profilePicture}

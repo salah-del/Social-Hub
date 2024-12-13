@@ -39,20 +39,20 @@ const Notifications = () => {
         className="text-gray-600 hover:text-gray-800 relative mt-1.5"
       >
         <FaBell size={20} />
-        <span className="absolute -top-1 -right-1 bg-main-color text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+        <span className="absolute -top-1.5 -right-1.5  bg-main-color text-white text-xs rounded-full w-[18px] h-[18px]  flex items-center justify-center">
           {notifications.length}
         </span>
       </button>
 
       {/* Dropdown Menu */}
       {isOpen && (
-        <div className="absolute -right-3.5 mt-2 w-[350px] bg-c-bg1 rounded shadow-lg  z-50">
+        <div className="absolute -right-3.5 mt-2 w-[350px] bg-c-bg1 rounded shadow-2xl  z-50">
           {/* Arrow pointing to the button */}
-          <div className="absolute -top-1.5 right-4 w-4 h-4 bg-c-bg1 rotate-45 z-40"></div>
-          <div className="flex items-center justify-between space-x-2 px-3 py-2 border-b border-gray-500">
-            <h2 className="text-lg font-bold text-white ">Notifications</h2>
+          <div className="absolute  -top-1.5 right-4 w-4 h-4 bg-main-color rotate-45 -z-40"></div>
+          <div className="flex items-center bg-c-white justify-between space-x-2 px-3 py-2 border-b-2 border-h-bg1">
+            <h2 className="text-lg font-bold text-c-black ">Notifications</h2>
             <FaTimes
-              className="text-red-500 text-lg cursor-pointer"
+              className="text-red-500 bg-c-white text-lg cursor-pointer"
               onClick={() => setIsOpen(false)}
             />
           </div>
@@ -60,13 +60,13 @@ const Notifications = () => {
             {notifications.map((notification, index) => (
               <div
                 key={index}
-                className="flex items-start  border-b border-gray-500 px-4 py-2 hover:bg-gray-900"
+                className="flex items-start  border-b border-h-bg1 px-4 py-2 hover:bg-c-bg2"
               >
                 <div className="space-y-1">
-                  <p className="text-base  text-white font-medium">
+                  <p className="  text-c-black font-semibold text-sm">
                     {notification.message}
                   </p>
-                  <p className="text-sm text-gray-400">
+                  <p className="text-xs text-gray-400">
                     {formatDate(notification.createdAt)}
                   </p>
                 </div>
