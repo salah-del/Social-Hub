@@ -2,8 +2,8 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { API } from "../../Api/Api";
 
-export const fetchUserData = createAsyncThunk(
-  "user/userData",
+export const getUserById = createAsyncThunk(
+  "getUser/getUserById",
   async (userID, { rejectWithValue }) => {
     try {
       const response = await axios.get(`${API.getUserById}/${userID}`);
@@ -32,32 +32,30 @@ export const fetchUserData = createAsyncThunk(
   }
 );
 
-//  الخاص ببيانات المستخدم Slice
-const userDataSlice = createSlice({
-  name: "userData", // slice اسم واضح للـ
+const getUserSlice = createSlice({
+  name: "getUser",
   initialState: {
-    userData: null, // dataUser بدلاً من
-    status: "idle", // حالة التحميل
-    error: null, // خطأ في حال وجوده
+    getUser: null,
+    status: "idle",
+    error: null,
     hasFetched: false,
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchUserData.pending, (state) => {
-        state.status = "loading"; // جاري التحميل
-        state.error = null; // لا توجد أخطاء حالياً
+      .addCase(getUserById.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
       })
-      .addCase(fetchUserData.fulfilled, (state, action) => {
-        state.userData = action.payload; // تحديث البيانات
-        state.status = "succeeded"; // حالة النجاح
+      .addCase(getUserById.fulfilled, (state, action) => {
+        state.getUser = action.payload;
+        state.status = "succeeded";
         state.hasFetched = true;
       })
-      .addCase(fetchUserData.rejected, (state, action) => {
-        state.error = action.payload; // تسجيل الخطأ
-        state.status = "failed"; // حالة الفشل
+      .addCase(getUserById.rejected, (state, action) => {
+        state.error = action.payload;
+        state.status = "failed";
       });
   },
 });
 
-// التصدير
-export default userDataSlice.reducer;
+export default getUserSlice.reducer;

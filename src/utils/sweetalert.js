@@ -17,30 +17,33 @@ const sweetalert = {
   logout: () =>
     Swal.fire({
       title: "Do you want to log out?",
-      text : null,
+      text: null,
       icon: "warning",
       iconColor: "var(--main-color)",
-      showCancelButton: true,
       confirmButtonColor: "var(--main-color)",
+      showCancelButton: true,
       cancelButtonColor: "",
       confirmButtonText: "Logout",
       cancelButtonText: "Cancel",
     }),
 
-  deletedDone: (name) =>
+  done: (text) =>
     Swal.fire({
       icon: "success",
       title: "Deleted!",
-      text: `The ${name} has been deleted successfully.`,
-      confirmButtonColor: "#3085d6",
+      // text: `The ${name} has been deleted successfully.`,
+      text: text,
+      iconColor: "var(--main-color)",
+      confirmButtonColor: "var(--main-color)",
     }),
-
-  deletedError: () =>
+  error: (text) =>
     Swal.fire({
       icon: "error",
       title: "Error!",
-      text: "Something went wrong, please try again.",
-      confirmButtonColor: "#d32f2f",
+      // text: "Something went wrong, please try again.",
+      text: text,
+      iconColor: "var(--main-color)",
+      confirmButtonColor: "var(--main-color)",
     }),
 };
 

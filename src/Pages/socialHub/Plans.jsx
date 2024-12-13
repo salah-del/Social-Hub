@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
-
+import Coins from "../../Components/socialHub/Navbar/Coins";
+import { FaCheck } from "react-icons/fa";
 const Plans = () => {
   const loc = useLocation();
   useEffect(() => {
@@ -70,11 +71,11 @@ const Plans = () => {
   ];
   return (
     <div className="w-full max-w-7xl">
-      <div className="flex  items-center justify-between">
+      <div className="flex max-sm:flex-col  items-center justify-between">
         <h2 className="text-3xl font-bold mb-6">Choose Your Plan</h2>
-        <h2 className="text-2xl font-bold mb-6">Your coins : 500</h2>
+        <Coins title="Your Balance: " className="-mt-4 max-sm:mb-4 bg-white" />
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-2  gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-2  gap-8">
         {plans.map((plan) => (
           <div
             key={plan.title}
@@ -100,20 +101,7 @@ const Plans = () => {
               {plan.features &&
                 plan.features.map((feature) => (
                   <li key={feature} className="flex items-center mb-2">
-                    <svg
-                      className="w-5 h-5 text-green-500 mr-2"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M5 13l4 4L19 7"
-                      ></path>
-                    </svg>
+                    <FaCheck className="w-5 h-5 text-green-500 mr-2" />
                     {feature}
                   </li>
                 ))}

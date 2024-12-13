@@ -14,7 +14,7 @@ import { FaRegSave } from "react-icons/fa";
 import SidebarHeader from "./SidebarHeader";
 import SidebarItem from "./SidebarItem";
 import { useDispatch } from "react-redux";
-import sweetalert from './../../../Utils/sweetalert';
+import sweetalert from "./../../../Utils/sweetalert";
 import { logUserOut } from "../../../Redux/slices/userSlice";
 import React from "react";
 
@@ -22,11 +22,10 @@ const Sidebar = React.memo(({ isOpen, onClose }) => {
   const location = useLocation();
 
   const dispatch = useDispatch();
-  const handleLogout = async () => { 
-      const result = await sweetalert.logout();
-      if (result.isConfirmed)
-          dispatch(logUserOut())
-  }
+  const handleLogout = async () => {
+    const result = await sweetalert.logout();
+    if (result.isConfirmed) dispatch(logUserOut());
+  };
 
   const menuItems = [
     { icon: FaHome, text: "Main Page", path: "/socialHub", scr: "/socialHub" },
@@ -93,14 +92,13 @@ const Sidebar = React.memo(({ isOpen, onClose }) => {
       />
       <div
         className={`
-        fixed top-0 left-0 h-full bg-gray-800 text-white w-64 
+        fixed top-0 left-0 h-full bg-c-bg1 text-c-black w-[225px] 
         transform transition-transform duration-300 ease-in-out z-50
         ${isOpen ? "translate-x-0" : "-translate-x-full"}
-        lg:translate-x-0
+        lg:translate-x-0 shadow-xl
       `}
       >
         <SidebarHeader onClose={onClose} />
-
         <nav className="mt-6">
           <div className="space-y-1">
             {menuItems.map((item) => (
@@ -114,18 +112,16 @@ const Sidebar = React.memo(({ isOpen, onClose }) => {
             ))}
           </div>
 
-          <button onClick={handleLogout} className="absolute bottom-0 w-full border-t border-gray-700 p-4 cursor-pointer">
-            <SidebarItem
-              icon={FaSignOutAlt}
-              text="Logout"
-              
-            />
+          <button
+            onClick={handleLogout}
+            className="absolute bottom-0 w-full border-t-2 border-h-bg1 p-4 cursor-pointer"
+          >
+            <SidebarItem icon={FaSignOutAlt} text="Logout" />
           </button>
         </nav>
       </div>
     </>
   );
-}
-);
+});
 
 export default Sidebar;
