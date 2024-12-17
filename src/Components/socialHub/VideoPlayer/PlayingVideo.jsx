@@ -106,7 +106,7 @@ const PlayingVideo = () => {
                 </div>
                 <div className='flex flex-col gap-0.5 text-sm'>
                     <p className=''>{channel && channel.name}</p>
-                    <p className='text-gray-500'>{channel.SubscriberedOrFollowed.length} Subscribers</p>
+                    <p className='text-gray-500'>{channel && channel.SubscriberedOrFollowed && channel.SubscriberedOrFollowed.length} Subscribers</p>
                 </div>
                 <button  onClick={handleFollowAndUnfollow} className={` rounded-full ${amISubscriber ? "bg-white text-black hover:bg-gray-100" : "text-white hover:bg-sec-color bg-main-color"}  border shadow-sm py-2 px-8 text-sm ml-2  trans `}>{amISubscriber ? "Unsubscribe" :"Subscribe"}</button>
             </div>

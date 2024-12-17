@@ -1,32 +1,45 @@
-import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { fetchUserData } from '../../../Redux/slices/userDataSlice';
-import LazyImage from '../../../Utils/LazyImage';
+import axios from 'axios';
+import React, { memo, useEffect, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
-import { FaUserCircle } from "react-icons/fa";
+import { Link } from 'react-router-dom';
+import { API } from '../../../Api/Api';
+import LazyImage from '../../../Utils/LazyImage';
 
-const Admin = ({admin}) => {
-    // Get admin's pic 
-    const {userData:adminData, status, error} = useSelector((state) => state.userData);
-    const dispatch = useDispatch();
+const Admin = memo(({admin}) => {
+    // Get admin's pic  
+
+    const [adminData, setadminData] = useState(null);
+    const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(true);
+
     useEffect(() => { 
-        dispatch(fetchUserData(admin._id));
+        const getadminDetails = async () => { 
+            try {
+                setLoading(true);
+                const response = await axios.get(`${API.getUserById}/${admin._id}`);
+                setadminData(response.data);
+            } catch (error) {
+                setError(error)
+            } finally{ 
+                setLoading(false);
+            }
+        }
+        getadminDetails();
     }, [])
-    console.log(adminData);
     return (
         <>
             {
-                status === 'loading' && 
+                loading && 
                 <div className='w-fit flex gap-1'>
                     <div className="w-6 h-6 rounded-full">
                         <Skeleton height="100%" width="100%" borderRadius={"100%"} />
                     </div>
-                    <div className='w-56 h-3 rounded-sm'>
+                    <div className='w-20 h-3 rounded-sm'>
                         <Skeleton height="100%" width="100%" borderRadius={"3px"} />
                     </div>
                 </div>
             }
-            {status == 'succeeded' && <div  className="flex gap-1 items-center">
+            {!loading && adminData && !error && <Link to={`/socialHub/user/${admin._id}`} className="flex gap-1 items-center">
                 
                 { adminData && adminData.profilePicture ? (
                 <LazyImage
@@ -39,12 +52,24 @@ const Admin = ({admin}) => {
                     }
                     />
                 ) : (
-                    <FaUserCircle className="text-gray-300 w-6 h-6" />
+                    <LazyImage
+                            className="w-6 h-6 rounded-full bg-white"
+                            src={`/src/assets/user.svg`}
+                            loader={
+                                <div className="w-6 h-6 rounded-full">
+                                    <Skeleton height="100%" width="100%" borderRadius={"100%"} />
+                                </div>
+                            }
+                            />
                 )}
-                <p className="text-xs text-gray-600">{admin.name}</p>
-            </div>}
+                <p className="text-xs text-gray-600">{admin.name.length > 10 ? admin.name.split(0, 7) + "..."  : admin.name}</p>
+            </Link>}
+            {
+                error &&
+                <div className="text-xs text-red-500">{error.message}</div>
+            }
         </>
     )
-}
+})
 
 export default Admin

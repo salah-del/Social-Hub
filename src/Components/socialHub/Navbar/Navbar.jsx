@@ -11,7 +11,7 @@ import Coins from "./Coins";
 const Navbar = ({ toggleSidebar }) => {
   const { user, status, error } = useSelector((state) => state.user);
   // console.log(user);
-  console.log(status);
+  // console.log(status);
 
   return (
     <nav className="bg-white shadow-sm border-b h-[74.2px] border-gray-200 px-6 py-4">
@@ -44,7 +44,7 @@ const Navbar = ({ toggleSidebar }) => {
               7
             </span>
           </button>
-          <Notifications />
+          {/* <Notifications /> */}
           {/* User Details */}
           {status === "loading" ? (
             <div className="flex items-center space-x-3">

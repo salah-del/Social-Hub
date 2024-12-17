@@ -1,22 +1,22 @@
 import Swal from "sweetalert2";
 
 const sweetalert = {
-  deleteOrNot: () =>
+  deleteOrNot: ({title, text, confirmBtn, cancelBtn}) =>
     Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
+      title: title || "Are you sure?",
+      text: text || "You won't be able to revert this!",
       icon: "warning",
       iconColor: "#ef4444",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
-      cancelButtonText: "No, cancel",
+      confirmButtonColor: "var(--main-color)",
+      cancelButtonColor: "#D3D3D3",
+      confirmButtonText: confirmBtn || "Yes, delete it!",
+      cancelButtonText: cancelBtn || "No, cancel",
     }),
 
   logout: () =>
     Swal.fire({
-      title: "Do you want to log out?",
+      title: "Do you want to logout?",
       text: null,
       icon: "warning",
       iconColor: "var(--main-color)",
