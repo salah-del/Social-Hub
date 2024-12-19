@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { LuEye, LuEyeOff } from "react-icons/lu";
-import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import { signupUser } from "../../Redux/slices/userSlice";
 import Loader from "../../Utils/Loader";
 
@@ -62,7 +62,7 @@ const SignUp = () => {
   };
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { user, status, error } = useSelector((state) => state.user);
+  const status = useSelector((state) => state.user.status);
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -75,8 +75,6 @@ const SignUp = () => {
     setTouched(allTouched);
 
     const validationErrors = validateForm(values);
-    console.log(Object.keys(validationErrors).length);
-
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors); // Show errors
       return;
@@ -88,8 +86,8 @@ const SignUp = () => {
     console.log(res);
 
     if (res) {
-      navigate("/login", {
-        state: { name: values.name, password: values.password },
+      navigate("/otpVerification", {
+        state: { name: values.name,email:values.email , password: values.password },
       });
     }
   };

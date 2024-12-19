@@ -61,10 +61,10 @@ const InviteUsersModal = memo(({ community, followersArr, followedArr, onClose }
     return (
         <Modal title={`Invite Users ${community ? 'to ' + community.name : ''}`} onClose={onClose}>
         {loadingUsers ? (
-            <div className='mx-auto w-full flex items-center justify-center h-44'>
+            <div className=' w-full flex items-center justify-center h-44'>
                 <Loader width={'30px'} />
             </div>
-        ) : ( !error ? MemoizedUserList : <p className='mx-auto text-main-color font-semibold'>{error}</p>
+        ) : ( !error ? MemoizedUserList : <p className='w-full flex items-center justify-center  sm:text-lg text-main-color font-semibold'>{error}</p>
         )}
         </Modal>
     );

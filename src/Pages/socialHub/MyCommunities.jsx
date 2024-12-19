@@ -1,16 +1,16 @@
 import { memo, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Community from "../../Components/socialHub/MyCommunities/Community";
-import NoCommunitiesJoined from "../../Components/socialHub/MyCommunities/NoCommunitiesJoined";
-import Modal from "../../Utils/Modal";
 import CreateCommunity from "../../Components/socialHub/MyCommunities/CreateCommunity";
+import NoCommunitiesJoined from "../../Components/socialHub/MyCommunities/NoCommunitiesJoined";
+import { updateUserCommunities } from "../../Redux/slices/userSlice";
 
 const MyCommunities = memo(() => {
   const { user, status, error } = useSelector((state) => state.user);
   const [openCreateCommunityModal, setOpenCreateCommunityModal] = useState(false);
   const [allMyCommunities, setallMyCommunities] = useState(
     user && user.communities ? user.communities : [] );
-  
+    const dispatch = useDispatch();
     useEffect(() => { 
       setallMyCommunities(user && user.communities ? user.communities : []);
     }, [user])
@@ -23,21 +23,23 @@ const MyCommunities = memo(() => {
   };
 
   const handleLeaveCommunity = (commId, restore = false) => { 
-      setallMyCommunities((prev) => {
-          if (restore) {
-              // Restore the community back into the state
-              const communityToRestore = user.communities.find((comm) => comm._id === commId);
-              return [...prev, communityToRestore];
-          }
-          // Remove the community optimistically
-          return prev.filter((id) => id !== commId);
-      });
+    setallMyCommunities((prev) => {
+      const updatedCommunities = restore
+        ? [...prev, user.communities.find((comm) => comm._id === commId)]
+        : prev.filter((id) => id !== commId);
+
+      // Dispatch an action to update Redux state
+      dispatch(updateUserCommunities(updatedCommunities));
+
+      return updatedCommunities;
+    });
   };
 
   const handleAddCreatedCommunity = (comm) => { 
     console.log("comm back : ", comm);
     
     setallMyCommunities([...allMyCommunities, comm]);
+    dispatch(updateUserCommunities([...user.communities, comm]));
   }
   
   return (

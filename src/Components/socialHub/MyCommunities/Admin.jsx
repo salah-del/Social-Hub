@@ -62,7 +62,7 @@ const Admin = memo(({admin}) => {
                             }
                             />
                 )}
-                <p className="text-xs text-gray-600">{admin.name.length > 10 ? admin.name.split(0, 7) + "..."  : admin.name}</p>
+                <p className="text-xs text-gray-600">{admin.name.length > 10 ? admin.name.slice(0, 7) + "..."  : admin.name}</p>
             </Link>}
             {
                 error &&

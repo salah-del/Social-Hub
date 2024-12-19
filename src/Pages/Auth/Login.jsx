@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { LuEye, LuEyeOff } from "react-icons/lu";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
@@ -7,10 +7,11 @@ import Loader from "../../Utils/Loader";
 
 const Login = () => {
   const location = useLocation();
+  const loginBtnRef = useRef(null);
 
-  // if there is name and password coming from signup page
   const usernameFromSignup = location.state?.name || "";
   const passwordFromSignup = location.state?.password || "";
+
   const [inputs, setInputs] = useState({
     name: "",
     password: "",
@@ -19,25 +20,24 @@ const Login = () => {
     nameError: "",
     passwordError: "",
   });
-
+  
   const [showPassword, setShowPassword] = useState(false);
-
-  const { user, status, error } = useSelector((state) => state.user);
-
+  const status = useSelector((state) => state.user.status);
   const dispatch = useDispatch();
+
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (usernameFromSignup && passwordFromSignup) {
-      console.log(usernameFromSignup, passwordFromSignup);
 
       dispatch(
         loginUser({ name: usernameFromSignup, password: passwordFromSignup })
       );
     } else if (checkIfInputsValid()) {
-      // login
       dispatch(loginUser({ name: inputs.name, password: inputs.password }));
     }
   };
+  
 
   const handleInputsChange = (e) => {
     setInputs({ ...inputs, [e.target.name]: e.target.value });
@@ -57,7 +57,7 @@ const Login = () => {
     } else if (!inputs.password) {
       setErrors({ ...errors, passwordError: "Please enter your password" });
       isValid = false;
-    }
+    } 
     if (isValid) {
       setErrors({});
       return true;
@@ -79,7 +79,7 @@ const Login = () => {
           Please enter your username and password to continue
         </p>
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className={`focus:border-main-color `}>
+          <div className={`focus:border-main-color`}>
             <div className=" w-full  flex items-center justify-between  text-sm font-medium text-gray-700 ">
               <p className="mb-2">User name:</p>
               {errors.nameError && (
@@ -91,13 +91,14 @@ const Login = () => {
             <input
               type="text"
               name="name"
+              
               value={usernameFromSignup ? usernameFromSignup : inputs.name}
               onChange={handleInputsChange}
               className={`w-full p-2 outline-1 border-2 rounded-md bg-gray-50 ${
                 errors.nameError
                   ? "outline-red-400 border-red-400"
                   : "focus:outline-gray-400"
-              }  `}
+              }`}
               placeholder="Enter your username"
             />
           </div>
@@ -142,11 +143,13 @@ const Login = () => {
           {status !== "loading" && (
             <button
               type="submit"
+              ref={loginBtnRef}
               className={`w-full bg-main-color text-white border-[1px] border-main-color py-2 rounded-md hover:bg-sec-color hover:border-sec-color trans `}
             >
               Login
             </button>
           )}
+          
           {status === "loading" && (
             <div className="w-full justify-center h-[41px] mt-[16px] flex items-center">
               <Loader />
