@@ -2,14 +2,24 @@ import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import Coins from "../../Components/socialHub/Navbar/Coins";
 import { FaCheck } from "react-icons/fa";
+import { API } from "../../Api/Api";
+import axios from "axios";
+import sweetalert from "../../Utils/sweetalert";
+import PlanActionsHook from "../../Hooks/PlanActionsHook";
 const Plans = () => {
+  const { getUserPlan, userPlan } = PlanActionsHook();
   const loc = useLocation();
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [loc.pathname]);
 
+  useEffect(() => {
+    getUserPlan();
+  }, []);
+
   const plans = [
     {
+      planName: null,
       title: "Free",
       text: "For individuals just getting started",
       price: "0",
@@ -23,6 +33,7 @@ const Plans = () => {
       ],
     },
     {
+      planName: "business",
       title: "Business",
       text: "For individuals just getting started",
       price: "5000",
@@ -37,6 +48,7 @@ const Plans = () => {
       ],
     },
     {
+      planName: "vip",
       title: "VIP",
       text: "For individuals just getting started",
       price: "6500",
@@ -52,6 +64,7 @@ const Plans = () => {
       ],
     },
     {
+      planName: "superVIP",
       title: "Super VIP",
       text: "For individuals just getting started",
       price: "8000",
@@ -69,8 +82,23 @@ const Plans = () => {
       ],
     },
   ];
-  return (
 
+  const handleSubscribePlan = async (planName) => {
+    try {
+      const response = await axios.post(API.subscribePlan, {
+        planType: planName,
+      });
+      sweetalert.done(response.data.message);
+      console.log(response);
+    } catch (error) {
+      sweetalert.message(
+        "Your balance is insufficient",
+        error.response.data.message
+      );
+    }
+  };
+
+  return (
     <div className="w-full max-w-7xl">
       <div className="flex max-sm:flex-col  items-center justify-between">
         <h2 className="text-3xl font-bold mb-6">Choose Your Plan</h2>
@@ -81,12 +109,14 @@ const Plans = () => {
           <div
             key={plan.title}
             className={`${
-              plan.isActive ? "border-sec-color border shadow-xl" : "shadow-md"
+              userPlan === plan.planName
+                ? "border-sec-color border shadow-xl"
+                : "shadow-md"
             } bg-white rounded-lg  p-6 flex flex-col flex-1`}
           >
             <h3
               className={`text-xl ${
-                plan.isActive ? "text-main-color" : ""
+                userPlan === plan.planName ? "text-main-color" : ""
               } font-semibold mb-4`}
             >
               {plan.title}
@@ -107,19 +137,25 @@ const Plans = () => {
                   </li>
                 ))}
             </ul>
-            <button
-              className={`${
-                plan.isActive
-                  ? " pointer-events-none bg-gray-600"
-                  : " bg-main-color hover:bg-sec-color"
-              } text-white rounded-md py-2 px-4  trans`}
-            >
-              {plan.isActive ? "Chosen" : "Choose"} Plan
-            </button>
+            {userPlan !== plan.planName && plan.planName === null ? (
+              <div className={`text-center text-main-color py-2 px-4 `}>
+              Default Plan
+              </div>
+            ) : (
+              <button
+                onClick={() => handleSubscribePlan(plan.planName)}
+                className={`${
+                  userPlan === plan.planName
+                    ? " pointer-events-none bg-gray-600"
+                    : " bg-main-color hover:bg-sec-color"
+                } text-white rounded-md py-2 px-4  trans`}
+              >
+                {userPlan === plan.planName ? "Current" : "Choose"} Plan
+              </button>
+            )}
           </div>
         ))}
       </div>
-
     </div>
   );
 };

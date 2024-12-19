@@ -2,13 +2,19 @@ import { FaBars, FaSearch, FaUserCircle } from "react-icons/fa";
 import { TbMessageCircle } from "react-icons/tb";
 import Notifications from "./Notifications";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
 import Skeleton from "react-loading-skeleton";
-import Cookies from "js-cookie";
 import { Link } from "react-router-dom";
 import LazyImage from "../../../Utils/LazyImage";
 import Coins from "./Coins";
+import PlanActionsHook from "../../../Hooks/PlanActionsHook";
+import profile from "../../../assets/profile.jpg";
+import { useEffect } from "react";
 const Navbar = ({ toggleSidebar }) => {
+  const { getUserPlan, userPlan } = PlanActionsHook();
+
+  useEffect(() => {
+    getUserPlan();
+  }, []);
   const { user, status, error } = useSelector((state) => state.user);
   // console.log(user);
   // console.log(status);
@@ -48,15 +54,25 @@ const Navbar = ({ toggleSidebar }) => {
           {/* User Details */}
           {status === "loading" ? (
             <div className="flex items-center space-x-3">
-              <Skeleton width={100} height={24} />
-              <Skeleton circle width={40} height={40} />
+              <div className="flex flex-col justify-center items-center">
+                <Skeleton width={100} height={14} />
+                <Skeleton width={80} height={12} />
+              </div>
+              <Skeleton circle width={45} height={45} />
             </div>
           ) : (
             <Link
               to={`myProfile`}
               className="flex items-center space-x-3 focus:outline-none"
             >
-              <span className="text-gray-700 font-medium max-sm:hidden">{user?.name}</span>
+              <div className="flex flex-col justify-center items-center">
+                <span className="text-gray-700 font-medium max-sm:hidden">
+                  {user?.name}
+                </span>
+                <span className="text-main-color tracking-[1px] text-sm font-medium max-sm:hidden">
+                  {userPlan == null ? "Free Plan" : `${userPlan} Plan`}
+                </span>
+              </div>
               {user?.profilePicture ? (
                 <LazyImage
                   src={user.profilePicture}
@@ -64,9 +80,11 @@ const Navbar = ({ toggleSidebar }) => {
                   alt="profilePicture"
                 />
               ) : (
-                <div className="w-10 h-10 rounded-full bg-main-color flex items-center justify-center">
-                  <FaUserCircle className="w-6 h-6 text-white" />
-                </div>
+                <LazyImage
+                  src={profile}
+                  className="w-10 h-10 rounded-full"
+                  alt="profilePicture"
+                />
               )}
             </Link>
           )}

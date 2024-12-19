@@ -7,11 +7,14 @@ import { showToast } from "../../Utils/showToast";
 // Async Thunks
 
 // Get Posts
-export const fetchPosts = createAsyncThunk(
-  "posts/fetchPosts",
+export const fetchPostsUser = createAsyncThunk(
+  "posts/fetchPostsUser",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(API.getPosts);
+      const response = await axios.get(
+        `${API.getPostsUser}/${Cookies.get("userID")}`
+      );
+
       return response.data;
     } catch (error) {
       return rejectWithValue(
@@ -71,7 +74,7 @@ export const likePost = createAsyncThunk(
   "posts/likePost",
   async (idPost, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${API.likePost}/${idPost}/like`);
+      const response = await axios.post(API.likePost(idPost));
       return response.data;
     } catch (error) {
       return rejectWithValue(
@@ -86,7 +89,7 @@ export const dislikePost = createAsyncThunk(
   "posts/dislikePost",
   async (idPost, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${API.dislikePost}/${idPost}/dislike`);
+      const response = await axios.post(API.dislikePost(idPost));
       return response.data;
     } catch (error) {
       return rejectWithValue(
@@ -101,9 +104,7 @@ export const copyUrlForPost = createAsyncThunk(
   "posts/copyUrlForPost",
   async (idPost, { rejectWithValue }) => {
     try {
-      const response = await axios.get(
-        `${API.copyUrlForPost}/${idPost}/copyUrl`
-      );
+      const response = await axios.get(API.copyUrlForPost(idPost));
       return response.data;
     } catch (error) {
       return rejectWithValue(
@@ -118,7 +119,7 @@ export const savePost = createAsyncThunk(
   "posts/savePost",
   async (idPost, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${API.savePost}/savePost`, {
+      const response = await axios.post(`${API.savePost}/${idPost}`, {
         idPost,
       });
       return response.data;
@@ -135,7 +136,7 @@ export const unsavePost = createAsyncThunk(
   "posts/unsavePost",
   async (idPost, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${API.unsavePost}/unsavePost`, {
+      const response = await axios.post(`${API.unsavePost}/${idPost}`, {
         idPost,
       });
       return response.data;
@@ -151,7 +152,7 @@ const postsSlice = createSlice({
   name: "posts",
   initialState: {
     posts: [],
-    status: "idle", 
+    status: "idle",
     error: null,
   },
   reducers: {
@@ -162,21 +163,22 @@ const postsSlice = createSlice({
   extraReducers: (builder) => {
     builder
       // Fetch Posts
-      .addCase(fetchPosts.pending, (state) => {
+      .addCase(fetchPostsUser.pending, (state) => {
         state.status = "loading";
         state.error = null;
       })
-      .addCase(fetchPosts.fulfilled, (state, action) => {
+      .addCase(fetchPostsUser.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.posts = action.payload;
       })
-      .addCase(fetchPosts.rejected, (state, action) => {
+      .addCase(fetchPostsUser.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
       })
       // Add Post
       .addCase(addPost.fulfilled, (state, action) => {
         state.posts.push(action.payload);
+        showToast("success", "Post added successfully");
       })
       .addCase(addPost.rejected, (state, action) => {
         state.error = action.payload;
@@ -184,9 +186,11 @@ const postsSlice = createSlice({
       // Delete Post
       .addCase(deletePost.fulfilled, (state, action) => {
         state.posts = state.posts.filter((post) => post.id !== action.meta.arg);
+        showToast("success", "Post deleted successfully");
       })
       .addCase(deletePost.rejected, (state, action) => {
         state.error = action.payload;
+        showToast("error", action.payload);
       })
       // Update Post
       .addCase(updatePost.fulfilled, (state, action) => {
@@ -196,6 +200,7 @@ const postsSlice = createSlice({
         if (index !== -1) {
           state.posts[index] = { ...state.posts[index], ...action.payload };
         }
+        showToast("success", "Post updated successfully");
       })
       .addCase(updatePost.rejected, (state, action) => {
         state.error = action.payload;
@@ -227,6 +232,7 @@ const postsSlice = createSlice({
       // Copy URL for Post
       .addCase(copyUrlForPost.fulfilled, (state, action) => {
         console.log("Post URL copied successfully:", action.payload);
+        showToast("success", "Post URL copied successfully");
       })
       .addCase(copyUrlForPost.rejected, (state, action) => {
         state.error = action.payload;
@@ -234,6 +240,7 @@ const postsSlice = createSlice({
       // Save Post
       .addCase(savePost.fulfilled, (state, action) => {
         console.log("Post saved successfully:", action.payload);
+        showToast("success", "Post saved successfully");
       })
       .addCase(savePost.rejected, (state, action) => {
         state.error = action.payload;
@@ -241,6 +248,7 @@ const postsSlice = createSlice({
       // Unsave Post
       .addCase(unsavePost.fulfilled, (state, action) => {
         console.log("Post unsaved successfully:", action.payload);
+        showToast("success", "Post unsaved successfully");
       })
       .addCase(unsavePost.rejected, (state, action) => {
         state.error = action.payload;

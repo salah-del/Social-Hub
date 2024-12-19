@@ -1,21 +1,13 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { RiCoinsLine } from "react-icons/ri";
-import { API } from "../../../Api/Api";
-
-const Coins = ({title, className}) => {
-  const [coins, setCoins] = useState({ balance: 0 }); // Default balance value
+import useCoinsActionsHook from "../../../Hooks/useCoinsActionsHook";
+const Coins = ({ title, className }) => {
+  const { getCoins } = useCoinsActionsHook();
+  const [coins, setCoins] = useState({ balance: 0 });
 
   useEffect(() => {
-    const getCoins = async () => {
-      try {
-        const response = await axios.get(API.getBalance);
-        setCoins(response.data);
-      } catch (error) {
-        console.error("Error fetching coins balance:", error);
-      }
-    };
-    getCoins();
+    getCoins({ setCoins });
   }, []);
 
   return (

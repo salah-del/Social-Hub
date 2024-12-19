@@ -14,8 +14,8 @@ const Notifications = () => {
     const getNotifications = async () => {
       try {
         const response = await axios.get(`${API.showNotifications}/${userId}`);
-        setNotifications(response.data);
-        // console.log(response.data);
+        setNotifications(response.data.notifications);
+        console.log(response.data.notifications);
       } catch (error) {
         console.error(error);
       }
@@ -40,7 +40,7 @@ const Notifications = () => {
       >
         <FaBell size={20} />
         <span className="absolute -top-1.5 -right-1.5  bg-main-color text-white text-xs rounded-full w-[18px] h-[18px]  flex items-center justify-center">
-          {notifications.length}
+          {notifications?.length}
         </span>
       </button>
 
