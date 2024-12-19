@@ -50,7 +50,7 @@ const Navbar = ({ toggleSidebar }) => {
               7
             </span>
           </button>
-          <Notifications />
+          {/* <Notifications /> */}
           {/* User Details */}
           {status === "loading" ? (
             <div className="flex items-center space-x-3">

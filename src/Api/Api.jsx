@@ -40,10 +40,12 @@ export const API = {
   deleteUser: `${BASE_URL}/users`, //   /:userId
   updateUser: `${BASE_URL}/users`, // body params
   /* ======= Communities ======= */
-  addCommunity: `${BASE_URL}/communities/create`,
+  createCommunity: `${BASE_URL}/communities/create`,
   getCommunityById: `${BASE_URL}/communities/community`, // /:idCommunity
   inviteToCommunity: `${BASE_URL}/communities/invite`,
   acceptInvitation: `${BASE_URL}/communities/accept-invitation`,
+  leaveCommunity: `${BASE_URL}/communities/exit-community/`, // /:idCommunity
+  deleteCommunity: `${BASE_URL}/communities/delete-community/`, // /:idCommunity
   /* ======= Notifications ======= */
   showNotifications: `${BASE_URL}/notifications`, //     /:idUser
   newNotifications: `${BASE_URL}/notifications//New`, //     /:idUser

@@ -7,6 +7,7 @@ import ProtectedRoute from "./Pages/ProtectedRoute";
 import PublicRoute from "./Pages/PublicRoute";
 import SocialHubLayout from "./Pages/socialHub/SocialHubLayout";
 import Loader from "./Utils/Loader";
+import OTPField from "./Pages/Auth/OTPField";
 
 // lazy loading for components
 const LandingPage = lazy(() => import("./Pages/LandingPage/LandingPage"));
@@ -40,48 +41,13 @@ const App = () => {
               </PublicRoute>
             }
           >
-            <Route
-              index
-              element={
-                <Suspense
-                  fallback={
-                    <div className="w-full h-[calc(100vh-70px)] flex items-center justify-center">
-                      <Loader />
-                    </div>
-                  }
-                >
-                  <LandingPage />
-                </Suspense>
-              }
-            />
-            <Route
-              path="login"
-              element={
-                <Suspense
-                  fallback={
-                    <div className="w-full h-[calc(100vh-70px)] flex items-center justify-center">
-                      <Loader />
-                    </div>
-                  }
-                >
-                  <Login />
-                </Suspense>
-              }
-            />
-            <Route
-              path="signup"
-              element={
-                <Suspense
-                  fallback={
-                    <div className="w-full h-[calc(100vh-70px)] flex items-center justify-center">
-                      <Loader />
-                    </div>
-                  }
-                >
-                  <SignUp />
-                </Suspense>
-              }
-            />
+
+            <Route index element={<Suspense fallback={<div className="w-full h-[calc(100vh-70px)] flex items-center justify-center"><Loader /></div>}><LandingPage /></Suspense>} />
+            <Route path="login" element={<Suspense fallback={<div className="w-full h-[calc(100vh-70px)] flex items-center justify-center"><Loader /></div>}><Login /></Suspense>} />
+            <Route path="otpVerification" element={<Suspense fallback={<div className="w-full h-[calc(100vh-70px)] flex items-center justify-center"><Loader /></div>}><OTPField /></Suspense>} />
+            <Route path="signup" element={<Suspense fallback={<div className="w-full h-[calc(100vh-70px)] flex items-center justify-center"><Loader /></div>}><SignUp /></Suspense>} />
+
+
           </Route>
           {/* End of landing page routes */}
 

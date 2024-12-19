@@ -45,6 +45,11 @@ ul {
 ::-webkit-scrollbar-track {
   background-color: var(--c-black);
 }
+
+.friendsInModal::-webkit-scrollbar { 
+  display: none;
+} 
+
 a {
   text-decoration: none;
   color: black;
