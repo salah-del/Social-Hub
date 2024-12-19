@@ -12,17 +12,16 @@ import Loader from "./Utils/Loader";
 const LandingPage = lazy(() => import("./Pages/LandingPage/LandingPage"));
 const Login = lazy(() => import("./Pages/Auth/Login"));
 const SignUp = lazy(() => import("./Pages/Auth/SignUp"));
-const Friends = lazy(() => import("./Pages/socialHub/Friends"));
 const MainPage = lazy(() => import("./Pages/socialHub/MainPage"));
 const MyCommunities = lazy(() => import("./Pages/socialHub/MyCommunities"));
 const MyMessages = lazy(() => import("./Pages/socialHub/MyMessages"));
 const People = lazy(() => import("./Pages/socialHub/People"));
 const Plans = lazy(() => import("./Pages/socialHub/Plans"));
 const Reports = lazy(() => import("./Pages/socialHub/Reports"));
-const SavedItems = lazy(() => import("./Pages/socialHub/SavedItems"));
 const Trending = lazy(() => import("./Pages/socialHub/Trending"));
 const VideoPlayer = lazy(() => import("./Pages/socialHub/VideoPlayer"));
-const MyProfile = lazy(() => import("./Pages/socialHub/MyProfile"));
+const MyProfile = lazy(() => import("./Pages/socialHub/Profile/MyProfile"));
+const BetaBotAi = lazy(() => import("./Pages/socialHub/BetaBotAi"));
 const NotFound = lazy(() => import("./Pages/NotFound"));
 
 const App = () => {
@@ -41,11 +40,48 @@ const App = () => {
               </PublicRoute>
             }
           >
-
-            <Route index element={<Suspense fallback={<div className="w-full h-[calc(100vh-70px)] flex items-center justify-center"><Loader /></div>}><LandingPage /></Suspense>} />
-            <Route path="login" element={<Suspense fallback={<div className="w-full h-[calc(100vh-70px)] flex items-center justify-center"><Loader /></div>}><Login /></Suspense>} />
-            <Route path="signup" element={<Suspense fallback={<div className="w-full h-[calc(100vh-70px)] flex items-center justify-center"><Loader /></div>}><SignUp /></Suspense>} />
-
+            <Route
+              index
+              element={
+                <Suspense
+                  fallback={
+                    <div className="w-full h-[calc(100vh-70px)] flex items-center justify-center">
+                      <Loader />
+                    </div>
+                  }
+                >
+                  <LandingPage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="login"
+              element={
+                <Suspense
+                  fallback={
+                    <div className="w-full h-[calc(100vh-70px)] flex items-center justify-center">
+                      <Loader />
+                    </div>
+                  }
+                >
+                  <Login />
+                </Suspense>
+              }
+            />
+            <Route
+              path="signup"
+              element={
+                <Suspense
+                  fallback={
+                    <div className="w-full h-[calc(100vh-70px)] flex items-center justify-center">
+                      <Loader />
+                    </div>
+                  }
+                >
+                  <SignUp />
+                </Suspense>
+              }
+            />
           </Route>
           {/* End of landing page routes */}
 
@@ -83,20 +119,6 @@ const App = () => {
                   }
                 >
                   <Trending />
-                </Suspense>
-              }
-            />
-            <Route
-              path="friends"
-              element={
-                <Suspense
-                  fallback={
-                    <div className="w-full h-screen flex items-center justify-center">
-                      <Loader />
-                    </div>
-                  }
-                >
-                  <Friends />
                 </Suspense>
               }
             />
@@ -143,20 +165,6 @@ const App = () => {
               }
             />
             <Route
-              path="savedItems"
-              element={
-                <Suspense
-                  fallback={
-                    <div className="w-full h-screen flex items-center justify-center">
-                      <Loader />
-                    </div>
-                  }
-                >
-                  <SavedItems />
-                </Suspense>
-              }
-            />
-            <Route
               path="myMessages"
               element={
                 <Suspense
@@ -167,6 +175,20 @@ const App = () => {
                   }
                 >
                   <MyMessages />
+                </Suspense>
+              }
+            />
+            <Route
+              path="betaBotAi"
+              element={
+                <Suspense
+                  fallback={
+                    <div className="w-full h-screen flex items-center justify-center">
+                      <Loader />
+                    </div>
+                  }
+                >
+                  <BetaBotAi />
                 </Suspense>
               }
             />

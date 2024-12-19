@@ -7,7 +7,8 @@ export const API = {
   /* ======= Posts ======= */
   addPost: `${BASE_URL}/routPost`,
   deletePost: `${BASE_URL}/routPost`, //     /:idPost
-  getPosts: `${BASE_URL}/routPost/random`, //     /:idUser
+  getAllPosts: `${BASE_URL}/routPost/random`, //     /:idUser
+  getPostsUser: `${BASE_URL}/routPost/find`, //     /:idUser
   updatePost: `${BASE_URL}/routPost`, //     /:idPost
   likePost: (idPost) => `${BASE_URL}/routPost/${idPost}/like`,
   dislikePost: (idPost) => `${BASE_URL}/routPost/${idPost}/dislike`,
@@ -45,6 +46,7 @@ export const API = {
   acceptInvitation: `${BASE_URL}/communities/accept-invitation`,
   /* ======= Notifications ======= */
   showNotifications: `${BASE_URL}/notifications`, //     /:idUser
+  newNotifications: `${BASE_URL}/notifications//New`, //     /:idUser
   /* ======= Balance ======= */
   getBalance: `${BASE_URL}/balances/get-balance`,
   deductBalance: `${BASE_URL}/balances/deduct-coins`,
@@ -53,5 +55,7 @@ export const API = {
   sendMasgageToChatGPT: `${BASE_URL}/chatRoutes/chatBot`,
   /* ======= Owners ======= */
   /* ======= Premium ======= */
+  subscribePlan: `${BASE_URL}/premium-plans/subscribe`,
+  getUserPlanById: `${BASE_URL}/premium-plans/PlanType`, //     /:idUser
   /* ======= Test 222 ======= */
 };

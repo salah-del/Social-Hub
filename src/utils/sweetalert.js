@@ -45,6 +45,15 @@ const sweetalert = {
       iconColor: "var(--main-color)",
       confirmButtonColor: "var(--main-color)",
     }),
+  message: (title, message) =>
+    Swal.fire({
+      title: title,
+      text: message,
+      icon: "info",
+      confirmButtonText: "Ok",
+      iconColor: "var(--main-color)",
+      confirmButtonColor: "var(--main-color)",
+    }),
 };
 
 export default sweetalert;

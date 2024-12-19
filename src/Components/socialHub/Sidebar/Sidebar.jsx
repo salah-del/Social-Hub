@@ -6,6 +6,7 @@ import {
   FaClipboard,
   FaUserFriends,
 } from "react-icons/fa";
+import { TbMessagePlus } from "react-icons/tb";
 import { FaArrowTrendUp } from "react-icons/fa6";
 import { BiSolidCategoryAlt } from "react-icons/bi";
 import { TbMessages } from "react-icons/tb";
@@ -36,12 +37,6 @@ const Sidebar = React.memo(({ isOpen, onClose }) => {
       scr: "/socialHub/trending",
     },
     {
-      icon: FaUserFriends,
-      text: "Friends",
-      path: "friends",
-      scr: "/socialHub/friends",
-    },
-    {
       icon: FaUsers,
       text: "People",
       path: "people",
@@ -54,22 +49,22 @@ const Sidebar = React.memo(({ isOpen, onClose }) => {
       scr: "/socialHub/plans",
     },
     {
+      icon: TbMessages,
+      text: "My Messages",
+      path: "myMessages",
+      scr: "/socialHub/myMessages",
+    },
+    {
       icon: RiCommunityLine,
       text: "Communities",
       path: "myCommunities",
       scr: "/socialHub/myCommunities",
     },
     {
-      icon: FaRegSave,
-      text: "Saved Items",
-      path: "savedItems",
-      scr: "/socialHub/savedItems",
-    },
-    {
-      icon: TbMessages,
-      text: "My Messages",
-      path: "myMessages",
-      scr: "/socialHub/myMessages",
+      icon: TbMessagePlus,
+      text: "Beta Bot AI",
+      path: "betaBotAi",
+      scr: "/socialHub/betaBotAi",
     },
     {
       icon: FaClipboard,
