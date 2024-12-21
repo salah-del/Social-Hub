@@ -1,7 +1,7 @@
 import Swal from "sweetalert2";
 
 const sweetalert = {
-  deleteOrNot: ({title, text, confirmBtn, cancelBtn}) =>
+  deleteOrNot: ({ title, text, confirmBtn, cancelBtn }) =>
     Swal.fire({
       title: title || "Are you sure?",
       text: text || "You won't be able to revert this!",
@@ -27,28 +27,26 @@ const sweetalert = {
       cancelButtonText: "Cancel",
     }),
 
-  done: (text) =>
+  done: (message) =>
     Swal.fire({
       icon: "success",
-      title: "Deleted!",
-      // text: `The ${name} has been deleted successfully.`,
-      text: text,
-      iconColor: "var(--main-color)",
-      confirmButtonColor: "var(--main-color)",
+      title: "Success!",
+      text: message || "Operation completed successfully.",
+      iconColor: "#28a745",
+      confirmButtonColor: "#28a745",
     }),
-  error: (text) =>
+  error: (message) =>
     Swal.fire({
       icon: "error",
       title: "Error!",
-      // text: "Something went wrong, please try again.",
-      text: text,
+      text: message || "Something went wrong, please try again.",
       iconColor: "var(--main-color)",
       confirmButtonColor: "var(--main-color)",
     }),
-  message: (title, message) =>
+  info: (title, message) =>
     Swal.fire({
-      title: title,
-      text: message,
+      title: title || "Info",
+      text: message || "Here is some information for you.",
       icon: "info",
       confirmButtonText: "Ok",
       iconColor: "var(--main-color)",

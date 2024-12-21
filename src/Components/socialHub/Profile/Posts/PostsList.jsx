@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchPostsUser } from "../../../Redux/slices/postsReducer";
+import { fetchPostsUser } from "../../../../Redux/slices/postsReducer";
 import PostCard from "./PostCard";
 
 const PostsList = () => {
@@ -8,10 +8,11 @@ const PostsList = () => {
   const { posts, status, error } = useSelector((state) => state.posts);
 
   useEffect(() => {
-    dispatch(fetchPostsUser());
+    // dispatch(fetchPostsUser());
   }, [dispatch]);
 
-  if (status === "loading") return <p className="text-center text-gray-500">Loading posts...</p>;
+  if (status === "loading")
+    return <p className="text-center text-gray-500">Loading posts...</p>;
   if (error) return <p className="text-center text-red-500">Error: {error}</p>;
 
   return (

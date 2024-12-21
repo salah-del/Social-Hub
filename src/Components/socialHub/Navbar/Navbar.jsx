@@ -51,6 +51,7 @@ const Navbar = ({ toggleSidebar }) => {
             </span>
           </button>
           {/* <Notifications /> */}
+          <Notifications />
           {/* User Details */}
           {status === "loading" ? (
             <div className="flex items-center space-x-3">
@@ -62,7 +63,7 @@ const Navbar = ({ toggleSidebar }) => {
             </div>
           ) : (
             <Link
-              to={`myProfile`}
+              to={`profile/${user?._id}`}
               className="flex items-center space-x-3 focus:outline-none"
             >
               <div className="flex flex-col justify-center items-center">

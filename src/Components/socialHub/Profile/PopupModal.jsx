@@ -15,7 +15,7 @@ function PopupModal({ count, title, usersId }) {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      if (usersId.length > 0) {
+      if (usersId?.length > 0) {
         try {
           // جلب البيانات باستخدام Promise.all
           const Users = await Promise.all(
@@ -31,7 +31,7 @@ function PopupModal({ count, title, usersId }) {
     fetchUsers();
   }, [user, dispatch]);
 
-  console.log(users);
+  // console.log(users);
 
   return (
     <>
@@ -43,7 +43,7 @@ function PopupModal({ count, title, usersId }) {
       {/* Overlay ومحتوى المودال */}
       {isOpen && (
         <div
-          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+          className="fixed inset-0 flex items-center justify-center backdrop-blur-sm bg-black bg-opacity-60 z-50"
           onClick={toggleModal} // يقفل المودال لو ضغطت على الخلفية
         >
           <div

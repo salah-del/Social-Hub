@@ -6,8 +6,9 @@ import { API } from "../../Api/Api";
 import axios from "axios";
 import sweetalert from "../../Utils/sweetalert";
 import PlanActionsHook from "../../Hooks/PlanActionsHook";
+import { showToast } from "../../Utils/showToast";
 const Plans = () => {
-  const { getUserPlan, userPlan } = PlanActionsHook();
+  const { getUserPlan, userPlan , handleSubscribePlan } = PlanActionsHook();
   const loc = useLocation();
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -16,7 +17,7 @@ const Plans = () => {
   useEffect(() => {
     getUserPlan();
   }, []);
-
+  
   const plans = [
     {
       planName: null,
@@ -82,22 +83,6 @@ const Plans = () => {
       ],
     },
   ];
-
-  const handleSubscribePlan = async (planName) => {
-    try {
-      const response = await axios.post(API.subscribePlan, {
-        planType: planName,
-      });
-      sweetalert.done(response.data.message);
-      console.log(response);
-    } catch (error) {
-      sweetalert.message(
-        "Your balance is insufficient",
-        error.response.data.message
-      );
-    }
-  };
-
   return (
     <div className="w-full max-w-7xl">
       <div className="flex max-sm:flex-col  items-center justify-between">
@@ -139,7 +124,7 @@ const Plans = () => {
             </ul>
             {userPlan !== plan.planName && plan.planName === null ? (
               <div className={`text-center text-main-color py-2 px-4 `}>
-              Default Plan
+                Default Plan
               </div>
             ) : (
               <button

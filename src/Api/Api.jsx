@@ -15,6 +15,9 @@ export const API = {
   copyUrlForPost: (idPost) => `${BASE_URL}/routPost/${idPost}/copyUrl`,
   savePost: `${BASE_URL}/routPost/savePost`, //     /:idPost
   unsavePost: `${BASE_URL}/routPost/unsavePost`, //     /:idPost
+  /* ======= Masseges ======= */
+  SendMassege: `${BASE_URL}/messages`, // Post
+  getMasseges: `${BASE_URL}/messages`,
   /* ======= Comments ======= */
   addComment: `${BASE_URL}/comments`,
   replyComment: `${BASE_URL}/comments`,
@@ -32,13 +35,22 @@ export const API = {
   deleteVideo: `${BASE_URL}/videos`, //   /:videoId
   copyUrlForVideo: (idVideo) => `${BASE_URL}/videos/${idVideo}/copyUrl`,
   /* ======= Users ======= */
-  getUserById: `${BASE_URL}/users/find`, //   /:userId
-  subscribe: `${BASE_URL}/users/sub`, //   /:idUser
-  unsubscribe: `${BASE_URL}/users/unsub`, //   /:idUser
+  getAllUsers: `${BASE_URL}/users/getAllUsers`,
+  getUserById: `${BASE_URL}/users/find`, //     /:userID
+
+  subscribe: `${BASE_URL}/users/sub`, //   /:userID
+  unsubscribe: `${BASE_URL}/users/unsub`, //   /:userID
+
+  AddFriend: `${BASE_URL}/users/send-request`, //     /:FriendID
+  AcceptFriend: `${BASE_URL}/users/accept-request`, //     /:FriendID
+   // in Body : {"receiverId":"6761843c3aa8c81ef60868ee"}
+   
+  updateUser: `${BASE_URL}/users`, // :userId
+  // in Body : values For Update User
+
+  deleteUser: `${BASE_URL}/users`, //   /:userId
   likeVideo: `${BASE_URL}/users/like`, //   /:videoId
   dislikeVideo: `${BASE_URL}/users/dislike`, //   /:videoId
-  deleteUser: `${BASE_URL}/users`, //   /:userId
-  updateUser: `${BASE_URL}/users`, // body params
   /* ======= Communities ======= */
   createCommunity: `${BASE_URL}/communities/create`,
   getCommunityById: `${BASE_URL}/communities/community`, // /:idCommunity

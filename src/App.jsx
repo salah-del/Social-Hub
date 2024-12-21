@@ -16,12 +16,21 @@ const SignUp = lazy(() => import("./Pages/Auth/SignUp"));
 const MainPage = lazy(() => import("./Pages/socialHub/MainPage"));
 const MyCommunities = lazy(() => import("./Pages/socialHub/MyCommunities"));
 const MyMessages = lazy(() => import("./Pages/socialHub/MyMessages"));
-const People = lazy(() => import("./Pages/socialHub/People"));
+const PeopleList = lazy(() => import("./Pages/socialHub/People/PeopleList"));
 const Plans = lazy(() => import("./Pages/socialHub/Plans"));
 const Reports = lazy(() => import("./Pages/socialHub/Reports"));
 const Trending = lazy(() => import("./Pages/socialHub/Trending"));
 const VideoPlayer = lazy(() => import("./Pages/socialHub/VideoPlayer"));
 const MyProfile = lazy(() => import("./Pages/socialHub/Profile/MyProfile"));
+const Profile = lazy(() => import("./Pages/socialHub/Profile/Profile"));
+const Posts = lazy(() => import("./Components/socialHub/Profile/Posts/Posts"));
+const Videos = lazy(
+  () => import("./Components/socialHub/Profile/Videos/Videos")
+);
+const Friends = lazy(
+  () => import("./Components/socialHub/Profile/Friends/Friends")
+);
+const Saved = lazy(() => import("./Components/socialHub/Profile/Saved/Saved"));
 const BetaBotAi = lazy(() => import("./Pages/socialHub/BetaBotAi"));
 const NotFound = lazy(() => import("./Pages/NotFound"));
 
@@ -41,13 +50,62 @@ const App = () => {
               </PublicRoute>
             }
           >
-
-            <Route index element={<Suspense fallback={<div className="w-full h-[calc(100vh-70px)] flex items-center justify-center"><Loader /></div>}><LandingPage /></Suspense>} />
-            <Route path="login" element={<Suspense fallback={<div className="w-full h-[calc(100vh-70px)] flex items-center justify-center"><Loader /></div>}><Login /></Suspense>} />
-            <Route path="otpVerification" element={<Suspense fallback={<div className="w-full h-[calc(100vh-70px)] flex items-center justify-center"><Loader /></div>}><OTPField /></Suspense>} />
-            <Route path="signup" element={<Suspense fallback={<div className="w-full h-[calc(100vh-70px)] flex items-center justify-center"><Loader /></div>}><SignUp /></Suspense>} />
-
-
+            <Route
+              index
+              element={
+                <Suspense
+                  fallback={
+                    <div className="w-full h-[calc(100vh-70px)] flex items-center justify-center">
+                      <Loader />
+                    </div>
+                  }
+                >
+                  <LandingPage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="login"
+              element={
+                <Suspense
+                  fallback={
+                    <div className="w-full h-[calc(100vh-70px)] flex items-center justify-center">
+                      <Loader />
+                    </div>
+                  }
+                >
+                  <Login />
+                </Suspense>
+              }
+            />
+            <Route
+              path="otpVerification"
+              element={
+                <Suspense
+                  fallback={
+                    <div className="w-full h-[calc(100vh-70px)] flex items-center justify-center">
+                      <Loader />
+                    </div>
+                  }
+                >
+                  <OTPField />
+                </Suspense>
+              }
+            />
+            <Route
+              path="signup"
+              element={
+                <Suspense
+                  fallback={
+                    <div className="w-full h-[calc(100vh-70px)] flex items-center justify-center">
+                      <Loader />
+                    </div>
+                  }
+                >
+                  <SignUp />
+                </Suspense>
+              }
+            />
           </Route>
           {/* End of landing page routes */}
 
@@ -98,7 +156,7 @@ const App = () => {
                     </div>
                   }
                 >
-                  <People />
+                  <PeopleList />
                 </Suspense>
               }
             />
@@ -186,8 +244,9 @@ const App = () => {
                 </Suspense>
               }
             />
+
             <Route
-              path="myProfile"
+              path="profile/:id"
               element={
                 <Suspense
                   fallback={
@@ -196,10 +255,15 @@ const App = () => {
                     </div>
                   }
                 >
-                  <MyProfile />
+                  <Profile />
                 </Suspense>
               }
-            />
+            >
+              <Route index element={<Posts />} />
+              <Route path="videos" element={<Videos />} />
+              <Route path="friends" element={<Friends />} />
+              <Route path="saved" element={<Saved />} />
+            </Route>
           </Route>
 
           <Route

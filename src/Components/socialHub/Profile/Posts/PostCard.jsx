@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { likePost, dislikePost, deletePost, copyUrlForPost, savePost } from "../../../Redux/slices/postsReducer";
+import { likePost, dislikePost, deletePost, copyUrlForPost, savePost } from "../../../../Redux/slices/postsReducer";
 import { AiFillLike, AiFillDislike, AiFillDelete, AiOutlineSave, AiOutlineLink } from "react-icons/ai";
 
 const PostCard = ({ post }) => {
