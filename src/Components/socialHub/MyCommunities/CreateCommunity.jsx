@@ -28,6 +28,12 @@ const CreateCommunity = ({handleCreateCommunity, closeCreateModal}) => {
                 closeCreateModal();
             }
         } catch (error) {
+            if (error?.response?.data?.message) { 
+                showToast("error", error.response.data.message);
+            }
+            else 
+                showToast("error", "Community wasn't created");
+
             setLoading(false);
         } finally{ 
             setLoading(false);

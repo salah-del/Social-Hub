@@ -40,7 +40,7 @@ const Navbar = ({ toggleSidebar }) => {
             </div>
             */}
 
-          <Coins title="" className="" />
+          {/* <Coins title="" className="" /> */}
         </div>
 
         <div className="flex items-center space-x-6">

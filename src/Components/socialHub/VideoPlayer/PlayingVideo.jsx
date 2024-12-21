@@ -11,11 +11,11 @@ const PlayingVideo = () => {
     const location = useLocation();
     const video = location.state?.video || "";
     const channel = location.state?.user || "";
+    console.log("video : ", video);
+    console.log("channel : ", channel);
     const user = useSelector((state) => state.user.user);
     const [views, setViews] = useState(video ? video.views : 0);
     const [amISubscriber, setAmISubscriber] = useState(false);
-    console.log(channel);
-    
     
     const [error, setError] = useState("");
 
@@ -23,12 +23,9 @@ const PlayingVideo = () => {
         window.scrollTo(0, 0);
         const viewVideo = async () => { 
             const response = await axios.put(`${API.viewVideo}/${video._id}`);
-            
-            
             if (response.data) { 
                 setViews(prev => prev + 1);
             }
-            
         }
         const handleAmISubscriber = () => { 
             if (channel && channel.SubscriberedOrFollowed && user) { 
