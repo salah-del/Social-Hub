@@ -64,7 +64,7 @@ const InviteUsersModal = memo(({ community, followersArr, followedArr, onClose }
             <div className=' w-full flex items-center justify-center h-44'>
                 <Loader width={'30px'} />
             </div>
-        ) : ( !error ? MemoizedUserList : <p className='w-full flex items-center justify-center  sm:text-lg text-main-color font-semibold'>{error}</p>
+        ) : ( !error ? MemoizedUserList : <p className='w-full flex items-center justify-center  sm:text-lg text-gray-500 '>{error}</p>
         )}
         </Modal>
     );

@@ -30,6 +30,7 @@ export const API = {
   getTrendVideos: `${BASE_URL}/videos/trend`,
   getRandomVideos: `${BASE_URL}/videos/random`,
   getVideosByTags: `${BASE_URL}/videos/tags`, // params : tags as a string
+  getVideosForSpecificUser: `${BASE_URL}/videos/find`, // /:userId
   viewVideo: `${BASE_URL}/videos/viewMoudel`, //   /:videoId
   updateVideo: `${BASE_URL}/videos`, //   /:videoId
   deleteVideo: `${BASE_URL}/videos`, //   /:videoId
