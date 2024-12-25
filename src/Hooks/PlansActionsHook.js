@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 import { useState } from "react";
 import sweetalert from "../Utils/sweetalert";
 const userID = Cookies.get("userID");
-const PlanActionsHook = () => {
+const PlansActionsHook = () => {
   const [userPlan, setUserPlan] = useState("");
   const getUserPlan = async () => {
     try {
@@ -26,8 +26,7 @@ const PlanActionsHook = () => {
       console.log(response);
     } catch (error) {
       sweetalert.info(
-        "Your balance is insufficient",
-        error.response.data.message
+        error?.response?.data?.message || "Something went wrong"
       );
     }
   };
@@ -35,4 +34,4 @@ const PlanActionsHook = () => {
   return { getUserPlan, userPlan , handleSubscribePlan };
 };
 
-export default PlanActionsHook;
+export default PlansActionsHook;

@@ -5,10 +5,10 @@ import { FaCheck } from "react-icons/fa";
 import { API } from "../../Api/Api";
 import axios from "axios";
 import sweetalert from "../../Utils/sweetalert";
-import PlanActionsHook from "../../Hooks/PlanActionsHook";
+import PlanActionsHook from "../../Hooks/PlansActionsHook";
 import { showToast } from "../../Utils/showToast";
 const Plans = () => {
-  const { getUserPlan, userPlan , handleSubscribePlan } = PlanActionsHook();
+  const { getUserPlan, userPlan, handleSubscribePlan } = PlanActionsHook();
   const loc = useLocation();
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -17,7 +17,7 @@ const Plans = () => {
   useEffect(() => {
     getUserPlan();
   }, []);
-  
+
   const plans = [
     {
       planName: null,

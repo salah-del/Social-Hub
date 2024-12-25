@@ -19,12 +19,12 @@ const BetaBotAI = () => {
 
     try {
       const response = await axios.post(API.sendMasgageToChatGPT, {
-        message: userInput,
+        prompt: userInput,
       });
 
       const botResponse = {
         sender: "bot",
-        text: response.data.botResponse,
+        text: response.data.output,
       };
 
       setMessages((prevMessages) => [...prevMessages, botResponse]);

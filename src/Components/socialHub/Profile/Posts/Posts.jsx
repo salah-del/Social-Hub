@@ -24,7 +24,7 @@ function Posts() {
       timestamp: "4 hours ago",
     },
     {
-      id: 2,
+      id: 3,
       authorName: "Jane Smith",
       authorAvatar: "https://i.pravatar.cc/150?img=2",
       content: "Beautiful sunset today! 🌅",

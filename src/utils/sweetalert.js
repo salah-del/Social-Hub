@@ -32,20 +32,21 @@ const sweetalert = {
       icon: "success",
       title: "Success!",
       text: message || "Operation completed successfully.",
-      iconColor: "#28a745",
-      confirmButtonColor: "#28a745",
+      // iconColor: "#28a745",
+      iconColor: "var(--sec-color)",
+      confirmButtonColor: "var(--sec-color)",
     }),
-  error: (message) =>
+  error: (title, message) =>
     Swal.fire({
       icon: "error",
-      title: "Error!",
+      title: title || "Error!",
       text: message || "Something went wrong, please try again.",
       iconColor: "var(--main-color)",
       confirmButtonColor: "var(--main-color)",
     }),
-  info: (title, message) =>
+  info: ( message) =>
     Swal.fire({
-      title: title || "Info",
+      // title: title || "Info",
       text: message || "Here is some information for you.",
       icon: "info",
       confirmButtonText: "Ok",

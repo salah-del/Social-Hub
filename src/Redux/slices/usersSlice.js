@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { API } from "../../Api/Api";
+import { showToast } from "../../Utils/showToast";
 
 // Helper function to handle errors
 const handleError = (error, rejectWithValue) => {
@@ -74,8 +75,11 @@ export const addFriend = createAsyncThunk(
   async (friendID, { rejectWithValue }) => {
     try {
       const response = await axios.post(`${API.AddFriend}/${friendID}`);
+      console.log(response);
       return response.data;
     } catch (error) {
+      console.log(response);
+
       return handleError(error, rejectWithValue);
     }
   }
@@ -137,7 +141,7 @@ const userSlice = createSlice({
         state.error = null;
       })
       .addCase(getAllUsers.fulfilled, (state, action) => {
-        state.users = action.payload;
+        state.users = action.payload.users || [];
         state.status = "succeeded";
       })
       .addCase(getAllUsers.rejected, (state, action) => {
@@ -195,14 +199,16 @@ const userSlice = createSlice({
       })
       // updateUser
       .addCase(updateUser.fulfilled, (state, action) => {
-        state.userData = action.payload;
         state.status = "succeeded";
+        state.userData = action.payload;
+        showToast("success", "Your information has been updated.");
       })
       .addCase(updateUser.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
-      })
-      // deleteUser
+        showToast("error", action.payload);
+      });
+    // deleteUser
     //   .addCase(deleteUser.pending, (state) => {
     //     state.status = "loading";
     //     state.error = null;

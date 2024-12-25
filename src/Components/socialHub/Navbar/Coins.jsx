@@ -1,13 +1,14 @@
-import axios from "axios";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import { RiCoinsLine } from "react-icons/ri";
-import useCoinsActionsHook from "../../../Hooks/useCoinsActionsHook";
+import CoinsActionsHook from "../../../Hooks/CoinsActionsHook";
+
 const Coins = ({ title, className }) => {
-  const { getCoins } = useCoinsActionsHook();
-  const [coins, setCoins] = useState({ balance: 0 });
+  const { getCoins, coins, loading } = CoinsActionsHook();
 
   useEffect(() => {
-    getCoins({ setCoins });
+    getCoins();
   }, []);
 
   return (
@@ -16,7 +17,11 @@ const Coins = ({ title, className }) => {
     >
       <RiCoinsLine className="text-3xl text-main-color hover:text-sec-color" />
       <span className="text-lg font-semibold text-gray-700">
-        {`${title}${coins.balance} Coins`}
+        {loading ? (
+          <Skeleton width={100} height={20} />
+        ) : (
+          `${title}${coins.balance} Coins`
+        )}
       </span>
     </div>
   );

@@ -35,7 +35,7 @@ export const API = {
   deleteVideo: `${BASE_URL}/videos`, //   /:videoId
   copyUrlForVideo: (idVideo) => `${BASE_URL}/videos/${idVideo}/copyUrl`,
   /* ======= Users ======= */
-  getAllUsers: `${BASE_URL}/users/getAllUsers`,
+  getAllUsers: `${BASE_URL}/users/getRandomUsers`,
   getUserById: `${BASE_URL}/users/find`, //     /:userID
 
   subscribe: `${BASE_URL}/users/sub`, //   /:userID
@@ -43,8 +43,8 @@ export const API = {
 
   AddFriend: `${BASE_URL}/users/send-request`, //     /:FriendID
   AcceptFriend: `${BASE_URL}/users/accept-request`, //     /:FriendID
-   // in Body : {"receiverId":"6761843c3aa8c81ef60868ee"}
-   
+  // in Body : {"receiverId":"6761843c3aa8c81ef60868ee"}
+
   updateUser: `${BASE_URL}/users`, // :userId
   // in Body : values For Update User
 
@@ -59,12 +59,14 @@ export const API = {
   leaveCommunity: `${BASE_URL}/communities/exit-community/`, // /:idCommunity
   deleteCommunity: `${BASE_URL}/communities/delete-community/`, // /:idCommunity
   /* ======= Notifications ======= */
-  showNotifications: `${BASE_URL}/notifications`, //     /:idUser
-  newNotifications: `${BASE_URL}/notifications//New`, //     /:idUser
+  getNotifications10By10: `${BASE_URL}/notifications`, //     /:idUser
+  getNotificationsNotReaded: `${BASE_URL}/notifications/New`, //     /:idUser
+  markIsReadNotifications: `${BASE_URL}/notifications/MarkIsRead`, //     /:idNotification
   /* ======= Balance ======= */
   getBalance: `${BASE_URL}/balances/get-balance`,
-  deductBalance: `${BASE_URL}/balances/deduct-coins`,
-  bonusBalance: `${BASE_URL}/balances/bonus-coins`,
+  bonusCoins: `${BASE_URL}/balances/bonus-coins`,
+  deductCoins: `${BASE_URL}/balances/deduct-coins`,
+  dailyBonus: `${BASE_URL}/premium-plans/Statistics`,
   /* ======= ChatGPT ======= */
   sendMasgageToChatGPT: `${BASE_URL}/chatRoutes/chatBot`,
   /* ======= Owners ======= */

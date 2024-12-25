@@ -1,67 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import PeopleCard from "./PeopleCard";
 import { FaSearch } from "react-icons/fa";
-import { API } from "../../../Api/Api";
-import axios from "axios";
+import { useUsers } from "../../../Hooks/useUsers";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const PeopleList = () => {
-  const friends = [
-    {
-      id: 1,
-      name: "John Doe",
-      mutualFriends: 3,
-      avatar: "https://via.placeholder.com/150",
-    },
-    {
-      id: 2,
-      name: "Jane Smith",
-      mutualFriends: 5,
-      avatar: "https://via.placeholder.com/150",
-    },
-    {
-      id: 3,
-      name: "Emily Johnson",
-      mutualFriends: 2,
-      avatar: "https://via.placeholder.com/150",
-    },
-    {
-      id: 1,
-      name: "John Doe",
-      mutualFriends: 3,
-      avatar: "https://via.placeholder.com/150",
-    },
-    {
-      id: 2,
-      name: "Jane Smith",
-      mutualFriends: 5,
-      avatar: "https://via.placeholder.com/150",
-    },
-    {
-      id: 3,
-      name: "Emily Johnson",
-      mutualFriends: 2,
-      avatar: "https://via.placeholder.com/150",
-    },
-  ];
-  const [people, setPeople] = useState([]);
-  const getAllPeople = async () => {
-    try {
-      const response = await axios.get(API.getAllUsers);
-      setPeople(response.data);
-      console.log(response);
-    } catch (error) {
-      if (!error.response) {
-        console.error("Network error:", error.message);
-      }
-      if (error.response?.data) {
-        console.error("Backend error:", error.response.data);
-      }
-      console.error("Unexpected error:", error.message);
-    }
-  };
+  const {
+    fetchAllUsers,
+    handleSubscribe,
+    handleUnsubscribe,
+    handleAddFriend,
+    users,
+    status,
+    error,
+  } = useUsers();
 
   useEffect(() => {
-    getAllPeople();
+    fetchAllUsers();
   }, []);
 
   return (
@@ -79,13 +35,45 @@ const PeopleList = () => {
           <FaSearch className="absolute left-3 top-3 text-black" />
         </div>
       </div>
-      <div className="grid grid-cols-1 min-[1200px]:grid-cols-2  gap-6">
-        {people.map((person , index) => (
-          <PeopleCard key={index} person={person} />
-        ))}
+      <div className="grid grid-cols-1 min-[1200px]:grid-cols-2 gap-6">
+        {status === "loading"
+          ? // عرض Skeleton أثناء التحميل
+            Array.from({ length: 6 }).map((_, index) => (
+              <div
+                key={index}
+                className="flex items-center max-[540px]:flex-col max-[540px]:gap-2 p-5 bg-gray-100 shadow border border-gray-300 rounded-lg transition-shadow duration-200"
+              >
+                {/* صورة المستخدم */}
+                <Skeleton circle width={96} height={96} />
+
+                {/* بيانات المستخدم */}
+                <div className="ml-4 flex-1  space-y-1">
+                  <Skeleton height={24} width="65%" />
+                  <Skeleton height={18} width="50%" />
+                </div>
+
+                {/* أزرار الإجراءات */}
+                <div className="ml-4 flex flex-col max-[540px]:flex-row max-[365px]:flex-col items-end gap-2">
+                  <Skeleton height={35} width={120} />
+                  <Skeleton height={35} width={120} />
+                </div>
+              </div>
+            ))
+          : users?.map((person, index) => (
+              <PeopleCard
+                key={index}
+                person={person}
+                handleSubscribe={handleSubscribe}
+                handleUnsubscribe={handleUnsubscribe}
+                handleAddFriend={handleAddFriend}
+              />
+            ))}
       </div>
       <div className="flex items-center justify-center mt-[18px]">
-        <button onClick={() => getAllPeople()} className="bg-gray-200 border-[1.5px] border-gray-300 px-4 py-2 rounded-lg text-black hover:shadow">
+        <button
+          onClick={() => fetchAllUsers()}
+          className="bg-gray-200 border-[1.5px] border-gray-300 px-4 py-2 rounded-lg text-black hover:shadow"
+        >
           Show More
         </button>
       </div>
