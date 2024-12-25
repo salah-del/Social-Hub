@@ -16,7 +16,7 @@ const ProfileVideos = memo(() => {
         if (user && user._id) { 
             getUserVideos(user._id);
         }
-    }, []);
+    }, [user]);
     useEffect(() => { 
         if (videos)
             setshownVideos(videos);

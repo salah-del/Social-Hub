@@ -260,11 +260,13 @@ const App = () => {
                 </Suspense>
               }
             >
-              <Route index element={<Posts />} />
+              <Route index element={<Posts />} /> 
               <Route path="videos" element={<ProfileVideos />} />
               <Route path="friends" element={<Friends />} />
               <Route path="saved" element={<Saved />} />
             </Route>
+
+            
           </Route>
 
           <Route

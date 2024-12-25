@@ -99,7 +99,7 @@ const optionsRef = useRef(null);
     handleOpenVideoEdit(details);
   }
   const handleClickDeleteBtn = async () => { 
-    const res = await sweetalert.deleteOrNot({title:"Do you want to delete this video?", confirmBtn:"Delete", cancelBtn:"Cancel"});
+    const res = await sweetalert.deleteOrNot({title:`Do you want to delete "${video.title.slice(0,10)}..." video?`, confirmBtn:"Delete", cancelBtn:"Cancel"});
     if (res.isConfirmed) { 
       handleDeleteVideo(video._id);
     }
