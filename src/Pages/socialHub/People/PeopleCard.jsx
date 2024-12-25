@@ -3,21 +3,24 @@ import { SlUserFollow, SlUserUnfollow } from "react-icons/sl";
 import { BsPersonCheckFill } from "react-icons/bs";
 import { FaUserPlus } from "react-icons/fa";
 import profile from "../../../assets/profile.jpg";
+import { Link } from "react-router-dom";
 const PeopleCard = ({ person, handleSubscribe, handleUnsubscribe, handleAddFriend }) => {
   return (
     <div className="flex items-center max-[540px]:flex-col max-[540px]:gap-2 p-5 bg-gray-100 shadow border border-gray-300 rounded-lg hover:shadow-md transition-shadow duration-200">
       {/* صورة المستخدم */}
+      <Link to={`/socialHub/profile/${person._id}`}>
       <img
-        src={person.profilePicture || profile}
-        alt={person.name}
-        className="w-[96px] h-[96px] rounded-full"
+      src={person.profilePicture || profile}
+      alt={person.name}
+      className="w-[96px] h-[96px] rounded-full"
       />
+      </Link>
 
       {/* بيانات المستخدم */}
-      <div className="ml-4 flex-1 space-y-1">
+      <Link to={`/socialHub/profile/${person._id}`} className="ml-4 flex-1 space-y-1">
         <h2 className="text-xl font-bold text-gray-800">{person.name}</h2>
         <p className="text-sm text-gray-600">{person.mutualFriends || 0} mutual friends</p>
-      </div>
+      </Link>
 
       {/* أزرار الإجراءات */}
       <div className="ml-4 flex flex-col max-[540px]:flex-row max-[365px]:flex-col items-end gap-2">

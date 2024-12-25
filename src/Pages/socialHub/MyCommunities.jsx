@@ -11,7 +11,9 @@ const MyCommunities = memo(() => {
   const [allMyCommunities, setallMyCommunities] = useState(
     user && user.communities ? user.communities : [] );
     const dispatch = useDispatch();
+
     useEffect(() => { 
+      window.scrollTo(0, 0);
       setallMyCommunities(user && user.communities ? user.communities : []);
     }, [user])
   // Modals function 
@@ -36,10 +38,10 @@ const MyCommunities = memo(() => {
   };
 
   const handleAddCreatedCommunity = (comm) => { 
-    console.log("comm back : ", comm);
-    
-    setallMyCommunities([...allMyCommunities, comm]);
-    dispatch(updateUserCommunities([...user.communities, comm]));
+    if (comm) { 
+      setallMyCommunities([...allMyCommunities, comm]);
+      dispatch(updateUserCommunities([...user.communities, comm]));
+    }
   }
   
   return (
@@ -47,11 +49,11 @@ const MyCommunities = memo(() => {
 
       {/* Static title */}
       <div className="w-full flex items-end mb-16 justify-between">
-        <h2 className="text-3xl font-bold ">My Communities</h2>
+        <h2 className="text-2xl sm:text-3xl font-bold ">My Communities</h2>
         {user && user.communities && user.communities.length > 0 && (
           <button
             onClick={handleOpenCreateCommunityModal}
-            className="text-xs trans bg-main-color hover:bg-sec-color text-white py-2 px-4 rounded-md"
+            className="text-xs trans bg-main-color hover:bg-sec-color text-white py-2 px-2 sm:px-4 rounded-md"
           >
             Create Community
           </button>
@@ -67,7 +69,7 @@ const MyCommunities = memo(() => {
         
           {/* You have communities */}
           {user && allMyCommunities &&  allMyCommunities.length > 0 && (
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid lg:grid-cols-1 xl:grid-cols-2 gap-4">
                   {allMyCommunities.map((communityID) => (
                       <Community user={user ? user : null} key={communityID} communityId={communityID} leaveCommunity={handleLeaveCommunity}  />
                   ))}

@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { LuEye, LuEyeOff } from "react-icons/lu";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
@@ -25,15 +25,17 @@ const Login = () => {
   const status = useSelector((state) => state.user.status);
   const dispatch = useDispatch();
 
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  useEffect(() => { 
     if (usernameFromSignup && passwordFromSignup) {
-
       dispatch(
         loginUser({ name: usernameFromSignup, password: passwordFromSignup })
       );
-    } else if (checkIfInputsValid()) {
+    }
+  }, []);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (checkIfInputsValid()) {
       dispatch(loginUser({ name: inputs.name, password: inputs.password }));
     }
   };

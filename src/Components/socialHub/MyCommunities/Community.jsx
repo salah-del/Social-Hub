@@ -17,8 +17,8 @@ const Community = memo(({user, communityId, leaveCommunity}) => {
     const [isCurrUserAdmin, setIsCurrUserAdmin] = useState(false);
     // Fetch and process community details
     useEffect(() => {
-        window.scrollTo(0, 0);
-        const fetchCommunities = async () => {
+        
+        const fetchCommunity = async () => {
             if (communityId) {
                 try {
                     setloading(true)
@@ -32,7 +32,7 @@ const Community = memo(({user, communityId, leaveCommunity}) => {
                 }
             }
         };
-        fetchCommunities();
+        fetchCommunity();
     }, []);
 
     const handleOpenInviteUsersModal = () => { 
@@ -78,19 +78,19 @@ const Community = memo(({user, communityId, leaveCommunity}) => {
                 </div>
             )}
             
-            {!loading && !error && community && <div  className="p-4 text-black flex flex-col gap-3 bg-gray-100 border border-gray-200 rounded-md">
+            {!loading && !error && community && <div  className="p-2 sm:p-4 text-black flex flex-col gap-3 bg-gray-100 border border-gray-200 rounded-md">
                 <div className="flex items-center justify-between">
-                    <div className=" flex gap-1 items-center ">
-                        <h3 className="font-bold text-lg">{community.name}</h3>
+                    <div className=" flex gap-1 max-sm:mr-auto items-center ">
+                        <h3 className="font-bold text-sm sm:text-lg">{community.name.length > 18 ? community.name.slice(0, 15) + "..."  : community.name}</h3>
                         {isCurrUserAdmin && <p>Delete</p>}
                     </div>
-                    <div className="flex gap-2 items-center">
+                    <div className="flex gap-2   items-center">
                         {/* <p className="text-xs text-gray-600">Created {getDateFormatted(community.createdAt)}</p> */}
                         <button onClick={handleLeaveCommunity} className="p-2 flex items-center  text-xs border border-main-color text-main-color trans hover:bg-gray-200 rounded-md">
-                            Leave Community
+                            Leave
                         </button>
                         <button onClick={handleOpenInviteUsersModal} className="p-2 flex items-center  text-xs bg-main-color text-white trans hover:bg-sec-color rounded-md">
-                            Invite User
+                            Invite
                         </button>
                     </div>
                 </div>
