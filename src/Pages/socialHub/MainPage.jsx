@@ -11,9 +11,7 @@ const MainPage = () => {
   const { videos, status, error, hasFetched } = useSelector((state) => state.randomVideos);
   useEffect(() => {
     // to fetch only once
-    if (!hasFetched) {
-      dispatch(getRandomVideos());
-    }
+    dispatch(getRandomVideos());
   }, [dispatch]);
   const loc = useLocation();
   useEffect(() => { 
@@ -46,10 +44,10 @@ const MainPage = () => {
     )
 
   return (
-        <>
+        <div className="min-h-screen">
             {/* Show video cards when data is successfully loaded */}
-          {status === "succeeded" && <VideoGrid videos={videos} />}
-        </>
+          {status === "succeeded" && <VideoGrid initVideos={videos} />}
+        </div>
   );
 };
 

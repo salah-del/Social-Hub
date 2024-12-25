@@ -20,6 +20,9 @@ const PeopleList = () => {
     fetchAllUsers();
   }, []);
 
+  console.log("Users in the people list", users);
+  
+
   return (
     <div className="">
       <div className="flex max-[600px]:flex-col items-center justify-between">
@@ -59,9 +62,9 @@ const PeopleList = () => {
                 </div>
               </div>
             ))
-          : users?.map((person, index) => (
+          : users?.map((person) => (
               <PeopleCard
-                key={index}
+                key={person._id}
                 person={person}
                 handleSubscribe={handleSubscribe}
                 handleUnsubscribe={handleUnsubscribe}

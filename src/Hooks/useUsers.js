@@ -32,6 +32,7 @@ export const useUsers = () => {
   };
 
   const handleAddFriend = (friendId) => {
+    console.log("Firend id in the useUsers hook :", friendId);
     dispatch(addFriend(friendId));
   };
 

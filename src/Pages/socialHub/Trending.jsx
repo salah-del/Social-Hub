@@ -12,9 +12,7 @@ const Trending = () => {
 
   useEffect(() => {
     // to fetch only once
-    if (!hasFetched) {
-      dispatch(getTrendyVideos());
-    }
+    dispatch(getTrendyVideos());
   }, [dispatch]);
   const loc = useLocation();
   useEffect(() => { 
@@ -47,10 +45,10 @@ const Trending = () => {
     )
 
   return (
-        <>
+        <div className="min-h-screen">
             {/* Show video cards when data is successfully loaded */}
-          {status === "succeeded" && <VideoGrid videos={videos} />}
-        </>
+          {status === "succeeded" && <VideoGrid initVideos={videos} />}
+        </div>
   );
 };
 

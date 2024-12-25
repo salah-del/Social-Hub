@@ -5,6 +5,8 @@ import { FaUserPlus } from "react-icons/fa";
 import profile from "../../../assets/profile.jpg";
 import { Link } from "react-router-dom";
 const PeopleCard = ({ person, handleSubscribe, handleUnsubscribe, handleAddFriend }) => {
+  console.log("person: " , person);
+  
   return (
     <div className="flex items-center max-[540px]:flex-col max-[540px]:gap-2 p-5 bg-gray-100 shadow border border-gray-300 rounded-lg hover:shadow-md transition-shadow duration-200">
       {/* صورة المستخدم */}

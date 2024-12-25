@@ -25,7 +25,6 @@ export const API = {
   deleteComment: `${BASE_URL}/comments`, //     /:idComment
   /* ======= Videos ======= */
   addVideo: `${BASE_URL}/videos`,
-  addVideo: `${BASE_URL}/videos/sub`, // get videos of people u follow
   searchVideo: `${BASE_URL}/videos/search`, //   params : q
   getTrendVideos: `${BASE_URL}/videos/trend`,
   getRandomVideos: `${BASE_URL}/videos/random`,
