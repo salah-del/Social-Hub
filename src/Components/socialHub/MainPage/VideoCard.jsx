@@ -61,7 +61,7 @@ const VideoCard = React.memo(({ video, handleOpenVideoEdit, handleDeleteVideo, i
   const handleNavToUser = () => { 
     if (user) { 
         navigateTo({
-          dest: `/socialHub/profile/${user._id}`,
+          dest: `/socialHub/profile/${video.userId}`,
           state: { user: user }
         })
     }

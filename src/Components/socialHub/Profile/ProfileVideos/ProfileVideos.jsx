@@ -6,15 +6,17 @@ import Loader from "../../../../Utils/Loader";
 import Modal from "../../../../Utils/Modal";
 import VideoGrid from "../../MainPage/VideoGrid";
 import AddNewVideoModal from "./AddNewVideoModal";
+import { useParams } from "react-router-dom";
 
 const ProfileVideos = memo(() => {
     const {user, status, error:userError} = useSelector((state) => state.user);
     const {videos, getUserVideos, loading:loadingVideos, error, addNewVideo, deleteVideo} = useProfileVideosHook();
     const [isAddNewVideoModalOpen, setIsAddNewVideoModalOpen] = useState(false);
     const [shownVideos, setshownVideos] = useState(videos);
+    const {id} = useParams();
     useEffect(() => { 
-        if (user && user._id) { 
-            getUserVideos(user._id);
+        if (user && id) { 
+            getUserVideos(id);
         }
     }, [user]);
     useEffect(() => { 
@@ -42,7 +44,7 @@ const ProfileVideos = memo(() => {
         return (
             <div className="w-full flex flex-col gap-5 ">
                 <div className="w-full blur flex items-center justify-between">
-                    <h2 className="text-2xl font-bold text-gray-800 ">My videos</h2>
+                    <h2 className="text-2xl font-bold text-gray-800 ">User videos</h2>
                     <button  className="ml-auto pointer-events-none text-xs bg-main-color px-3 py-2 text-white trans hover:bg-sec-color rounded-md ">
                         Add New Video
                     </button>
@@ -64,7 +66,7 @@ const ProfileVideos = memo(() => {
     return (
         <div className="w-full flex flex-col gap-6 ">
             <div className="w-full flex items-center justify-between">
-                <h2 className="text-2xl font-bold text-gray-800 ">My videos</h2>
+                <h2 className="text-2xl font-bold text-gray-800 ">User videos</h2>
                 {videos && videos.length > 0 && <button onClick={handleAddNewVideoModal} className="ml-auto text-xs bg-main-color px-3 py-2 text-white trans hover:bg-sec-color rounded-md ">
                     Add New Video
                 </button>}

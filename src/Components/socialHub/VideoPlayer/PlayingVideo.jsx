@@ -1,13 +1,11 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import ReactPlayer from 'react-player';
-import { useLocation } from 'react-router-dom';
-import { Img } from 'react-image';
-import Skeleton from 'react-loading-skeleton';
-import { FaUserCircle } from "react-icons/fa";
 import { useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import { API } from '../../../Api/Api';
-import Cookies from 'js-cookie';
+import { showToast } from '../../../Utils/showToast';
+import ChannelDetails from './ChannelDetails';
 const PlayingVideo = () => {
     const location = useLocation();
     const video = location.state?.video || "";
@@ -18,8 +16,7 @@ const PlayingVideo = () => {
     const [views, setViews] = useState(video ? video.views : 0);
     const [amISubscriber, setAmISubscriber] = useState(false);
     const [error, setError] = useState("");
-    const currUserId = Cookies.get("userID");
-    const isMyVideo = video?.userId == currUserId;
+    
 
 
     useEffect(() => { 
@@ -35,18 +32,44 @@ const PlayingVideo = () => {
                 setViews(prev => prev - 1);
             }
         }
-        const handleAmISubscriber = () => { 
-            if (channel && channel.SubscribersOrFollowers && user) { 
-                const answer = channel.SubscribersOrFollowers.find((follower) => follower === user._id);
-                if (answer)
-                    setAmISubscriber(answer);
-                else if (answer == false)
-                    setAmISubscriber(answer);
-            }
-            setAmISubscriber(false);
-        }
+        
+        // const handleVideoLikes = async () => {
+        //     if (video) { 
+        //         try {
+        //             const res = await axios.get(`${API.getVideo}`)
+        //         } catch (error) {
+                    
+        //         }
+        //     }
+        //     if (video && currUserId) {
+        //         if (video.likes.includes(currUserId)) { 
+        //             // unlike
+        //             try {
+        //                 const res = await axios.put(`${API.unlikeVideo}/${video._id}`);
+        //                 console.log(res.data);
+        //                 setViews(prev => prev - 1);
+                        
+        //             } catch (error) {
+        //                 showToast('error', "Something went wrong");
+        //                 setViews(prev => prev + 1);
+        //             }
+        //         }
+        //         else { 
+        //             // like
+        //             try {
+        //                 const res = await axios.put(`${API.likeVideo}/${video._id}`);
+        //                 console.log(res.data);
+        //                 setViews(prev => prev + 1);
+                        
+        //             } catch (error) {
+        //                 showToast('error', "Something went wrong");
+        //                 setViews(prev => prev - 1);
+        //             }
+        //         }
+        //     }
+        // }
         viewVideo();
-        handleAmISubscriber();
+        // handleVideoLikes();
     }, []);
 
     console.log("Video player", video);
@@ -59,22 +82,6 @@ const PlayingVideo = () => {
     const reloadPage = () => { 
         window.location.reload();
     }
-
-    const handleFollowAndUnfollow = () => { 
-        if (channel && currUserId) {
-            if (amISubscriber) { 
-                // unsbscribe
-                
-                setAmISubscriber(false);
-            }
-            else { 
-                
-                setAmISubscriber(true);
-            }
-        }
-    }
-
-    
 
     if (!video) return <div>Something went wrong</div>;
     if (error) 
@@ -101,20 +108,8 @@ const PlayingVideo = () => {
                 <p className='text-xl font-bold'>{video.title}</p>
 
             {/* Channel Details */}
-            <div className='flex items-center gap-3 '>
-                {/* channel image */}
-                <div className='max-w-10 h-10 rounded-full '>
-                    {channel && channel.profilePicture ? 
-                    <Img src={channel.profilePicture} className='w-full h-full rounded-full' loader={<div className='w-10 h-10 rounded-full'><Skeleton width={'100%'} height={'100%'} borderRadius={'100%'} /></div>} />
-                    : <FaUserCircle className="text-gray-300 w-9 h-9" />
-                }
-                </div>
-                <div className='flex flex-col gap-0.5 text-sm'>
-                    <p className=''>{channel && channel.name}</p>
-                    <p className='text-gray-500'>{(channel && channel.SubscribersOrFollowers) && channel.SubscribersOrFollowers.length} Subscribers</p>
-                </div>
-                {!isMyVideo && <button  onClick={handleFollowAndUnfollow} className={` rounded-full ${amISubscriber ? "bg-white text-black hover:bg-gray-100" : "text-white hover:bg-sec-color bg-main-color"}  border shadow-sm py-2 px-8 text-sm ml-2  trans `}>{amISubscriber ? "Unsubscribe" :"Subscribe"}</button>}
-            </div>
+            <ChannelDetails channelId={channel?._id} name={channel?.name} profilePicture={channel?.profilePicture} /> 
+            
         </div>
     );
 };
