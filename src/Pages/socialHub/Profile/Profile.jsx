@@ -10,6 +10,8 @@ import Cookies from "js-cookie";
 const Profile = () => {
   const location = useLocation();
   const pathSegments = location.pathname.split("/");
+  console.log(pathSegments);
+  
   const profileIndex = pathSegments.indexOf("profile");
   const id = profileIndex !== -1 ? pathSegments[profileIndex + 1] : null;
   const edit = id === Cookies.get("userID");
@@ -56,7 +58,7 @@ const Profile = () => {
         edit={edit}
       />
 
-      <Tabs />
+      <Tabs openTab={pathSegments[4] ? pathSegments[4] : null}/>
 
       <div>
         <Outlet />

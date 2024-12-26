@@ -2,8 +2,8 @@ import { useState } from "react";
 import { FaTable, FaBookmark, FaUserFriends } from "react-icons/fa";
 import { BiSolidVideos } from "react-icons/bi";
 import { Link } from "react-router-dom";
-const Tabs = () => {
-  const [activeTab, setActiveTab] = useState("posts");
+const Tabs = ({openTab}) => {
+  const [activeTab, setActiveTab] = useState(openTab || "posts");
   const tabs = [
     { id: "posts", to: "", name: "POSTS", icon: <FaTable size={16} /> },
     { id: "videos", to: "videos", name: "VIDEOS", icon: <BiSolidVideos size={18} /> },

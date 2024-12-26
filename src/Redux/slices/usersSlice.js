@@ -27,6 +27,7 @@ export const getAllUsers = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(API.getAllUsers);
+      console.log("All user : ", response.data);
       return response.data;
     } catch (error) {
       return handleError(error, rejectWithValue);
@@ -73,8 +74,10 @@ export const unsubscribe = createAsyncThunk(
 export const addFriend = createAsyncThunk(
   "users/addFriend",
   async (friendID, { rejectWithValue }) => {
+    console.log("friendId: ", friendID);
+    
     try {
-      const response = await axios.post(`${API.AddFriend}/${friendID}`);
+      const response = await axios.put(`${API.AddFriend}/${friendID}`);
       console.log(response);
       return response.data;
     } catch (error) {

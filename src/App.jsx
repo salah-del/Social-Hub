@@ -33,6 +33,7 @@ const Friends = lazy(
 const Saved = lazy(() => import("./Components/socialHub/Profile/Saved/Saved"));
 const BetaBotAi = lazy(() => import("./Pages/socialHub/BetaBotAi"));
 const NotFound = lazy(() => import("./Pages/NotFound"));
+import ProfileVideos from './Components/socialHub/Profile/ProfileVideos/ProfileVideos';
 
 const App = () => {
   const userID = Cookies.get("userID");
@@ -259,11 +260,13 @@ const App = () => {
                 </Suspense>
               }
             >
-              <Route index element={<Posts />} />
-              <Route path="videos" element={<Videos />} />
+              <Route index element={<Posts />} /> 
+              <Route path="videos" element={<ProfileVideos />} />
               <Route path="friends" element={<Friends />} />
               <Route path="saved" element={<Saved />} />
             </Route>
+
+            
           </Route>
 
           <Route

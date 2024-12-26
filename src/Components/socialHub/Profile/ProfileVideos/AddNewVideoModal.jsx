@@ -1,14 +1,19 @@
-import React, { useCallback, useRef, useState } from 'react'
+import React, { memo, useRef, useState } from 'react';
 import { Img } from 'react-image';
 import Skeleton from 'react-loading-skeleton';
+import { isValidUrl, isVideoURL } from '../../../../Utils/validateURLs';
+import { IoMdAdd } from "react-icons/io";
+import AddNewTagModal from '../../MainPage/EditVideo/AddNewTagModal';
 
-const AddNewVideoModal = () => {
+const AddNewVideoModal = memo(({addVideo}) => {
   const [imgURL, setimgURL] = useState("");
+  const [addNewTagModal, setAddNewTagModal] = useState(false);
   const [inputs, setInputs] = useState({
     title: "",
     description: "",
     videoURL: "",
     thumbnailURL: "",
+    tags: [],
   });
   const [errors, setErrors] = useState({
     title: "",
@@ -16,35 +21,73 @@ const AddNewVideoModal = () => {
     videoURL: "",
     thumbnailURL: "",
   });
-
-  const isVideoURL = (url) => {
-    const videoPlatforms = [/youtube\.com/, /vimeo\.com/];
-    return videoPlatforms.some((pattern) => pattern.test(url));
-  };
+  
 
   const handleInputsChange = (e) => {
-    setInputs({ ...inputs, [e.target.name]: e.target.value });
-    if (e.target.name == "thumbnailURL") { 
-      if (!e.target.value) 
-        setimgURL("")
-      const value = e.target.value;
-      if (isValidUrl(value)) {
-        if (isVideoURL(value)) {
-          // Handle video URL (e.g., YouTube playlist or video link)
-          console.log("This is a video URL, not an image.");
-          setimgURL("");
-        } else {
-          // Validate if it's an image
-          const img = new Image();
-          img.onload = () => setimgURL(value); // Valid image
-          img.onerror = () => setimgURL(""); // Invalid image
-          img.src = value;
-        }
-      } else {
+    const { name, value } = e.target;
+
+    // Update the input value
+    setInputs({ ...inputs, [name]: value });
+    
+    // Handle changes specifically for thumbnailURL
+    if (name === "thumbnailURL") {
+      // Clear image URL and errors if the input is empty
+      if (!value) {
         setimgURL("");
+        setErrors({ ...errors, [name]: "" });
+        return;
+      }
+
+      // Validate the URL format
+      if (!isValidUrl(value)) {
+        setErrors({ ...errors, [name]: "Invalid URL format" });
+        setimgURL("");
+        return;
+      }
+
+      // Check if it's a video URL
+      if (isVideoURL(value)) {
+        setErrors({ ...errors, [name]: "Appears to be a video link" });
+        setimgURL("");
+        return;
+      }
+
+      // Validate if it's an image URL
+      const img = new Image();
+      img.onload = () => {
+        setimgURL(value); // Valid image
+        setErrors({ ...errors, [name]: "" }); // Clear errors
+      };
+      img.onerror = () => {
+        setErrors({ ...errors, [name]: "Invalid thumbnail URL" });
+        setimgURL("");
+      };
+      img.src = value; // Trigger image loading
+    }
+    else if (name === "description") {
+      if (!value) { 
+        setErrors({...errors, [name]: "Enter a description" });
+      } else { 
+        setErrors({...errors, [name]: "" });
+      }
+    }
+    else if (name === "title") { 
+      if (!value) { 
+        setErrors({...errors, [name]: "Enter a title" });
+      } else { 
+        setErrors({...errors, [name]: "" });
+      }
+    }
+    else if (name === "videoURL") { 
+      const videoURLError = checkVideoURL(value);
+      if (videoURLError) { 
+        setErrors({...errors, [name]: videoURLError });
+      } else { 
+        setErrors({...errors, [name]: "" });
       }
     }
   };
+
   const thumbnailRef = useRef(null)
   const titleRef = useRef(null)
   const descRef = useRef(null)
@@ -63,38 +106,38 @@ const AddNewVideoModal = () => {
       thumbnailRef.current.focus();
     }
   }
-
-  const isValidUrl = (url) => {
-    try {
-      new URL(url); // Checks if the URL is valid
-      return true;
-    } catch (error) {
-      return false;
+  
+  const checkVideoURL = (url) => { 
+    if (!url) { 
+      return "Enter video URL"
     }
-  };
-
+    else if (!isValidUrl(url)) {
+      return "Invalid Video URL"
+    } else { 
+      if (!isVideoURL(url)) { 
+        return "Invalid Video URL"
+      }
+    }
+  }
   const isValidInputs = () => { 
     let isValid = true;
     let errors = {
       title: "",
-      description: "",
       videoURL: "",
+      description: "",
       thumbnailURL: "",
     };
     if (!inputs.title) { 
-      errors.title = "Enter Title"
+      errors.title = "Enter a title"
       isValid = false;
     }
     if (!inputs.description) { 
-      errors.description = "Enter description"
+      errors.description = "Enter a description"
       isValid = false;
     }
-    if (!inputs.videoURL) { 
-      errors.videoURL = "Enter video URL"
-      isValid = false;
-    }
-    else if (!isValidUrl(inputs.videoURL)) {
-      errors.videoURL = "Invalid Video URL"
+    const videoURLError = checkVideoURL(inputs.videoURL);
+    if (videoURLError) { 
+      errors.videoURL = videoURLError;
       isValid = false;
     }
     if (!inputs.thumbnailURL) { 
@@ -111,8 +154,27 @@ const AddNewVideoModal = () => {
 
   const handleAddVideo = () => { 
     if(isValidInputs()) { 
-      // handle add video 
+      const details = {
+        "title" : inputs.title,
+        "videoUrl" : inputs.videoURL,
+        "thumbnailUrl" : inputs.thumbnailURL,
+        "description" : inputs.description,
+        "tags":inputs.tags,
+      }
+      addVideo(details);
     }
+  }
+  const handleOpenAddNewTag = () => { 
+      setAddNewTagModal(true);
+  }
+  const handleCloseAddNewTag = () => { 
+      setAddNewTagModal(false);
+  }
+  const handleAddNewTag = (tagName) => {
+      setInputs({ ...inputs, tags: [...inputs.tags, tagName] });
+  };
+  const handleRemoveTag = (index) => { 
+      setInputs({...inputs, tags: inputs.tags.filter((_, i) => i!== index) });
   }
 
   return (
@@ -128,7 +190,33 @@ const AddNewVideoModal = () => {
               </div>
             } onError={() => setimgURL("")} /> : <div onClick={focusOnThumbnailInput} className='w-full select-none cursor-pointer h-48 rounded-md bg-gray-200 flex items-center justify-center text-sm' >Add Video Thumbnail</div> 
         }
-        <p onClick={focusOnTitleInput} className='text-xs select-none cursor-pointer ml-2 text-gray-600 text-start max-w-full text-wrap break-words'>{inputs.title ? inputs.title : "Add the video title right here" }</p>
+        <p onClick={focusOnTitleInput} className='text-sm select-none cursor-pointer ml-2 text-gray-600 text-start max-w-full text-wrap break-words'>{inputs.title ? inputs.title : "Add the video title right here" }</p>
+        {/* video tags */}
+        {
+            <div className='flex max-w-full text-wrap gap-1 ml-2 items-center'>
+                {inputs.tags && inputs.tags.length > 0 ?
+                    <div className='flex max-w-full flex-wrap gap-1 items-center'>
+                        {inputs.tags.map((tag, index) => (
+                            <span key={index} onClick={() => handleRemoveTag(index)} className="p-2 text-xs cursor-pointer trans hover:bg-sec-color text-gray-600  bg-gray-50 rounded-sm">
+                                {tag}
+                            </span>
+                        ))}
+                        <button onClick={handleOpenAddNewTag} className="p-2 text-xs cursor-pointer trans hover:bg-gray-100 rounded-sm">
+                            <IoMdAdd className='text-lg text-main-color' />
+                        </button>
+                    </div>
+                    : 
+                    <div className='flex items-center gap-1 flex-wrap'>
+                        <span  className="p-2 text-xs  text-gray-800 bg-gray-50 rounded-sm">
+                            Not tags added
+                        </span>
+                        <button onClick={handleOpenAddNewTag} className="p-2 text-xs cursor-pointer trans hover:bg-gray-100 rounded-sm">
+                            <IoMdAdd className='text-lg text-main-color' />
+                        </button>
+                    </div>
+                }
+            </div>
+        }
         <div onClick={focusOnDescInput} className='select-none cursor-pointer ml-2 p-2 bg-gray-50 border  text-gray-600 w-full rounded-md flex items-center justify-start'>
           <p className='text-xs max-w-full text-start text-wrap break-words'>{inputs.description ? inputs.description :"Add video description"}</p>
         </div>
@@ -149,6 +237,23 @@ const AddNewVideoModal = () => {
             onChange={handleInputsChange}
             className={`w-full p-2 outline-1 border-2 rounded-md bg-gray-50 focus:outline-gray-400`}
             placeholder="Enter video video URL" 
+          />
+
+        </label>
+        {/* Thumbnail */}
+        <label className='flex flex-col items-start gap-1 cursor-pointer'>
+          <span className=' select-none text-sm font-medium w-full flex items-center justify-center text-gray-700'>
+            <p className='mr-auto'>Thumbnail URL:</p>
+            {errors.thumbnailURL && <div className='text-xs p-1 rounded-sm bg-red-100 text-red-500 font-semibold'>{errors.thumbnailURL}</div>}
+          </span>
+          <input 
+            type='text' 
+            name='thumbnailURL'
+            ref={thumbnailRef}
+            value={inputs.thumbnailURL}
+            onChange={handleInputsChange}
+            className={`w-full p-2 outline-1 border-2 rounded-md bg-gray-50 focus:outline-gray-400`}
+            placeholder="Enter thumbnail URL" 
           />
 
         </label>
@@ -187,29 +292,20 @@ const AddNewVideoModal = () => {
 
         </label>
 
-        {/* Thumbnail */}
-        <label className='flex flex-col items-start gap-1 cursor-pointer'>
-          <span className=' select-none text-sm font-medium w-full flex items-center justify-center text-gray-700'>
-            <p className='mr-auto'>Thumbnail URL:</p>
-            {errors.thumbnailURL && <div className='text-xs p-1 rounded-sm bg-red-100 text-red-500 font-semibold'>{errors.thumbnailURL}</div>}
-          </span>
-          <input 
-            type='text' 
-            name='thumbnailURL'
-            ref={thumbnailRef}
-            value={inputs.thumbnailURL}
-            onChange={handleInputsChange}
-            className={`w-full p-2 outline-1 border-2 rounded-md bg-gray-50 focus:outline-gray-400`}
-            placeholder="Enter thumbnail URL" 
-          />
-
-        </label>
+        
         <button onClick={handleAddVideo} className="ml-auto text-sm bg-main-color px-3 py-2 text-white trans hover:bg-sec-color rounded-md ">
             Add Video
         </button>
       </div>
+      {
+          addNewTagModal && 
+          <AddNewTagModal 
+              handleAddNewTag={handleAddNewTag}
+              handleCloseTagModal={handleCloseAddNewTag}
+          />
+      }
     </div>
   )
-}
+})
 
-export default AddNewVideoModal
+export default AddNewVideoModal;
