@@ -21,18 +21,19 @@ const Profile = () => {
   }, [pathSegments]);
 
   const edit = useMemo(() => id === Cookies.get("userID"), [id]);
-  const currentTab = useMemo(() => pathSegments[4] || null, [pathSegments]);
+
 
   useEffect(() => {
     fetchUserById(id);
   }, [id]);
 
+  const currentTab = useMemo(() => pathSegments[4] || null, [pathSegments]);
   return (
     <div className="-m-2">
       <ProfileAndCover user={user} status={status} edit={edit} />
       <UserInfo user={user} status={status} edit={edit} />
       <Tabs openTab={currentTab} />
-      <Outlet />
+      <Outlet context={{ user , edit }} />
     </div>
   );
 };

@@ -21,7 +21,7 @@ export const useUsers = () => {
   };
 
   const fetchUserById = (userId) => {
-    dispatch(getUserById(userId));
+    return dispatch(getUserById(userId)).unwrap();
   };
 
   const handleSubscribe = (userId) => {
@@ -41,7 +41,7 @@ export const useUsers = () => {
   };
 
   const handleUpdateUser = (userId, values) => {
-    return dispatch(updateUser({ userId, values })).unwrap();;
+    return dispatch(updateUser({ userId, values })).unwrap();
   };
 
   const handleSearchByName = (query) => {

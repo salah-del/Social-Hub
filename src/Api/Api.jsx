@@ -1,4 +1,3 @@
-
 export const BASE_URL = `http://localhost:5173/api`;
 
 export const API = {
@@ -36,18 +35,19 @@ export const API = {
   updateVideo: `${BASE_URL}/videos`, //   /:videoId
   deleteVideo: `${BASE_URL}/videos`, //   /:videoId
   copyUrlForVideo: (idVideo) => `${BASE_URL}/videos/${idVideo}/copyUrl`,
-  saveVideo:`${BASE_URL}/videos/save`, //   /:videoId
-  unSaveVideo:`${BASE_URL}/videos/unsave`, //   /:videoId
+  saveVideo: `${BASE_URL}/videos/save`, //   /:videoId
+  unSaveVideo: `${BASE_URL}/videos/unsave`, //   /:videoId
   /* ======= Users ======= */
   getAllUsers: `${BASE_URL}/users/getRandomUsers`,
   getUserById: `${BASE_URL}/users/find`, //     /:userID
   subscribe: `${BASE_URL}/users/sub`, //   /:userID
   unsubscribe: `${BASE_URL}/users/unsub`, //   /:userID
   addFriend: `${BASE_URL}/users/send-request`, //     /:FriendID
-  
-  acceptFriend: `${BASE_URL}/users/accept-request`, //     /:FriendID
 
-  searchByName : `${BASE_URL}/users/Search_Users_Name`,
+  acceptFriend: `${BASE_URL}/users/accept-request`, //     /:FriendID
+  rejectRequest: `${BASE_URL}/users/reject-request`, //     /:FriendID
+
+  searchByName: `${BASE_URL}/users/Search_Users_Name`,
   // in Body : {"receiverId":"6761843c3aa8c81ef60868ee"}
 
   updateUser: `${BASE_URL}/users`, // :userId

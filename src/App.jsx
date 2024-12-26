@@ -22,19 +22,14 @@ const Reports = lazy(() => import("./Pages/socialHub/Reports"));
 const Trending = lazy(() => import("./Pages/socialHub/Trending"));
 const VideoPlayer = lazy(() => import("./Pages/socialHub/VideoPlayer"));
 
-const Profile = lazy(() => import("./Pages/socialHub/Profile/Profile"));
-
-const Posts = lazy(() => import("./Components/socialHub/Profile/Posts/Posts"));
-const Videos = lazy(
-  () => import("./Components/socialHub/Profile/Videos/Videos")
-);
-const Friends = lazy(
-  () => import("./Components/socialHub/Profile/Friends/Friends")
-);
-const Saved = lazy(() => import("./Components/socialHub/Profile/Saved/Saved"));
 const BetaBotAi = lazy(() => import("./Pages/socialHub/BetaBotAi"));
 const NotFound = lazy(() => import("./Pages/NotFound"));
-import ProfileVideos from './Components/socialHub/Profile/ProfileVideos/ProfileVideos';
+
+import Profile from "./Pages/socialHub/Profile/Profile";
+import ProfileVideos from "./Components/socialHub/Profile/ProfileVideos/ProfileVideos";
+import Posts from "./Components/socialHub/Profile/Posts/Posts";
+import Friends from "./Components/socialHub/Profile/Friends/Friends";
+import Saved from "./Components/socialHub/Profile/Saved/Saved";
 
 const App = () => {
   const userID = Cookies.get("userID");
@@ -248,40 +243,12 @@ const App = () => {
             />
 
             <Route path="profile/:id" element={<Profile />}>
-                  <Route
-                    index
-                    element={
-                      <Suspense>
-                        <Posts />
-                      </Suspense>
-                    }
-                  />
-                  <Route
-                    path="videos"
-                    element={
-                      <Suspense >
-                        <ProfileVideos />
-                      </Suspense>
-                    }
-                  />
-                  <Route
-                    path="friends"
-                    element={
-                      <Suspense>
-                        <Friends />
-                      </Suspense>
-                    }
-                  />
-                  <Route
-                    path="saved"
-                    element={
-                      <Suspense>
-                        <Saved />
-                      </Suspense>
-                    }
-                  />
-                </Route>
+              <Route index element={<Posts />} />
+              <Route path="videos" element={<ProfileVideos />} />
+              <Route path="friends" element={<Friends />} />
+              <Route path="saved" element={<Saved />} />
             </Route>
+          </Route>
 
           <Route
             path="*"
