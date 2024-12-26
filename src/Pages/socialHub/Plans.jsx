@@ -1,15 +1,19 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import Coins from "../../Components/socialHub/Navbar/Coins";
 import { FaCheck } from "react-icons/fa";
-import { API } from "../../Api/Api";
-import axios from "axios";
-import sweetalert from "../../Utils/sweetalert";
+import Coins from "../../Components/socialHub/Navbar/Coins";
 import PlanActionsHook from "../../Hooks/PlansActionsHook";
-import { showToast } from "../../Utils/showToast";
+import { formatDate } from "../../Utils/formatDate";
 const Plans = () => {
-  const { getUserPlan, userPlan, handleSubscribePlan } = PlanActionsHook();
   const loc = useLocation();
+  const {
+    getUserPlan,
+    userPlan,
+    handleSubscribePlan,
+    currentUserPlanExpiration,
+    expirationDate,
+  } = PlanActionsHook();
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [loc.pathname]);
@@ -17,6 +21,10 @@ const Plans = () => {
   useEffect(() => {
     getUserPlan();
   }, []);
+
+  useEffect(() => {
+    userPlan === null || userPlan === "" ? "" : currentUserPlanExpiration();
+  }, [userPlan]);
 
   const plans = [
     {
@@ -99,13 +107,23 @@ const Plans = () => {
                 : "shadow-md"
             } bg-white rounded-lg  p-6 flex flex-col flex-1`}
           >
-            <h3
-              className={`text-xl ${
-                userPlan === plan.planName ? "text-main-color" : ""
-              } font-semibold mb-4`}
-            >
-              {plan.title}
-            </h3>
+            <div className="flex items-center justify-between">
+              <h3
+                className={`text-xl ${
+                  userPlan === plan.planName ? "text-main-color" : ""
+                } font-semibold mb-4`}
+              >
+                {plan.title}
+              </h3>
+              {userPlan === plan.planName && expirationDate && (
+                <p className="text-gray-600 text-sm font-medium mb-4">
+                  Expiration Date:{" "}
+                  <span className="font-semibold text-main-color">
+                    {formatDate(expirationDate)}
+                  </span>
+                </p>
+              )}
+            </div>
             <p className="text-gray-600 mb-4">{plan.text}</p>
             <p className="text-4xl font-bold mb-6">
               {plan.price}

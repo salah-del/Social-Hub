@@ -6,6 +6,8 @@ import sweetalert from "../Utils/sweetalert";
 const userID = Cookies.get("userID");
 const PlansActionsHook = () => {
   const [userPlan, setUserPlan] = useState("");
+  const [expirationDate, setExpirationDate] = useState("");
+
   const getUserPlan = async () => {
     try {
       const response = await axios.get(`${API.getUserPlanById}/${userID}`);
@@ -23,15 +25,29 @@ const PlansActionsHook = () => {
       });
       sweetalert.done(response.data.message);
       getUserPlan();
-      console.log(response);
+      // console.log(response);
     } catch (error) {
-      sweetalert.info(
-        error?.response?.data?.message || "Something went wrong"
-      );
+      sweetalert.info(error?.response?.data?.message || "Something went wrong");
     }
   };
 
-  return { getUserPlan, userPlan , handleSubscribePlan };
+  const currentUserPlanExpiration = async () => {
+    try {
+      const response = await axios.get(API.currentUserPlanExpiration);
+      setExpirationDate(response.data.expirationDate);
+      // console.log(response.data);
+    } catch (error) {
+      console.error("Error fetching user plan:", error);
+    }
+  };
+
+  return {
+    getUserPlan,
+    userPlan,
+    handleSubscribePlan,
+    currentUserPlanExpiration,
+    expirationDate,
+  };
 };
 
 export default PlansActionsHook;

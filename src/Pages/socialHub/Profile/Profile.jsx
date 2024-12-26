@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { useSelector } from "react-redux";
 import { useLocation, useParams } from "react-router-dom";
 import ProfileAndCover from "../../../Components/socialHub/Profile/ProfileAndCover";
 import UserInfo from "../../../Components/socialHub/Profile/UserInfo";
@@ -11,18 +10,16 @@ import { API } from "../../../Api/Api";
 import { showToast } from "../../../Utils/showToast";
 
 const Profile = () => {
-  // const { userData: user, status, fetchUserById } = useUsers();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
+  
   const location = useLocation();
-
   const pathSegments = useMemo(
     () => location.pathname.split("/"),
     [location.pathname]
   );
-
   const { id } = useParams();
-
+  console.log("id ", useParams ());
   const edit = useMemo(() => id === Cookies.get("userID"), [id]);
 
   useEffect(() => {

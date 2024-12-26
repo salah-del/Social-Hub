@@ -8,7 +8,8 @@ import "react-loading-skeleton/dist/skeleton.css";
 const PeopleList = () => {
   const { fetchAllUsers, users, status, handleSearchByName } = useUsers();
   const [searchQuery, setSearchQuery] = useState("");
-
+  console.log(users);
+  
   useEffect(() => {
     fetchAllUsers();
   }, []);

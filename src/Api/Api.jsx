@@ -77,5 +77,6 @@ export const API = {
   /* ======= Premium ======= */
   subscribePlan: `${BASE_URL}/premium-plans/subscribe`,
   getUserPlanById: `${BASE_URL}/premium-plans/PlanType`, //     /:idUser
+  currentUserPlanExpiration: `${BASE_URL}/premium-plans/premium/expiration`,
   /* ======= Test 222 ======= */
 };
