@@ -6,6 +6,7 @@ import {
   unsubscribe,
   addFriend,
   acceptFriend,
+  rejectFriend,
   updateUser,
   searchByName,
 } from "../Redux/slices/usersSlice";
@@ -39,6 +40,9 @@ export const useUsers = () => {
   const handleAcceptFriend = (friendId, receiverId) => {
     return dispatch(acceptFriend({ friendId, receiverId }));
   };
+  const handleRejectFriend = (friendId, receiverId) => {
+    return dispatch(rejectFriend({ friendId, receiverId }));
+  };
 
   const handleUpdateUser = (userId, values) => {
     return dispatch(updateUser({ userId, values })).unwrap();
@@ -60,6 +64,7 @@ export const useUsers = () => {
     handleUnsubscribe,
     handleAddFriend,
     handleAcceptFriend,
+    handleRejectFriend,
     handleUpdateUser,
     handleSearchByName,
   };

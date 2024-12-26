@@ -27,86 +27,6 @@ export const getAllUsers = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(API.getAllUsers);
-      // console.log("All user : ", response.data);
-      return response.data;
-    } catch (error) {
-      return handleError(error, rejectWithValue);
-    }
-  }
-);
-
-export const getUserById = createAsyncThunk(
-  "users/getUserById",
-  async (userID, { rejectWithValue }) => {
-    try {
-      const response = await axios.get(`${API.getUserById}/${userID}`);
-      return response.data;
-    } catch (error) {
-      return handleError(error, rejectWithValue);
-    }
-  }
-);
-
-export const subscribe = createAsyncThunk(
-  "users/subscribe",
-  async (userID, { rejectWithValue }) => {
-    try {
-      const response = await axios.put(`${API.subscribe}/${userID}`);
-      return response.data;
-    } catch (error) {
-      return handleError(error, rejectWithValue);
-    }
-  }
-);
-
-export const unsubscribe = createAsyncThunk(
-  "users/unsubscribe",
-  async (userID, { rejectWithValue }) => {
-    try {
-      const response = await axios.put(`${API.unsubscribe}/${userID}`);
-      return response.data;
-    } catch (error) {
-      return handleError(error, rejectWithValue);
-    }
-  }
-);
-
-export const addFriend = createAsyncThunk(
-  "users/addFriend",
-  async (friendID, { rejectWithValue }) => {
-    console.log("friendId: ", friendID);
-
-    try {
-      const response = await axios.put(`${API.addFriend}/${friendID}`);
-      console.log(response);
-      return response.data;
-    } catch (error) {
-      console.log(response);
-
-      return handleError(error, rejectWithValue);
-    }
-  }
-);
-
-export const acceptFriend = createAsyncThunk(
-  "users/acceptFriend",
-  async ({ friendID, receiverId }, { rejectWithValue }) => {
-    try {
-      const response = await axios.put(`${API.acceptFriend}/${friendID}`, {
-        receiverId,
-      });
-      return response.data;
-    } catch (error) {
-      return handleError(error, rejectWithValue);
-    }
-  }
-);
-
-export const updateUser = createAsyncThunk(
-  "users/updateUser",
-  async ({ userId, values }, { rejectWithValue }) => {
-    try {
-      const response = await axios.put(`${API.updateUser}/${userId}`, values);
       return response.data;
     } catch (error) {
       return handleError(error, rejectWithValue);
@@ -126,17 +46,113 @@ export const searchByName = createAsyncThunk(
   }
 );
 
-// export const deleteUser = createAsyncThunk(
-//   "user/deleteUser",
-//   async (userID, { rejectWithValue }) => {
-//     try {
-//       const response = await axios.delete(`${API.deleteUser}/${userID}`);
-//       return response.data;
-//     } catch (error) {
-//       return handleError(error, rejectWithValue);
-//     }
-//   }
-// );
+export const getUserById = createAsyncThunk(
+  "users/getUserById",
+  async (userID, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${API.getUserById}/${userID}`);
+      return response.data;
+    } catch (error) {
+      return handleError(error, rejectWithValue);
+    }
+  }
+);
+
+export const updateUser = createAsyncThunk(
+  "users/updateUser",
+  async ({ userId, values }, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(`${API.updateUser}/${userId}`, values);
+      return response.data;
+    } catch (error) {
+      return handleError(error, rejectWithValue);
+    }
+  }
+);
+
+export const subscribe = createAsyncThunk(
+  "users/subscribe",
+  async (userID, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(`${API.subscribe}/${userID}`);
+      return response.data;
+    } catch (error) {
+      return handleError(error, rejectWithValue);
+    }
+  }
+);
+export const unsubscribe = createAsyncThunk(
+  "users/unsubscribe",
+  async (userID, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(`${API.unsubscribe}/${userID}`);
+      return response.data;
+    } catch (error) {
+      return handleError(error, rejectWithValue);
+    }
+  }
+);
+
+export const addFriend = createAsyncThunk(
+  "users/addFriend",
+  async (friendID, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(`${API.addFriend}/${friendID}`);
+      return response.data;
+    } catch (error) {
+      return handleError(error, rejectWithValue);
+    }
+  }
+);
+export const acceptFriend = createAsyncThunk(
+  "users/acceptFriend",
+  async ({ senderId }, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(`${API.acceptFriend}/${senderId}`);
+      return response.data;
+    } catch (error) {
+      return handleError(error, rejectWithValue);
+    }
+  }
+);
+export const rejectFriend = createAsyncThunk(
+  "users/rejectFriend",
+  async ({ senderId }, { rejectWithValue }) => {
+    try {
+      const response = await axios.delete(`${API.rejectFriend}/${senderId}`);
+      return response.data;
+    } catch (error) {
+      return handleError(error, rejectWithValue);
+    }
+  }
+);
+
+export const blockUser = createAsyncThunk(
+  "users/blockUser",
+  async ({ userToBlockId }, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(API.blockUser, {
+        userToBlockId,
+      });
+      return response.data;
+    } catch (error) {
+      return handleError(error, rejectWithValue);
+    }
+  }
+);
+export const unBlockUser = createAsyncThunk(
+  "users/unBlockUser",
+  async ({ userToBlockId }, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(API.unBlockUser, {
+        userToBlockId,
+      });
+      return response.data;
+    } catch (error) {
+      return handleError(error, rejectWithValue);
+    }
+  }
+);
 
 // Slice
 const userSlice = createSlice({
@@ -164,6 +180,19 @@ const userSlice = createSlice({
         state.status = "failed";
         state.error = action.payload;
       })
+      // searchByName
+      .addCase(searchByName.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(searchByName.fulfilled, (state, action) => {
+        state.users = action.payload.users || [];
+        state.status = "succeeded";
+      })
+      .addCase(searchByName.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      })
       // getUserById
       .addCase(getUserById.pending, (state) => {
         state.status = "loading";
@@ -177,18 +206,20 @@ const userSlice = createSlice({
         state.status = "failed";
         state.error = action.payload;
       })
-      // searchByName
-      .addCase(searchByName.pending, (state) => {
-        state.status = "loading";
+      // updateUser
+      .addCase(updateUser.pending, (state) => {
+        state.statusUpdate = "loading";
         state.error = null;
       })
-      .addCase(searchByName.fulfilled, (state, action) => {
-        state.users = action.payload.users || [];
-        state.status = "succeeded";
+      .addCase(updateUser.fulfilled, (state, action) => {
+        state.statusUpdate = "succeeded";
+        state.userData = action.payload;
+        showToast("success", "Your information has been updated.");
       })
-      .addCase(searchByName.rejected, (state, action) => {
-        state.status = "failed";
+      .addCase(updateUser.rejected, (state, action) => {
+        state.statusUpdate = "failed";
         state.error = action.payload;
+        showToast("error", action.payload);
       })
       // subscribe
       .addCase(subscribe.fulfilled, (state, action) => {
@@ -229,35 +260,33 @@ const userSlice = createSlice({
         state.status = "failed";
         state.error = action.payload;
       })
-      // updateUser
-      .addCase(updateUser.pending, (state) => {
-        state.statusUpdate = "loading";
-        state.error = null;
-      })
-      .addCase(updateUser.fulfilled, (state, action) => {
-        state.statusUpdate = "succeeded";
+      // rejectFriend
+      .addCase(rejectFriend.fulfilled, (state, action) => {
         state.userData = action.payload;
-        showToast("success", "Your information has been updated.");
+        state.status = "succeeded";
       })
-      .addCase(updateUser.rejected, (state, action) => {
-        state.statusUpdate = "failed";
+      .addCase(rejectFriend.rejected, (state, action) => {
+        state.status = "failed";
         state.error = action.payload;
-        showToast("error", action.payload);
+      })
+      // blockUser
+      .addCase(blockUser.fulfilled, (state, action) => {
+        state.userData = action.payload;
+        state.status = "succeeded";
+      })
+      .addCase(blockUser.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      })
+      // unblockUser
+      .addCase(unBlockUser.fulfilled, (state, action) => {
+        state.userData = action.payload;
+        state.status = "succeeded";
+      })
+      .addCase(unBlockUser.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
       });
-    // deleteUser
-    //   .addCase(deleteUser.pending, (state) => {
-    //     state.status = "loading";
-    //     state.error = null;
-    //   })
-    //   .addCase(deleteUser.fulfilled, (state, action) => {
-    //     state.user = null;
-    //     state.status = "succeeded";
-    //   })
-    //   .addCase(deleteUser.rejected, (state, action) => {
-    //     state.status = "failed";
-    //     state.error = action.payload;
-    //   });
   },
 });
-
 export default userSlice.reducer;

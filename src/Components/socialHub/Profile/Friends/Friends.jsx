@@ -20,22 +20,22 @@ export default function Friends() {
       status: i % 2 === 0 ? "pending" : i % 2 === 1 ? "accepted" : "suggested",
     }));
 
-  const fetchFriendRequests = async () => {
-    if (user.friendRequests?.length > 0) {
-      try {
-        // Promise.all جلب البيانات باستخدام
-        const Users = await Promise.all(
-          user.friendRequests.map((id) => fetchUserById(id))
-        );
-        setfriendRequests(Users);
-      } catch (error) {
-        console.error(`Error fetching ${title}:`, error);
-      }
-    }
-  };
-  useEffect(() => {
-    fetchFriendRequests();
-  }, []);
+  // const fetchFriendRequests = async () => {
+  //   if (user.friendRequests?.length > 0) {
+  //     try {
+  //       // Promise.all جلب البيانات باستخدام
+  //       const Users = await Promise.all(
+  //         user.friendRequests.map((id) => fetchUserById(id))
+  //       );
+  //       setfriendRequests(Users);
+  //     } catch (error) {
+  //       console.error(`Error fetching ${title}:`, error);
+  //     }
+  //   }
+  // };
+  // useEffect(() => {
+  //   fetchFriendRequests();
+  // }, []);
 
   // const fetchFriendRequests = async () => {
   //       if (user.friends?.length > 0) {

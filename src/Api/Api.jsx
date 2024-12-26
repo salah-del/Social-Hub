@@ -39,19 +39,18 @@ export const API = {
   unSaveVideo: `${BASE_URL}/videos/unsave`, //   /:videoId
   /* ======= Users ======= */
   getAllUsers: `${BASE_URL}/users/getRandomUsers`,
+  searchByName: `${BASE_URL}/users/Search_Users_Name`,
   getUserById: `${BASE_URL}/users/find`, //     /:userID
+  updateUser: `${BASE_URL}/users`, // :userId
   subscribe: `${BASE_URL}/users/sub`, //   /:userID
   unsubscribe: `${BASE_URL}/users/unsub`, //   /:userID
   addFriend: `${BASE_URL}/users/send-request`, //     /:FriendID
 
-  acceptFriend: `${BASE_URL}/users/accept-request`, //     /:FriendID
-  rejectRequest: `${BASE_URL}/users/reject-request`, //     /:FriendID
+  acceptFriend: `${BASE_URL}/users/accept-request`, //     /:senderId
+  rejectFriend: `${BASE_URL}/users/reject-request`, //     /:senderId
 
-  searchByName: `${BASE_URL}/users/Search_Users_Name`,
-  // in Body : {"receiverId":"6761843c3aa8c81ef60868ee"}
-
-  updateUser: `${BASE_URL}/users`, // :userId
-  // in Body : values For Update User
+  blockUser: `${BASE_URL}/users/block`,
+  unBlockUser: `${BASE_URL}/users/unblock`,
 
   deleteUser: `${BASE_URL}/users`, //   /:userId
   likeVideo: `${BASE_URL}/users/like`, //   /:videoId
