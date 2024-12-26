@@ -4,12 +4,12 @@ import { FaCamera } from "react-icons/fa";
 import InputForm from "../../../helpers/InputForm";
 import PasswordForm from "../../../helpers/PasswordForm";
 import ButtonForm from "../../../helpers/ButtonForm";
-import UsersActionsHook from "../../../../Hooks/UsersActionsHook";
+import { useUsers } from "../../../../Hooks/useUsers";
 function CoverPicture({ user }) {
+  const { fetchUserById, handleUpdateUser, statusUpdate } = useUsers();
   const [isOpen, setIsOpen] = useState(false);
   const toggleModal = () => setIsOpen(!isOpen);
-  const { updateUser } = UsersActionsHook();
-  const [loading, setLoading] = useState(false);
+
   const [values, setValues] = useState({
     coverPicture: "",
     currentPassword: "",
@@ -33,7 +33,9 @@ function CoverPicture({ user }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    updateUser(user._id, values, setLoading, toggleModal);
+    await handleUpdateUser(user._id, values);
+    toggleModal();
+    fetchUserById(user._id);
   };
   return (
     <>
@@ -99,7 +101,10 @@ function CoverPicture({ user }) {
                 errorMessage={null}
                 condition={false}
               />
-              <ButtonForm title={"Update Picture"} loading={loading} />
+              <ButtonForm
+                title={"Update Picture"}
+                loading={statusUpdate === "loading"}
+              />
             </form>
           </div>
         </div>

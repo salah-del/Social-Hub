@@ -4,12 +4,14 @@ import { FaUserEdit } from "react-icons/fa";
 import InputForm from "../../../helpers/InputForm";
 import PasswordForm from "../../../helpers/PasswordForm";
 import ButtonForm from "../../../helpers/ButtonForm";
-import UsersActionsHook from "../../../../Hooks/UsersActionsHook";
+import { useUsers } from "../../../../Hooks/useUsers";
+import { useDispatch } from "react-redux";
+import { getCurrUser } from "../../../../Redux/slices/userSlice";
 function ProfilePicture({ user }) {
+  const dispatch = useDispatch();
+  const { fetchUserById, handleUpdateUser, statusUpdate } = useUsers();
   const [isOpen, setIsOpen] = useState(false);
   const toggleModal = () => setIsOpen(!isOpen);
-  const { updateUser } = UsersActionsHook();
-  const [loading, setLoading] = useState(false);
   const [values, setValues] = useState({
     profilePicture: "",
     currentPassword: "",
@@ -33,7 +35,10 @@ function ProfilePicture({ user }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    updateUser(user._id, values, setLoading, toggleModal);
+    await handleUpdateUser(user._id, values);
+    toggleModal();
+    fetchUserById(user._id);
+    dispatch(getCurrUser(user._id));
   };
   return (
     <>
@@ -98,7 +103,10 @@ function ProfilePicture({ user }) {
                 errorMessage={null}
                 condition={false}
               />
-              <ButtonForm title={"Update Picture"} loading={loading} />
+              <ButtonForm
+                title={"Update Picture"}
+                loading={statusUpdate === "loading"}
+              />
             </form>
           </div>
         </div>

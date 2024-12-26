@@ -7,11 +7,12 @@ import {
   addFriend,
   acceptFriend,
   updateUser,
+  searchByName,
 } from "../Redux/slices/usersSlice";
 
 export const useUsers = () => {
   const dispatch = useDispatch();
-  const { users, userData, status, error } = useSelector(
+  const { users, userData, status, error, statusUpdate } = useSelector(
     (state) => state.users
   );
 
@@ -24,24 +25,27 @@ export const useUsers = () => {
   };
 
   const handleSubscribe = (userId) => {
-    dispatch(subscribe(userId));
+    return dispatch(subscribe(userId));
   };
 
   const handleUnsubscribe = (userId) => {
-    dispatch(unsubscribe(userId));
+    return dispatch(unsubscribe(userId));
   };
 
   const handleAddFriend = (friendId) => {
-    console.log("Firend id in the useUsers hook :", friendId);
-    dispatch(addFriend(friendId));
+    return dispatch(addFriend(friendId));
   };
 
   const handleAcceptFriend = (friendId, receiverId) => {
-    dispatch(acceptFriend({ friendId, receiverId }));
+    return dispatch(acceptFriend({ friendId, receiverId }));
   };
 
   const handleUpdateUser = (userId, values) => {
-    return dispatch(updateUser({ userId, values }));
+    return dispatch(updateUser({ userId, values })).unwrap();;
+  };
+
+  const handleSearchByName = (query) => {
+    dispatch(searchByName(query));
   };
 
   return {
@@ -49,6 +53,7 @@ export const useUsers = () => {
     userData,
     status,
     error,
+    statusUpdate,
     fetchAllUsers,
     fetchUserById,
     handleSubscribe,
@@ -56,5 +61,6 @@ export const useUsers = () => {
     handleAddFriend,
     handleAcceptFriend,
     handleUpdateUser,
+    handleSearchByName,
   };
 };

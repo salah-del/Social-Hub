@@ -25,7 +25,7 @@ const UserDetails = ({ user, status, userPlan }) => {
         </span>
       </div>
       {user?.profilePicture ? (
-        <LazyImage
+        <img
           src={user.profilePicture}
           className="w-10 h-10 rounded-full"
           alt="profilePicture"

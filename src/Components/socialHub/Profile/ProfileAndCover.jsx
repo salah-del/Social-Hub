@@ -2,7 +2,6 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import cover from "../../../assets/cover.png";
 import profile from "../../../assets/profile.jpg";
-import LazyImage from "../../../Utils/LazyImage";
 import CoverPicture from "./Update/CoverPicture";
 import ProfilePicture from "./Update/ProfilePicture";
 const ProfileAndCover = ({ user, status, edit }) => {
@@ -29,11 +28,10 @@ const ProfileAndCover = ({ user, status, edit }) => {
             <Skeleton circle height={105} width={105} />
           </div>
         ) : (
-          <LazyImage
+          <img
             src={user?.profilePicture || profile}
             alt="profile"
             className="mr-5 Cover Picture -mt-11 w-20 h-20 sm:-mt-12 sm:w-[105px] sm:h-[105px] lg:w-36 lg:h-36 lg:-mt-20 rounded-full border-2 border-gray-300"
-            loader={<Skeleton circle height={105} width={105} />}
           />
         )}
         {status === "succeeded" && edit && <ProfilePicture user={user} />}

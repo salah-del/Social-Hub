@@ -27,7 +27,7 @@ export const getAllUsers = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(API.getAllUsers);
-      console.log("All user : ", response.data);
+      // console.log("All user : ", response.data);
       return response.data;
     } catch (error) {
       return handleError(error, rejectWithValue);
@@ -51,7 +51,7 @@ export const subscribe = createAsyncThunk(
   "users/subscribe",
   async (userID, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${API.subscribe}/${userID}`);
+      const response = await axios.put(`${API.subscribe}/${userID}`);
       return response.data;
     } catch (error) {
       return handleError(error, rejectWithValue);
@@ -63,7 +63,7 @@ export const unsubscribe = createAsyncThunk(
   "users/unsubscribe",
   async (userID, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${API.unsubscribe}/${userID}`);
+      const response = await axios.put(`${API.unsubscribe}/${userID}`);
       return response.data;
     } catch (error) {
       return handleError(error, rejectWithValue);
@@ -75,9 +75,9 @@ export const addFriend = createAsyncThunk(
   "users/addFriend",
   async (friendID, { rejectWithValue }) => {
     console.log("friendId: ", friendID);
-    
+
     try {
-      const response = await axios.put(`${API.AddFriend}/${friendID}`);
+      const response = await axios.put(`${API.addFriend}/${friendID}`);
       console.log(response);
       return response.data;
     } catch (error) {
@@ -92,7 +92,7 @@ export const acceptFriend = createAsyncThunk(
   "users/acceptFriend",
   async ({ friendID, receiverId }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${API.AcceptFriend}/${friendID}`, {
+      const response = await axios.put(`${API.acceptFriend}/${friendID}`, {
         receiverId,
       });
       return response.data;
@@ -107,6 +107,18 @@ export const updateUser = createAsyncThunk(
   async ({ userId, values }, { rejectWithValue }) => {
     try {
       const response = await axios.put(`${API.updateUser}/${userId}`, values);
+      return response.data;
+    } catch (error) {
+      return handleError(error, rejectWithValue);
+    }
+  }
+);
+
+export const searchByName = createAsyncThunk(
+  "users/searchByName",
+  async (query, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(`${API.searchByName}`, { query });
       return response.data;
     } catch (error) {
       return handleError(error, rejectWithValue);
@@ -133,6 +145,7 @@ const userSlice = createSlice({
     users: [],
     userData: null,
     status: "idle",
+    statusUpdate: "idle",
     error: null,
   },
   reducers: {},
@@ -164,10 +177,24 @@ const userSlice = createSlice({
         state.status = "failed";
         state.error = action.payload;
       })
+      // searchByName
+      .addCase(searchByName.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(searchByName.fulfilled, (state, action) => {
+        state.users = action.payload.users || [];
+        state.status = "succeeded";
+      })
+      .addCase(searchByName.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      })
       // subscribe
       .addCase(subscribe.fulfilled, (state, action) => {
         state.userData = action.payload;
         state.status = "succeeded";
+        showToast("success", state.userData);
       })
       .addCase(subscribe.rejected, (state, action) => {
         state.status = "failed";
@@ -177,6 +204,7 @@ const userSlice = createSlice({
       .addCase(unsubscribe.fulfilled, (state, action) => {
         state.userData = action.payload;
         state.status = "succeeded";
+        showToast("success", state.userData);
       })
       .addCase(unsubscribe.rejected, (state, action) => {
         state.status = "failed";
@@ -186,6 +214,7 @@ const userSlice = createSlice({
       .addCase(addFriend.fulfilled, (state, action) => {
         state.userData = action.payload;
         state.status = "succeeded";
+        showToast("success", state.userData);
       })
       .addCase(addFriend.rejected, (state, action) => {
         state.status = "failed";
@@ -201,13 +230,17 @@ const userSlice = createSlice({
         state.error = action.payload;
       })
       // updateUser
+      .addCase(updateUser.pending, (state) => {
+        state.statusUpdate = "loading";
+        state.error = null;
+      })
       .addCase(updateUser.fulfilled, (state, action) => {
-        state.status = "succeeded";
+        state.statusUpdate = "succeeded";
         state.userData = action.payload;
         showToast("success", "Your information has been updated.");
       })
       .addCase(updateUser.rejected, (state, action) => {
-        state.status = "failed";
+        state.statusUpdate = "failed";
         state.error = action.payload;
         showToast("error", action.payload);
       });
