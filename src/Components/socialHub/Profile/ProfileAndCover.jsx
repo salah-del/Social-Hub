@@ -4,12 +4,12 @@ import cover from "../../../assets/cover.png";
 import profile from "../../../assets/profile.jpg";
 import CoverPicture from "./Update/CoverPicture";
 import ProfilePicture from "./Update/ProfilePicture";
-const ProfileAndCover = ({ user, status, edit }) => {
+const ProfileAndCover = ({ user, loading, edit }) => {
   return (
     <div>
       {/* Cover Image */}
       <div className="relative group">
-        {status === "loading" ? (
+        {loading ? (
           <Skeleton height={155} />
         ) : (
           <img
@@ -18,12 +18,12 @@ const ProfileAndCover = ({ user, status, edit }) => {
             className="w-full h-[155px] object-cover"
           />
         )}
-        {status === "succeeded" && edit && <CoverPicture user={user} />}
+        {edit && <CoverPicture user={user} />}
       </div>
 
       {/* Profile Image */}
       <div className="relative group flex float-end">
-        {status === "loading" ? (
+        {loading === "loading" ? (
           <div className="mr-5 -mt-[60px] ">
             <Skeleton circle height={105} width={105} />
           </div>
@@ -34,7 +34,7 @@ const ProfileAndCover = ({ user, status, edit }) => {
             className="mr-5 Cover Picture -mt-11 w-20 h-20 sm:-mt-12 sm:w-[105px] sm:h-[105px] lg:w-36 lg:h-36 lg:-mt-20 rounded-full border-2 border-gray-300"
           />
         )}
-        {status === "succeeded" && edit && <ProfilePicture user={user} />}
+        {edit && <ProfilePicture user={user} />}
       </div>
     </div>
   );
