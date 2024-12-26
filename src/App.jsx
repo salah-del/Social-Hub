@@ -21,15 +21,18 @@ const Plans = lazy(() => import("./Pages/socialHub/Plans"));
 const Reports = lazy(() => import("./Pages/socialHub/Reports"));
 const Trending = lazy(() => import("./Pages/socialHub/Trending"));
 const VideoPlayer = lazy(() => import("./Pages/socialHub/VideoPlayer"));
+const Videos = lazy(
+  () => import("./Components/socialHub/Profile/Videos/Videos")
+);
+
 
 const BetaBotAi = lazy(() => import("./Pages/socialHub/BetaBotAi"));
 const NotFound = lazy(() => import("./Pages/NotFound"));
-
-import Profile from "./Pages/socialHub/Profile/Profile";
-import ProfileVideos from "./Components/socialHub/Profile/ProfileVideos/ProfileVideos";
-import Posts from "./Components/socialHub/Profile/Posts/Posts";
-import Friends from "./Components/socialHub/Profile/Friends/Friends";
-import Saved from "./Components/socialHub/Profile/Saved/Saved";
+import ProfileVideos from './Components/socialHub/Profile/ProfileVideos/ProfileVideos';
+import Profile from './Pages/socialHub/Profile/Profile';
+import Posts from './Components/socialHub/Profile/Posts/Posts';
+import Saved from './Components/socialHub/Profile/Saved/Saved';
+import Friends from './Components/socialHub/Profile/Friends/Friends';
 
 const App = () => {
   const userID = Cookies.get("userID");
@@ -243,12 +246,32 @@ const App = () => {
             />
 
             <Route path="profile/:id" element={<Profile />}>
-              <Route index element={<Posts />} />
-              <Route path="videos" element={<ProfileVideos />} />
-              <Route path="friends" element={<Friends />} />
-              <Route path="saved" element={<Saved />} />
+                  <Route
+                    index
+                    element={
+                        <Posts />
+                    }
+                  />
+                  <Route
+                    path="videos"
+                    element={
+                        <ProfileVideos />
+                    }
+                  />
+                  <Route
+                    path="friends"
+                    element={
+                        <Friends />
+                    }
+                  />
+                  <Route
+                    path="saved"
+                    element={
+                        <Saved />
+                    }
+                  />
+                </Route>
             </Route>
-          </Route>
 
           <Route
             path="*"
