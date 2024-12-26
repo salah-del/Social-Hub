@@ -10,7 +10,7 @@ const PlansActionsHook = () => {
     try {
       const response = await axios.get(`${API.getUserPlanById}/${userID}`);
       setUserPlan(response.data.planType);
-      console.log(response.data);
+      // console.log(response.data);
     } catch (error) {
       console.error("Error fetching user plan:", error);
     }

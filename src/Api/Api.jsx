@@ -41,12 +41,13 @@ export const API = {
   /* ======= Users ======= */
   getAllUsers: `${BASE_URL}/users/getRandomUsers`,
   getUserById: `${BASE_URL}/users/find`, //     /:userID
-
   subscribe: `${BASE_URL}/users/sub`, //   /:userID
   unsubscribe: `${BASE_URL}/users/unsub`, //   /:userID
+  addFriend: `${BASE_URL}/users/send-request`, //     /:FriendID
+  
+  acceptFriend: `${BASE_URL}/users/accept-request`, //     /:FriendID
 
-  AddFriend: `${BASE_URL}/users/send-request`, //     /:FriendID
-  AcceptFriend: `${BASE_URL}/users/accept-request`, //     /:FriendID
+  searchByName : `${BASE_URL}/users/Search_Users_Name`,
   // in Body : {"receiverId":"6761843c3aa8c81ef60868ee"}
 
   updateUser: `${BASE_URL}/users`, // :userId

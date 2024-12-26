@@ -4,12 +4,14 @@ import { showToast } from "../../../../Utils/showToast";
 import InputForm from "../../../helpers/InputForm";
 import PasswordForm from "../../../helpers/PasswordForm";
 import ButtonForm from "../../../helpers/ButtonForm";
-import UsersActionsHook from "../../../../Hooks/UsersActionsHook";
+import { useUsers } from "../../../../Hooks/useUsers";
+import { useDispatch } from "react-redux";
+import { getCurrUser } from "../../../../Redux/slices/userSlice";
 function UserInformation({ user, edit }) {
+  const dispatch = useDispatch();
+  const { fetchUserById, handleUpdateUser, statusUpdate } = useUsers();
   const [isOpen, setIsOpen] = useState(false);
   const toggleModal = () => setIsOpen(!isOpen);
-  const { updateUser } = UsersActionsHook();
-  const [loading, setLoading] = useState(false);
   const [fields, setFields] = useState([]);
   const [values, setValues] = useState({
     name: user?.name || "",
@@ -25,7 +27,6 @@ function UserInformation({ user, edit }) {
       [name]: value,
     }));
   };
-
   // إضافة أو إزالة الحقول التي يريد المستخدم تعديلها
   const toggleField = (field) => {
     if (fields.includes(field)) {
@@ -43,7 +44,24 @@ function UserInformation({ user, edit }) {
       return;
     }
 
-    updateUser(user._id, values, setLoading, toggleModal);
+    const selectedValues = fields.reduce((acc, field) => {
+      acc[field] = values[field];
+      return acc;
+    }, {});
+
+    selectedValues.currentPassword = values.currentPassword;
+
+    console.log(selectedValues);
+
+    if (Object.keys(selectedValues).length === 1) {
+      showToast("error", "Please select at least one field to update.");
+      return;
+    }
+
+    await handleUpdateUser(user._id, selectedValues);
+    toggleModal();
+    fetchUserById(user._id);
+    dispatch(getCurrUser(user._id));
   };
 
   return (
@@ -168,7 +186,10 @@ function UserInformation({ user, edit }) {
                 />
               )}
 
-              <ButtonForm title={"Update your data"} loading={loading} />
+              <ButtonForm
+                title={"Update your data"}
+                loading={statusUpdate === "loading"}
+              />
             </form>
           </div>
         </div>
