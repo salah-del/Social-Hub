@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { memo, useState } from 'react';
 import { BsBookmark, BsBookmarkFill } from 'react-icons/bs';
+import { useSelector } from 'react-redux';
 
 const SavedItemCard = ({ item, onToggleSave }) => {
   return (
@@ -29,36 +30,21 @@ const SavedItemCard = ({ item, onToggleSave }) => {
   );
 };
 
-function Saved() {
-  const [savedItems, setSavedItems] = useState(
-    Array(6).fill(null).map((_, i) => ({
-      id: i,
-      title: `Saved Item ${i + 1}`,
-      description:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-      imageUrl: `https://picsum.photos/400/300?random=${i}`,
-      saved: true,
-    }))
-  );
-
-  const toggleSave = (id) => {
-    setSavedItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === id ? { ...item, saved: !item.saved } : item
-      )
-    );
-  };
+const  Saved = memo(() => {
+  const {user, status, error} = useSelector((state) => state.user)
+  console.log(user?.savedVideos);
+  
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
       <h2 className="text-2xl font-bold text-gray-800 mb-6">Saved Items</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {savedItems.map((item) => (
           <SavedItemCard key={item.id} item={item} onToggleSave={toggleSave} />
         ))}
-      </div>
+      </div> */}
     </div>
   );
-}
+})
 
 export default Saved;

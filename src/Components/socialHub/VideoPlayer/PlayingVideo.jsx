@@ -7,6 +7,7 @@ import Skeleton from 'react-loading-skeleton';
 import { FaUserCircle } from "react-icons/fa";
 import { useSelector } from 'react-redux';
 import { API } from '../../../Api/Api';
+import Cookies from 'js-cookie';
 const PlayingVideo = () => {
     const location = useLocation();
     const video = location.state?.video || "";
@@ -16,20 +17,27 @@ const PlayingVideo = () => {
     const user = useSelector((state) => state.user.user);
     const [views, setViews] = useState(video ? video.views : 0);
     const [amISubscriber, setAmISubscriber] = useState(false);
-    
     const [error, setError] = useState("");
+    const currUserId = Cookies.get("userID");
+    const isMyVideo = video?.userId == currUserId;
+
 
     useEffect(() => { 
         window.scrollTo(0, 0);
         const viewVideo = async () => { 
-            const response = await axios.put(`${API.viewVideo}/${video._id}`);
-            if (response.data) { 
+            try {
+                const response = await axios.put(`${API.viewVideo}/${video._id}`);
                 setViews(prev => prev + 1);
+                console.log(response.data);
+            } catch (error) {
+                console.log(error)
+                console.log(error?.response?.data || "Something went wrong in viewing the video");
+                setViews(prev => prev - 1);
             }
         }
         const handleAmISubscriber = () => { 
-            if (channel && channel.SubscriberedOrFollowed && user) { 
-                const answer = channel.SubscriberedOrFollowed.find((follower) => follower === user._id);
+            if (channel && channel.SubscribersOrFollowers && user) { 
+                const answer = channel.SubscribersOrFollowers.find((follower) => follower === user._id);
                 if (answer)
                     setAmISubscriber(answer);
                 else if (answer == false)
@@ -53,7 +61,7 @@ const PlayingVideo = () => {
     }
 
     const handleFollowAndUnfollow = () => { 
-        if (channel && user) {
+        if (channel && currUserId) {
             if (amISubscriber) { 
                 // unsbscribe
                 
@@ -103,9 +111,9 @@ const PlayingVideo = () => {
                 </div>
                 <div className='flex flex-col gap-0.5 text-sm'>
                     <p className=''>{channel && channel.name}</p>
-                    <p className='text-gray-500'>{channel && channel.SubscriberedOrFollowed && channel.SubscriberedOrFollowed.length} Subscribers</p>
+                    <p className='text-gray-500'>{(channel && channel.SubscribersOrFollowers) && channel.SubscribersOrFollowers.length} Subscribers</p>
                 </div>
-                <button  onClick={handleFollowAndUnfollow} className={` rounded-full ${amISubscriber ? "bg-white text-black hover:bg-gray-100" : "text-white hover:bg-sec-color bg-main-color"}  border shadow-sm py-2 px-8 text-sm ml-2  trans `}>{amISubscriber ? "Unsubscribe" :"Subscribe"}</button>
+                {!isMyVideo && <button  onClick={handleFollowAndUnfollow} className={` rounded-full ${amISubscriber ? "bg-white text-black hover:bg-gray-100" : "text-white hover:bg-sec-color bg-main-color"}  border shadow-sm py-2 px-8 text-sm ml-2  trans `}>{amISubscriber ? "Unsubscribe" :"Subscribe"}</button>}
             </div>
         </div>
     );

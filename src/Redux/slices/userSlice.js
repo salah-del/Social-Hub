@@ -127,7 +127,21 @@ const userSlice = createSlice({
         // add new community to user communities
         state.user.communities = action.payload;
       }
-    }
+    },
+    saveVideo: (state, action) => { 
+      // action is the video id
+      if (state.user){ 
+        console.log(action.payload);
+        state.user.savedVideos.push(action.payload);
+
+      }
+    },
+    unsaveVideo: (state, action) => { 
+      // action is the video id
+      if (state.user){ 
+        state.user.savedVideos.filter(vidId => vidId !== action.payload);
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -138,6 +152,7 @@ const userSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.user = action.payload;
+        console.log(action.payload); // user details
         state.status = "succeeded";
         showToast("success", "User successfully logged in");
         Cookies.set("userID", action.payload._id);
@@ -190,5 +205,5 @@ const userSlice = createSlice({
   },
 });
 
-export const {  updateUserCommunities } = userSlice.actions;
+export const {  updateUserCommunities, saveVideo,unsaveVideo } = userSlice.actions;
 export default userSlice.reducer;

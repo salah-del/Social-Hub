@@ -1,3 +1,4 @@
+
 export const BASE_URL = `http://localhost:5173/api`;
 
 export const API = {
@@ -25,6 +26,7 @@ export const API = {
   deleteComment: `${BASE_URL}/comments`, //     /:idComment
   /* ======= Videos ======= */
   addVideo: `${BASE_URL}/videos`,
+  getVideo: `${BASE_URL}/videos`,
   searchVideo: `${BASE_URL}/videos/search`, //   params : q
   getTrendVideos: `${BASE_URL}/videos/trend`,
   getRandomVideos: `${BASE_URL}/videos/random`,
@@ -34,6 +36,8 @@ export const API = {
   updateVideo: `${BASE_URL}/videos`, //   /:videoId
   deleteVideo: `${BASE_URL}/videos`, //   /:videoId
   copyUrlForVideo: (idVideo) => `${BASE_URL}/videos/${idVideo}/copyUrl`,
+  saveVideo:`${BASE_URL}/videos/save`, //   /:videoId
+  unSaveVideo:`${BASE_URL}/videos/unsave`, //   /:videoId
   /* ======= Users ======= */
   getAllUsers: `${BASE_URL}/users/getRandomUsers`,
   getUserById: `${BASE_URL}/users/find`, //     /:userID

@@ -1,12 +1,10 @@
-import { useState, useCallback, lazy, Suspense, useEffect } from "react";
+import { lazy, memo, Suspense, useCallback, useState } from "react";
 import Navbar from "../../Components/socialHub/Navbar/Navbar";
-import { useLocation } from "react-router-dom";
-import BonusCoinsButton from "../../Components/socialHub/BonusCoinsButton";
 const Sidebar = lazy(() =>
   import("../../Components/socialHub/Sidebar/Sidebar")
 );
 
-const PersistentLayout = ({ children }) => {
+const PersistentLayout = memo(({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const toggleSidebar = useCallback(() => {
@@ -34,6 +32,6 @@ const PersistentLayout = ({ children }) => {
       }
     </div>
   );
-};
+});
 
 export default PersistentLayout;
