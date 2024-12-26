@@ -1,9 +1,8 @@
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { Link } from "react-router-dom";
 import PopupModal from "./PopupModal";
 import UserInformation from "./Update/UserInformation";
-const UserInfo = ({ user, status, posts, postsStatus, edit }) => {
+const UserInfo = ({ user, status, edit }) => {
   return (
     <div className="flex flex-col items-start gap-4 mt-11 md:mt-3">
       {status === "loading" ? (
@@ -16,7 +15,7 @@ const UserInfo = ({ user, status, posts, postsStatus, edit }) => {
         </div>
       )}
       <ul className="flex gap-5 max-sm:gap-2">
-        {postsStatus === "loading" ? (
+        {false ? (
           <>
             <Skeleton width={70} />
             <Skeleton width={90} />
@@ -24,7 +23,7 @@ const UserInfo = ({ user, status, posts, postsStatus, edit }) => {
           </>
         ) : (
           <>
-            <li className="cursor-pointer">{posts?.length || 0} Post</li>
+            <li className="cursor-pointer">{ 0} Post</li>
             <PopupModal
               count={user?.SubscriberedOrFollowed?.length}
               title="Following"

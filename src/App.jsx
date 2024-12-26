@@ -35,7 +35,6 @@ const Saved = lazy(() => import("./Components/socialHub/Profile/Saved/Saved"));
 const BetaBotAi = lazy(() => import("./Pages/socialHub/BetaBotAi"));
 const NotFound = lazy(() => import("./Pages/NotFound"));
 import ProfileVideos from './Components/socialHub/Profile/ProfileVideos/ProfileVideos';
-import Profile from './Pages/socialHub/Profile/Profile';
 
 const App = () => {
   const userID = Cookies.get("userID");
