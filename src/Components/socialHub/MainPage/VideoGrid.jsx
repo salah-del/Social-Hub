@@ -6,7 +6,7 @@ import { API } from '../../../Api/Api';
 import { showToast } from '../../../Utils/showToast';
 const VideoCard = React.lazy(() => import('../MainPage/VideoCard'));
 const MemoizedVideoCard = React.memo(VideoCard);
-const VideoGrid = React.memo(({ initVideos:initialVideos, style, handleDeleteVideo }) => { 
+const VideoGrid = React.memo(({ initVideos:initialVideos, style, handleDeleteVideo, inProfile=false }) => { 
     const [videos, setVideos] = useState(initialVideos);
     const [isVideoEditOpen, setIsVideoEditOpen] = useState(false);
     const [editedVideoDetails, setEditedVideoDetails] = useState(null);
@@ -67,6 +67,7 @@ const VideoGrid = React.memo(({ initVideos:initialVideos, style, handleDeleteVid
                     video={vid}
                     handleOpenVideoEdit={handleOpenEditVdieo}
                     handleDeleteVideo={deleteVideo}
+                    inProfile={inProfile}  // Passing inProfile prop to VideoCard for different behavior in profile and main page. In profile, it shows edit and delete buttons. In main page, it only shows delete button.
                 />
             </div>
             ))}

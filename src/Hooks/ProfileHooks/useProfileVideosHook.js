@@ -1,19 +1,19 @@
 import axios from "axios";
-import { API } from "../Api/Api";
+import { API } from "../../Api/Api";
 import { useState } from "react";
-import { showToast } from "../Utils/showToast";
+import { showToast } from "../../Utils/showToast";
 
-const useProfileHook = () => {
+const useProfileVideosHook = () => {
     const [videos, setVideos] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
+    
+
     const getUserVideos = async (uId ) => {
-        console.log("Entered", uId);
         try {
             setLoading(true);
             const response = await axios.get(`${API.getVideosForSpecificUser}/${uId}`);
-            console.log(response.data);
             setVideos(response.data.videos);
         } catch (error) {
             setError(error.response?.data?.message || "Something went wrong with fetching videos.");
@@ -34,14 +34,11 @@ const useProfileHook = () => {
             // setLoading(true);
             setVideos((prevVideos) => [tempVideo, ...prevVideos]);
             const response = await axios.post(`${API.addVideo}`, videoDetails);
-            console.log("After adding video : ", response.data);
             
             // Replace the temporary video with the response data
             setVideos((prevVideos) =>
                 prevVideos.map((video) => (video._id === tempId ? response.data : video))
             );
-            console.log(videos);
-            
             showToast('success', "Video added successfully");
         } catch (error) {
             // Revert the state if the API call fails
@@ -61,4 +58,4 @@ const useProfileHook = () => {
     return { videos, loading, error, getUserVideos, addNewVideo, deleteVideo };
 };
 
-export default useProfileHook;
+export default useProfileVideosHook;

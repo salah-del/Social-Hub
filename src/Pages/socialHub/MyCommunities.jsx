@@ -11,7 +11,7 @@ const MyCommunities = memo(() => {
   const [allMyCommunities, setallMyCommunities] = useState(
     user && user.communities ? user.communities : [] );
     const dispatch = useDispatch();
-
+    console.log(user); // user details
     useEffect(() => { 
       window.scrollTo(0, 0);
       setallMyCommunities(user && user.communities ? user.communities : []);

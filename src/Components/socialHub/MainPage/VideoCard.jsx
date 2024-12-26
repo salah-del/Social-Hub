@@ -14,7 +14,9 @@ import useNavigateTo from "../../../Utils/navigateTo";
 import { showToast } from "../../../Utils/showToast";
 import sweetalert from "../../../Utils/sweetalert";
 import { isVideoURL } from "../../../Utils/validateURLs";
-const VideoCard = React.memo(({ video, handleOpenVideoEdit, handleDeleteVideo}) => {
+import { saveVideo, unsaveVideo } from "../../../Redux/slices/userSlice";
+import { useDispatch } from "react-redux";
+const VideoCard = React.memo(({ video, handleOpenVideoEdit, handleDeleteVideo, inProfile}) => {
   const navigateTo = useNavigateTo();
   const [user, setUser] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -67,7 +69,7 @@ const VideoCard = React.memo(({ video, handleOpenVideoEdit, handleDeleteVideo}) 
 const optionsRef = useRef(null);
 
   const handleOpenOptions = () => {
-    setIsOptionsOpen((prev) => !prev);
+    setIsOptionsOpen(prev => !prev);
   };
 
   // Close the popover if clicked outside
@@ -120,8 +122,18 @@ const optionsRef = useRef(null);
       showToast( "error", "Invalid Video URL");
     }
   };
-  const handleSaveOrUnsaveVideo = () => { 
 
+  const dispatch = useDispatch();
+  const handleSaveVideo = async () => { 
+    try {
+      const response = await axios.post(`${API.saveVideo}/${video._id}`);
+      console.log(response.data);
+      dispatch(saveVideo(video._id));
+      showToast('success', "Video saved successfully");
+    } catch (error) {
+      showToast("error", error?.response?.data?.message || "Failed to save video");
+      unsaveVideo(video._id);
+    }
   }
 
   return (
@@ -178,13 +190,13 @@ const optionsRef = useRef(null);
               
               <div className="w-full flex justify-between items-center">
                 <button onClick={handleNavToUser} className="w-fit text-xs trans hover:text-black">{user ? user.name : "Default User"}</button>
-                <div onClick={handleOpenOptions} className="relative w-6 h-6 group rounded-full flex items-center justify-center trans focus:bg-gray-200 hover:bg-gray-200 -mr-1">
+                <div ref={optionsRef} onClick={handleOpenOptions} className="relative w-6 h-6 group rounded-full flex items-center justify-center trans focus:bg-gray-200 hover:bg-gray-200 -mr-1">
                   <SlOptionsVertical className="text-sm" />
-                  {isOptionsOpen && <div ref={optionsRef} className="absolute  flex flex-col items-start overflow-hidden  -top-10 right-8 z-10 w-36 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm  ">
+                  {isOptionsOpen && <div  className="absolute  flex flex-col items-start overflow-hidden  -top-10 right-8 z-10 w-36 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm  ">
                       <button onClick={handleCopyVideoURL} className="w-full text-left pl-2 trans hover:bg-gray-200 cursor-pointer py-1">Copy video URL</button>
-                      <button onClick={handleSaveOrUnsaveVideo} className="w-full text-left pl-2 trans hover:bg-gray-200 cursor-pointer py-1">Save Video</button>
-                      {video.userId === userId && <button onClick={handleClickEditBtn} className="w-full text-left pl-2 trans hover:bg-gray-200 cursor-pointer py-1">Edit Video</button>}
-                      {video.userId === userId && <button onClick={handleClickDeleteBtn} className="w-full text-main-color text-left pl-2 trans hover:bg-gray-200 cursor-pointer py-1">Delete Video</button>}
+                      <button onClick={handleSaveVideo} className="w-full text-left pl-2 trans hover:bg-gray-200 cursor-pointer py-1">Save Video</button>
+                      {video.userId === userId && inProfile && <button onClick={handleClickEditBtn} className="w-full text-left pl-2 trans hover:bg-gray-200 cursor-pointer py-1">Edit Video</button>}
+                      {video.userId === userId && inProfile &&  <button onClick={handleClickDeleteBtn} className="w-full text-main-color text-left pl-2 trans hover:bg-gray-200 cursor-pointer py-1">Delete Video</button>}
                   </div>}
                 </div>
               </div>
