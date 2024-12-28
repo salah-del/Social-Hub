@@ -13,7 +13,7 @@ const VideoGrid = React.memo(({ initVideos:initialVideos, style, handleDeleteVid
     const [editedVideoId, setEditedVideoId] = useState(null);
     useEffect(() => { 
         setVideos(initialVideos);
-    }, initialVideos)
+    }, [initialVideos]);
     const handleOpenEditVdieo = (details) => { 
         const {_id, ...resetDetails} = details ; // Destructure _id and keep the rest
         setEditedVideoDetails(resetDetails);

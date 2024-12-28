@@ -16,6 +16,7 @@ import sweetalert from "../../../Utils/sweetalert";
 import { isVideoURL } from "../../../Utils/validateURLs";
 import { saveVideo, unsaveVideo } from "../../../Redux/slices/userSlice";
 import { useDispatch } from "react-redux";
+import { copyURL } from './../../../Utils/copyURL';
 const VideoCard = React.memo(({ video, handleOpenVideoEdit, handleDeleteVideo, inProfile}) => {
   const navigateTo = useNavigateTo();
   const [user, setUser] = useState(null);
@@ -50,13 +51,13 @@ const VideoCard = React.memo(({ video, handleOpenVideoEdit, handleDeleteVideo, i
 
   const validUrl = isValidUrl(video.thumbnailUrl) ? video.thumbnailUrl : "/src/assets/noImage.jpg";
   
-  // `video/${video._id}`
-  
   const handleNavToVideoPlayer = () => { 
-    navigateTo({
-      dest: `/socialHub/video/${video._id}`,
-      state: { video: video, user }
-    })
+    if (user) { 
+      navigateTo({
+        dest: `/socialHub/video/${video._id}`,
+        state: { video: video, user }
+      });
+    }
   }
   const handleNavToUser = () => { 
     if (user) { 
@@ -79,11 +80,7 @@ const optionsRef = useRef(null);
         setIsOptionsOpen(false);
       }
     };
-
-    // Add event listener
     document.addEventListener("mousedown", handleClickOutside);
-
-    // Cleanup event listener
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
@@ -109,15 +106,7 @@ const optionsRef = useRef(null);
 
   const handleCopyVideoURL = () => { 
     if (video && video.videoUrl && isVideoURL(video.videoUrl) ) {
-      console.log(video.videoUrl);
-      
-      navigator.clipboard.writeText(video.videoUrl)
-        .then(() => {
-          showToast('success', 'Video URL copied successfully');
-        })
-        .catch(() => {
-          showToast( "error", "Failed to copy video URL");
-        });
+      copyURL(video.videoUrl);
     } else {
       showToast( "error", "Invalid Video URL");
     }

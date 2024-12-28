@@ -25,7 +25,7 @@ export const API = {
   deleteComment: `${BASE_URL}/comments`, //     /:idComment
   /* ======= Videos ======= */
   addVideo: `${BASE_URL}/videos`,
-  getVideo: `${BASE_URL}/videos`,
+  getVideo: `${BASE_URL}/videos/spicificVideo/`, // /:videoId
   searchVideo: `${BASE_URL}/videos/search`, //   params : q
   getTrendVideos: `${BASE_URL}/videos/trend`,
   getRandomVideos: `${BASE_URL}/videos/random`,
@@ -37,6 +37,8 @@ export const API = {
   copyUrlForVideo: (idVideo) => `${BASE_URL}/videos/${idVideo}/copyUrl`,
   saveVideo: `${BASE_URL}/videos/save`, //   /:videoId
   unSaveVideo: `${BASE_URL}/videos/unsave`, //   /:videoId
+  likeVideo: `${BASE_URL}/users/like`, //   /:videoId
+  disLikeVideo:`${BASE_URL}/users/dislike`, //   /:videoId
   /* ======= Users ======= */
   getAllUsers: `${BASE_URL}/users/getRandomUsers`,
   searchByName: `${BASE_URL}/users/Search_Users_Name`,
@@ -55,6 +57,7 @@ export const API = {
   deleteUser: `${BASE_URL}/users`, //   /:userId
   likeVideo: `${BASE_URL}/users/like`, //   /:videoId
   dislikeVideo: `${BASE_URL}/users/dislike`, //   /:videoId
+  getSavedItems: `${BASE_URL}/users/saved-items`, 
   /* ======= Communities ======= */
   createCommunity: `${BASE_URL}/communities/create`,
   getCommunityById: `${BASE_URL}/communities/community`, // /:idCommunity

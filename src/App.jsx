@@ -21,9 +21,7 @@ const Plans = lazy(() => import("./Pages/socialHub/Plans"));
 const Reports = lazy(() => import("./Pages/socialHub/Reports"));
 const Trending = lazy(() => import("./Pages/socialHub/Trending"));
 const VideoPlayer = lazy(() => import("./Pages/socialHub/VideoPlayer"));
-const Videos = lazy(
-  () => import("./Components/socialHub/Profile/Videos/Videos")
-);
+
 
 
 const BetaBotAi = lazy(() => import("./Pages/socialHub/BetaBotAi"));
