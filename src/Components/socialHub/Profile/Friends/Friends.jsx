@@ -3,6 +3,7 @@ import { FriendRequest } from "./FriendRequest";
 import { FriendCard } from "./FriendCard";
 import { useOutletContext } from "react-router-dom";
 import { useUsers } from "../../../../Hooks/useUsers";
+import ItemsCarousel from "./itemsCarousel";
 export default function Friends() {
   const { fetchUserById } = useUsers();
   const { user, edit } = useOutletContext();
@@ -53,23 +54,29 @@ export default function Friends() {
 
   const pendingFriends = friends.filter((f) => f.status === "pending");
   const acceptedFriends = friends.filter((f) => f.status === "accepted");
-
+  // pendingFriends.push(...acceptedFriends);
+  acceptedFriends.push(...pendingFriends);
+  console.log(edit);
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold mb-4">Friend Requests</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {pendingFriends.map((friend) => (
-            <FriendRequest key={friend.id} friend={friend} />
-          ))}
+    <div className="max-w-7xl mx-auto px-4 py-5">
+      {edit && (
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold mb-4">Friend Requests</h2>
+          <ItemsCarousel
+            items={pendingFriends}
+            CardComponent={FriendRequest}
+            message={"No friend requests at the moment."}
+          />
         </div>
-      </div>
+      )}
 
       <div>
-        <h2 className="text-2xl font-bold mb-4">Your Friends</h2>
+        <h2 className="text-2xl font-bold mb-4">
+          {edit ? "Your Friends" : "Friends"}
+        </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {acceptedFriends.map((friend) => (
-            <FriendCard key={friend.id} friend={friend} />
+            <FriendCard key={friend.id} friend={friend} edit={edit} />
           ))}
         </div>
       </div>

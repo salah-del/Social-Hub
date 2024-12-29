@@ -96,11 +96,11 @@ export const unsubscribe = createAsyncThunk(
 export const addFriend = createAsyncThunk(
   "users/addFriend",
   async (friendId, { rejectWithValue }) => {
-        console.log("from addFriend func id : ", friendId);
+    console.log("from addFriend func id : ", friendId);
     try {
       const response = await axios.put(`${API.addFriend}/${friendId}`);
-      console.log("from addFriend func",response.data);
-      
+      console.log("from addFriend func", response.data);
+
       return response.data;
     } catch (error) {
       return handleError(error, rejectWithValue);
@@ -248,17 +248,18 @@ const userSlice = createSlice({
       .addCase(addFriend.fulfilled, (state, action) => {
         state.userData = action.payload;
         state.status = "succeeded";
-        showToast("success", "Request sent successfully");
+        showToast("success", "Friend request sent");
       })
       .addCase(addFriend.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
-        showToast("error", "Request wasn't sent");
+        // showToast("error", "Request wasn't sent");
       })
       // acceptFriend
       .addCase(acceptFriend.fulfilled, (state, action) => {
         state.userData = action.payload;
         state.status = "succeeded";
+        showToast("success", "Friend request accepted");
       })
       .addCase(acceptFriend.rejected, (state, action) => {
         state.status = "failed";
