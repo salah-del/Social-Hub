@@ -1,6 +1,6 @@
-import React, { memo, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { BsBookmark, BsBookmarkFill } from 'react-icons/bs';
-import { useSelector } from 'react-redux';
+import Cookies from 'js-cookie';
 
 const SavedItemCard = ({ item, onToggleSave }) => {
   return (
@@ -31,8 +31,11 @@ const SavedItemCard = ({ item, onToggleSave }) => {
 };
 
 const  Saved = memo(() => {
-  const {user, status, error} = useSelector((state) => state.user)
-  console.log(user?.savedVideos);
+  
+  const currUserId = Cookies.get("userID");
+  // useEffect(() => { 
+  //   const getSavedItems
+  // }, [currUserId])
   
 
   return (

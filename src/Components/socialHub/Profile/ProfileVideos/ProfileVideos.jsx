@@ -12,17 +12,13 @@ const ProfileVideos = memo(() => {
     const {user, status, error:userError} = useSelector((state) => state.user);
     const {videos, getUserVideos, loading:loadingVideos, error, addNewVideo, deleteVideo} = useProfileVideosHook();
     const [isAddNewVideoModalOpen, setIsAddNewVideoModalOpen] = useState(false);
-    const [shownVideos, setshownVideos] = useState(videos);
     const {id} = useParams();
     useEffect(() => { 
         if (user && id) { 
             getUserVideos(id);
         }
     }, [user]);
-    useEffect(() => { 
-        if (videos)
-            setshownVideos(videos);
-    }, [videos])
+    
 
     const handleAddNewVideoModal = () => { 
         setIsAddNewVideoModalOpen(prev => !prev);
@@ -43,11 +39,8 @@ const ProfileVideos = memo(() => {
     if (loadingVideos)  
         return (
             <div className="w-full flex flex-col gap-5 ">
-                <div className="w-full blur flex items-center justify-between">
-                    <h2 className="text-2xl font-bold text-gray-800 ">User videos</h2>
-                    <button  className="ml-auto pointer-events-none text-xs bg-main-color px-3 py-2 text-white trans hover:bg-sec-color rounded-md ">
-                        Add New Video
-                    </button>
+                <div className="w-full  flex items-center justify-between">
+                    <Skeleton width={100} height={32} />
                 </div>
                 <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 xl:gap-5">
                     {Array.from({ length: videos?.length || 6 }).map((_, index) => (

@@ -19,10 +19,11 @@ const Profile = () => {
     [location.pathname]
   );
   const { id } = useParams();
-  console.log("id ", useParams ());
+  
   const edit = useMemo(() => id === Cookies.get("userID"), [id]);
 
   useEffect(() => {
+    window.scrollTo(0,0);
     const fetchUserById = async () => {
       setLoading(true);
       try {
@@ -39,7 +40,7 @@ const Profile = () => {
   }, [id]);
 
   const currentTab = useMemo(() => pathSegments[4] || null, [pathSegments]);
-
+  console.log(user);
   return (
     <div className="-m-2">
       <ProfileAndCover user={user} loading={loading} edit={edit} />

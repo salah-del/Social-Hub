@@ -5,6 +5,7 @@ import { Img } from 'react-image';
 import Skeleton from 'react-loading-skeleton';
 import { API } from '../../../Api/Api';
 import Cookies from 'js-cookie';
+import { Link } from 'react-router-dom';
 
 const ChannelDetails = memo(({channelId, name, profilePicture}) => {
     const [channel, setChannel] = useState(null);
@@ -27,7 +28,10 @@ const ChannelDetails = memo(({channelId, name, profilePicture}) => {
                 setSubscribers(res.data.SubscribersOrFollowers.length);
                 
             } catch (error) {
-                setError(error?.response?.data?.message || "There is error with this channel")
+                if (error?.response?.data?.message)
+                    setError(error?.response?.data?.message);
+                else 
+                setError("There is error with this channel");
                 setAmISubscriber(false);
             } finally { 
                 setLoading(false);
@@ -70,25 +74,26 @@ const ChannelDetails = memo(({channelId, name, profilePicture}) => {
     const currUserId = Cookies.get("userID");
     const isMyVideo = channelId == currUserId;
     return (
-        <div className='flex items-center gap-3 '>
+        <div className='flex items-center jusbet gap-3 '>
             {/* channel image */}
-            <div className='max-w-10 h-10 rounded-full '>
-                {profilePicture ? 
-                <Img src={profilePicture} className='w-full h-full rounded-full' loader={<div className='w-10 h-10 rounded-full'><Skeleton width={'100%'} height={'100%'} borderRadius={'100%'} /></div>} />
-                : <FaUserCircle className="text-gray-300 w-9 h-9" />
-            }
-            </div>
-            <div className='flex flex-col gap-0.5 text-sm'>
-                <p className=''>{name ? name : "Channel"}</p>
-                <p className='text-gray-500 flex items-center'>
+            <Link to={`/socialHub/profile/${channelId}`} className='max-w-10 h-10 rounded-full '>
+                {
+                profilePicture 
+                    ? <Img src={profilePicture} className='w-full h-full rounded-full' loader={<div className='w-10 h-10 rounded-full'><Skeleton width={'100%'} height={'100%'} borderRadius={'100%'} /></div>} />
+                    : <FaUserCircle className="text-gray-300 w-9 h-9" />
+                }
+            </Link>
+            <div className='flex flex-col text-sm'>
+                <Link to={`/socialHub/profile/${channelId}`} className=''>{name ? name : "Channel"}</Link>
+                <div className='text-gray-500 flex items-center'>
                     {
                         loading ? <p className='blur-sm'>0 </p> 
                         : subscribers  ? subscribers : 0
                     }
                     {" "}Subscribers
-                </p>
+                </div>
             </div>
-            {!isMyVideo && <button  onClick={handleFollowAndUnfollow} className={` rounded-full ${amISubscriber ? "bg-white text-black hover:bg-gray-100" : "text-white hover:bg-sec-color bg-main-color"}  border shadow-sm py-2 px-8 text-sm ml-2  trans `}>{amISubscriber ? "Unsubscribe" :"Subscribe"}</button>}
+            {!isMyVideo && <button  onClick={handleFollowAndUnfollow} className={` rounded-full ${amISubscriber ? "bg-white text-black hover:bg-gray-100" : "text-white hover:bg-sec-color bg-main-color"}  border shadow-sm py-2 px-4 sm:px-8 text-sm ml-auto sm:ml-2  trans `}>{amISubscriber ? "Unsubscribe" :"Subscribe"}</button>}
         </div>
     )
 })
