@@ -5,10 +5,14 @@ import { showToast } from "../../Utils/showToast";
 
 const useProfileVideosHook = () => {
     const [videos, setVideos] = useState([]);
-    const [loading, setLoading] = useState(false);
+    const [isAddNewVideoModalOpen, setIsAddNewVideoModalOpen] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [addVideoLoading, setAddVideoLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    
+    const handleAddNewVideoModal = () => { 
+        setIsAddNewVideoModalOpen(prev => !prev);
+    }
 
     const getUserVideos = async (uId ) => {
         try {
@@ -31,23 +35,23 @@ const useProfileVideosHook = () => {
         const prevVideos = [...videos];
         
         try {
-            // setLoading(true);
+            setAddVideoLoading(true);
             setVideos((prevVideos) => [tempVideo, ...prevVideos]);
             const response = await axios.post(`${API.addVideo}`, videoDetails);
+            console.log(response.data);
             
             // Replace the temporary video with the response data
             setVideos((prevVideos) =>
                 prevVideos.map((video) => (video._id === tempId ? response.data : video))
             );
             showToast('success', "Video added successfully");
+            handleAddNewVideoModal();
         } catch (error) {
-            // Revert the state if the API call fails
-            // setVideos((prevVideos) => prevVideos.filter((video) => video.id !== tempId));
             setVideos(prevVideos);
             setError(error.response?.data?.message || "Something went wrong with adding the video.");
             showToast('error', error.response?.data?.message || "Something went wrong with adding the video.");
         } finally {
-            // setLoading(false);
+            setAddVideoLoading(false);
         }
     };
 
@@ -55,7 +59,7 @@ const useProfileVideosHook = () => {
         setVideos((prevVideos) => prevVideos.filter((video) => video._id !== videoId))
     }
 
-    return { videos, loading, error, getUserVideos, addNewVideo, deleteVideo };
+    return { videos, loading, addVideoLoading, error, getUserVideos, addNewVideo, deleteVideo, handleAddNewVideoModal, isAddNewVideoModalOpen };
 };
 
 export default useProfileVideosHook;

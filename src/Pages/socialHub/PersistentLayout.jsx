@@ -23,7 +23,7 @@ const PersistentLayout = memo(({ children }) => {
         <Navbar toggleSidebar={toggleSidebar} />
       </div>
       <div
-        className={`lg:ml-[225px] transition-all duration-300 p-6 overflow-y-hidden`}
+        className={`lg:ml-[225px] transition-all duration-300 p-6 overflow-hidden`}
       >
         {children}
       </div>

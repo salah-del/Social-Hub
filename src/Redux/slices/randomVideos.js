@@ -5,10 +5,10 @@ import { API } from "../../Api/Api";
 
 export const getRandomVideos = createAsyncThunk(
     'randomVideos/getRandomVideos',
-async (_, { rejectWithValue }) => {
+    async (_, { rejectWithValue }) => {
         try {
             const res = await axios.get(API.getRandomVideos);
-            return res.data;
+            return res.data.videos;
         } catch (error) {
         // Handle network errors (e.g., no connection, server is down)
             if (!error.response) {
@@ -36,7 +36,7 @@ async (_, { rejectWithValue }) => {
 const randomVideos = createSlice({
     name: 'randomVideos',
     initialState: {
-        videos: null,
+        videos: [],
         status: "idle",
         error: null,
         hasFetched: false,
@@ -49,7 +49,7 @@ const randomVideos = createSlice({
             state.error = null;
         })
         .addCase(getRandomVideos.fulfilled, (state, action) => { 
-            state.videos = action.payload;
+            state.videos = [...state.videos, ...action.payload];
             state.status = "succeeded";
             state.hasFetched = true;
         })

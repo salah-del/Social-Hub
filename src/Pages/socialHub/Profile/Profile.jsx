@@ -12,13 +12,12 @@ import { showToast } from "../../../Utils/showToast";
 const Profile = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
-  
+  const { id } = useParams();
   const location = useLocation();
   const pathSegments = useMemo(
     () => location.pathname.split("/"),
-    [location.pathname]
+    [location.pathname, id]
   );
-  const { id } = useParams();
   
   const edit = useMemo(() => id === Cookies.get("userID"), [id]);
 
@@ -40,12 +39,12 @@ const Profile = () => {
   }, [id]);
 
   const currentTab = useMemo(() => pathSegments[4] || null, [pathSegments]);
-  console.log(user);
+  
   return (
     <div className="-m-2">
       <ProfileAndCover user={user} loading={loading} edit={edit} />
       <UserInfo user={user} loading={loading} edit={edit} />
-      <Tabs openTab={currentTab} />
+      <Tabs openTab={currentTab} id={id} />
       <Outlet context={{ user, edit }} />
     </div>
   );
