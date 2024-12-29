@@ -103,6 +103,8 @@ export const getCurrUser = createAsyncThunk(
       }
       return userData.data; 
     } catch (error) {
+      console.log("Get user error : ", error);
+      
       if (error.response && error.response.data) {
         return rejectWithValue(
           error.response.data.message.slice(50) ||

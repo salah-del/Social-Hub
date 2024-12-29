@@ -11,6 +11,7 @@ const VideoGrid = React.memo(({ initVideos:initialVideos, style, handleDeleteVid
     const [isVideoEditOpen, setIsVideoEditOpen] = useState(false);
     const [editedVideoDetails, setEditedVideoDetails] = useState(null);
     const [editedVideoId, setEditedVideoId] = useState(null);
+    const [editVideoLoading, setEditVideoLoading] = useState(false)
     useEffect(() => { 
         setVideos(initialVideos);
     }, [initialVideos]);
@@ -27,7 +28,7 @@ const VideoGrid = React.memo(({ initVideos:initialVideos, style, handleDeleteVid
         const originalVideos = [...videos]; // Clone the original videos state
         console.log("used ID ",editedVideoId);
         try {
-            // Perform optimistic update
+            setEditVideoLoading(true)
             const updatedVideos = videos.map((video) => 
                 video._id === editedVideoId ? { ...video, ...newUpdates } : video
             );
@@ -36,12 +37,16 @@ const VideoGrid = React.memo(({ initVideos:initialVideos, style, handleDeleteVid
             // Send API request
             const res = await axios.put(`${API.updateVideo}/${editedVideoId}`, newUpdates);
             console.log(res.data);
-            showToast("success", "Video updated successfully")
+            showToast("success", "Video updated successfully");
+            handleCloseEditVdieo();
         } catch (error) {
             console.error("Failed to update video:", error);
             showToast("error", error?.response?.data?.message || "Can't update video")
             // Revert to the original state
             setVideos(originalVideos);
+            setEditVideoLoading(true)
+        } finally {             
+            setEditVideoLoading(false)
         }
     };
     const deleteVideo = async (videoId) => { 
@@ -58,10 +63,11 @@ const VideoGrid = React.memo(({ initVideos:initialVideos, style, handleDeleteVid
             setVideos(originalVideos);
         }
     }
-    return (
+    console.log(videos);
     
+    return (
         <div className={style ? style : `grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5`}>
-            {videos.map((vid) => (
+            {videos && videos.length > 0 && videos.map((vid) => (
             <div key={vid._id} className="mx-auto w-full">
                 <MemoizedVideoCard
                     video={vid}
@@ -71,9 +77,13 @@ const VideoGrid = React.memo(({ initVideos:initialVideos, style, handleDeleteVid
                 />
             </div>
             ))}
+            {
+                videos && videos.length == 0 && 
+                <p className='text-3xl text-gray-600 font-semibold'>Something went wrong</p>
+            }
             {isVideoEditOpen && 
                 <Modal title={'Edit Video'} onClose={handleCloseEditVdieo} >
-                    <EditVideoModal videoDetails={editedVideoDetails} updateVideo={handleUpdateVideo}    />
+                    <EditVideoModal videoDetails={editedVideoDetails} updateVideo={handleUpdateVideo} loading={editVideoLoading}   />
                 </Modal>}
         </div>
     )

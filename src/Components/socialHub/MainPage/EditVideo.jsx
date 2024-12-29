@@ -5,8 +5,9 @@ import Skeleton from 'react-loading-skeleton';
 import { showToast } from '../../../Utils/showToast';
 import { isValidUrl, isVideoURL } from './../../../Utils/validateURLs';
 import AddNewTagModal from './EditVideo/AddNewTagModal';
+import Loader from '../../../Utils/Loader';
 
-const EditVideoModal = memo(({videoDetails, updateVideo}) => {
+const EditVideoModal = memo(({videoDetails, updateVideo, loading}) => {
     console.log(videoDetails);
     const [imgURL, setimgURL] = useState("");
     const [addNewTagModal, setAddNewTagModal] = useState(false);
@@ -317,9 +318,15 @@ const EditVideoModal = memo(({videoDetails, updateVideo}) => {
                 
 
                 
-                <button onClick={handleEditVideo} className="ml-auto text-sm bg-main-color px-3 py-2 text-white trans hover:bg-sec-color rounded-md ">
+                {!loading && <button onClick={handleEditVideo} className="ml-auto text-sm bg-main-color px-3 py-2 text-white trans hover:bg-sec-color rounded-md ">
                     Update Video
-                </button>
+                </button>}
+                { 
+                    loading && 
+                    <div className="ml-auto text-sm w-[109px] flex items-center justify-center py-2 text-white  ">
+                        <Loader width={"24px"} />
+                    </div>
+                }
             </div>
             {
                 addNewTagModal && 

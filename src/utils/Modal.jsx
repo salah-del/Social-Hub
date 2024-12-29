@@ -13,7 +13,7 @@ const Modal = memo(({children, title, onClose}) => {
                 </div>
                 <div className="overflow-y-auto text-center friendsInModal">{children}</div>
             </div>
-            <div onClick={onClose} className="fixed w-full h-full top-0 left-0 z-50 backdrop-blur" />
+            <div onClick={onClose} className="fixed w-full h-full top-0 left-0 z-50 backdrop-blur-sm bg-black bg-opacity-60" />
         </>
     )
 })

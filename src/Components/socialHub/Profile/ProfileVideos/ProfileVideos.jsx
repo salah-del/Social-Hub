@@ -10,8 +10,7 @@ import { useParams } from "react-router-dom";
 
 const ProfileVideos = memo(() => {
     const {user, status, error:userError} = useSelector((state) => state.user);
-    const {videos, getUserVideos, loading:loadingVideos, error, addNewVideo, deleteVideo} = useProfileVideosHook();
-    const [isAddNewVideoModalOpen, setIsAddNewVideoModalOpen] = useState(false);
+    const {videos, getUserVideos, loading:loadingVideos, addVideoLoading,  error, addNewVideo,handleAddNewVideoModal, isAddNewVideoModalOpen, deleteVideo} = useProfileVideosHook();
     const {id} = useParams();
     useEffect(() => { 
         if (user && id) { 
@@ -20,20 +19,17 @@ const ProfileVideos = memo(() => {
     }, [user]);
     
 
-    const handleAddNewVideoModal = () => { 
-        setIsAddNewVideoModalOpen(prev => !prev);
-    }
+    
 
     const handleAddNewVideo = (inputs) => { 
         if (user && user._id)
-        addNewVideo(user._id, inputs);
+            addNewVideo(user._id, inputs);
     }
 
     // loading page
     if (status === "loading") { 
         return <div className={`w-full flex items-center justify-center mt-10`} ><Loader /></div>
     } 
-    console.log("videos in profile videos : ", videos);
     
     // Loading videos from backend
     if (loadingVideos)  
@@ -81,7 +77,7 @@ const ProfileVideos = memo(() => {
             {
                 isAddNewVideoModalOpen && 
                 <Modal title={'Add New Video'} onClose={handleAddNewVideoModal} >
-                    <AddNewVideoModal addVideo={handleAddNewVideo}  />
+                    <AddNewVideoModal addVideo={handleAddNewVideo} addVideoLoading={addVideoLoading}  />
                 </Modal>
             }
         </div>

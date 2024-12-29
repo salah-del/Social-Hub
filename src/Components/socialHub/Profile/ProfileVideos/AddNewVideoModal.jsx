@@ -4,8 +4,9 @@ import Skeleton from 'react-loading-skeleton';
 import { isValidUrl, isVideoURL } from '../../../../Utils/validateURLs';
 import { IoMdAdd } from "react-icons/io";
 import AddNewTagModal from '../../MainPage/EditVideo/AddNewTagModal';
+import Loader from '../../../../Utils/Loader';
 
-const AddNewVideoModal = memo(({addVideo}) => {
+const AddNewVideoModal = memo(({addVideo, addVideoLoading}) => {
   const [imgURL, setimgURL] = useState("");
   const [addNewTagModal, setAddNewTagModal] = useState(false);
   const [inputs, setInputs] = useState({
@@ -293,9 +294,15 @@ const AddNewVideoModal = memo(({addVideo}) => {
         </label>
 
         
-        <button onClick={handleAddVideo} className="ml-auto text-sm bg-main-color px-3 py-2 text-white trans hover:bg-sec-color rounded-md ">
+        {!addVideoLoading && <button onClick={handleAddVideo} className="ml-auto text-sm bg-main-color px-3 py-2 text-white trans hover:bg-sec-color rounded-md ">
             Add Video
-        </button>
+        </button>}
+        { 
+          addVideoLoading && 
+          <div className="ml-auto text-sm w-[89px] flex items-center justify-center py-2 text-white  ">
+            <Loader width={"24px"} />
+          </div>
+        }
       </div>
       {
           addNewTagModal && 
