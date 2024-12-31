@@ -77,10 +77,10 @@ const VideoGrid = React.memo(({ initVideos:initialVideos, style, handleDeleteVid
                 />
             </div>
             ))}
-            {
+            {/* {
                 videos && videos.length == 0 && 
-                <p className='text-3xl text-gray-600 font-semibold'>Something went wrong</p>
-            }
+                <p className='text-3xl text-gray-600 w-full text-center col-span-full font-semibold'>Something went wrong</p>
+            } */}
             {isVideoEditOpen && 
                 <Modal title={'Edit Video'} onClose={handleCloseEditVdieo} >
                     <EditVideoModal videoDetails={editedVideoDetails} updateVideo={handleUpdateVideo} loading={editVideoLoading}   />

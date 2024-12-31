@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import VideoGrid from "../../Components/socialHub/MainPage/VideoGrid";
 import { getTrendyVideos } from "../../Redux/slices/trendyVideos";
 import { useLocation } from "react-router-dom";
+import Loader from "../../Utils/Loader";
 
 const Trending = () => {
   const dispatch = useDispatch();
@@ -35,7 +36,14 @@ const Trending = () => {
         !isFetchingMore
       ) {
         setIsFetchingMore(true);
-        dispatch(getTrendyVideos(currentPage + 1)).finally(() => setIsFetchingMore(false));
+        dispatch(getTrendyVideos(currentPage + 1))
+          .finally(() => setIsFetchingMore(false))
+          .catch((err) => {
+            if (err.response?.data?.message === "No more trending videos available.") {
+              // Stop further fetching if no more videos
+              dispatch({ type: "trendyVideos/stopFetching" });
+            }
+          });
       }
     };
 
@@ -61,7 +69,7 @@ const Trending = () => {
     );
 
   // Show error message if loading failed
-  if (status === "failed")
+  if (status === "failed" && error != 'No more trending videos available.')
     return (
       <div className="col-span-full text-center bg-gray-200 text-red-500">
         <p>{error || "Failed to load videos"}</p>
@@ -74,8 +82,13 @@ const Trending = () => {
       <VideoGrid initVideos={videos} />
       {/* Show loading indicator while fetching more videos */}
       {isFetchingMore && (
-        <div className="text-center my-4">
-          <Skeleton height={30} width={200} />
+        <div className="w-full flex justify-center  my-4">
+          <Loader />
+        </div>
+      )}
+      {!hasMore && (
+        <div className="text-center mt-8 text-gray-500">
+          <p>No more videos available.</p>
         </div>
       )}
     </div>

@@ -14,8 +14,6 @@ import useNavigateTo from "../../../Utils/navigateTo";
 import { showToast } from "../../../Utils/showToast";
 import sweetalert from "../../../Utils/sweetalert";
 import { isVideoURL } from "../../../Utils/validateURLs";
-import { saveVideo, unsaveVideo } from "../../../Redux/slices/userSlice";
-import { useDispatch } from "react-redux";
 import { copyURL } from './../../../Utils/copyURL';
 const VideoCard = React.memo(({ video, handleOpenVideoEdit, handleDeleteVideo, inProfile}) => {
   const navigateTo = useNavigateTo();
@@ -111,22 +109,33 @@ const optionsRef = useRef(null);
       showToast( "error", "Invalid Video URL");
     }
   };
-
-  const dispatch = useDispatch();
+  
   const handleSaveVideo = async () => { 
     try {
       const response = await axios.post(`${API.saveVideo}/${video._id}`);
       console.log(response.data);
-      dispatch(saveVideo(video._id));
       showToast('success', "Video saved successfully");
     } catch (error) {
       showToast("error", error?.response?.data?.message || "Failed to save video");
-      unsaveVideo(video._id);
     }
   }
 
+  const isValidImage = (url) => { 
+    const img = new Image();
+    img.onload = () => {
+      setimgURL(url); // Valid image
+      setImgUrl(url); 
+    };
+    img.onerror = () => {
+      setimgURL("");
+      setImgUrl("/src/assets/noImage.jpg") ;
+    };
+    img.src = url;
+  }
+  
+
   return (
-    <div  ref={ref} className="relative flex flex-col items-center cursor-pointer trans ">
+    <div  ref={ref} className="relative max-w-full flex flex-col items-center cursor-pointer trans ">
       {inView ? (
         <div role="button" onClick={handleNavToVideoPlayer} className="min-w-full relative rounded-md group overflow-hidden">
           <Img
@@ -166,7 +175,6 @@ const optionsRef = useRef(null);
         </div>
         <div className="w-full flex flex-col gap-0.5">
               <div  className="relative group inline-block w-fit">
-                  {/* <button className="bg-teal-500 text-white px-4 py-2 rounded-lg hover:bg-teal-600 transition duration-300 ease-in-out transform hover:scale-105">Hover Me</button> */}
                     <h3 role="button" onClick={handleNavToVideoPlayer} className="text-sm lg:text-xs xl:text-sm font-semibold">
                       {video.title.length > 50 ? video.title.slice(0, 50) + " ..." : video.title}
                     </h3>
