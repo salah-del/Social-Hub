@@ -43,6 +43,7 @@ export const API = {
   getAllUsers: `${BASE_URL}/users/getRandomUsers`,
   searchByName: `${BASE_URL}/users/Search_Users_Name`,
   getUserById: `${BASE_URL}/users/find`, //     /:userID
+  getMutualFriends: `${BASE_URL}/users/getMutual`,  //     /:FriendID
   updateUser: `${BASE_URL}/users`, // :userId
   subscribe: `${BASE_URL}/users/sub`, //   /:userID
   unsubscribe: `${BASE_URL}/users/unsub`, //   /:userID

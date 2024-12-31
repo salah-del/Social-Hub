@@ -5,6 +5,8 @@ import { FaUserPlus } from "react-icons/fa";
 import profile from "../../../assets/profile.jpg";
 import { Link } from "react-router-dom";
 import { useUsers } from "../../../Hooks/useUsers";
+import { API } from "../../../Api/Api";
+import axios from "axios";
 const PeopleCard = ({ person }) => {
   const { handleSubscribe, handleUnsubscribe, handleAddFriend, error } =
     useUsers();
@@ -34,6 +36,24 @@ const PeopleCard = ({ person }) => {
     handleAddFriend(person._id);
   };
 
+  const [matualFriends, setMatualFriends] = useState([]);
+  const getMutualFriends = async () => {
+    try {
+      const response = await axios.get(`${API.getMutualFriends}/${person._id}`);
+      setMatualFriends(response.data);
+    } catch (error) {
+      console.error(
+        error.response?.data?.message ||
+          "Something went wrong with fetching mutual friends."
+      );
+    }
+  };
+
+  useEffect(() => {
+    getMutualFriends();
+  }, [person._id]);
+  console.log(matualFriends);
+
   return (
     <div className="flex items-center max-[540px]:flex-col max-[540px]:gap-2 p-5 bg-gray-100 shadow border border-gray-300 rounded-lg hover:shadow-md transition-shadow duration-200">
       {/* صورة المستخدم */}
@@ -52,7 +72,7 @@ const PeopleCard = ({ person }) => {
       >
         <h2 className="text-xl font-bold text-gray-800">{person.name}</h2>
         <p className="text-sm text-gray-600">
-          {person.isFollower ? "Following You" : "Not Following You"}
+          {matualFriends.length} Mutual Friends
         </p>
       </Link>
 

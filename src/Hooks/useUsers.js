@@ -34,15 +34,15 @@ export const useUsers = () => {
   };
 
   const handleAddFriend = (friendId) => {
-    console.log("id from useUsers hook : ", friendId)
+    console.log("id from useUsers hook : ", friendId);
     return dispatch(addFriend(friendId));
   };
 
-  const handleAcceptFriend = (friendId, receiverId) => {
-    return dispatch(acceptFriend({ friendId, receiverId }));
+  const handleAcceptFriend = (senderId) => {
+    return dispatch(acceptFriend({ senderId })).unwrap();
   };
-  const handleRejectFriend = (friendId, receiverId) => {
-    return dispatch(rejectFriend({ friendId, receiverId }));
+  const handleRejectFriend = (senderId) => {
+    return dispatch(rejectFriend({ senderId })).unwrap();
   };
 
   const handleUpdateUser = (userId, values) => {

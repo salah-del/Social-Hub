@@ -1,62 +1,103 @@
-import React from "react";
-import { useDispatch } from "react-redux";
-import { likePost, dislikePost, deletePost, copyUrlForPost, savePost } from "../../../../Redux/slices/postsReducer";
-import { AiFillLike, AiFillDislike, AiFillDelete, AiOutlineSave, AiOutlineLink } from "react-icons/ai";
+import { useState, useEffect } from "react";
+import {
+  BiLike,
+  BiBookmark,
+  BiDotsHorizontalRounded,
+  BiDislike,
+} from "react-icons/bi";
+import PostActions from "./PostActions";
+import { formatDate } from "../../../../Utils/formatDate";
+import checkImageUrl from "../../../../Utils/checkImageUrl";
+import { usePosts } from "../../../../Hooks/usePosts";
 
-const PostCard = ({ post }) => {
-  const dispatch = useDispatch();
+function Post({ post, user, edit }) {
+  const [showActions, setShowActions] = useState(false);
+  const [isValidImage, setIsValidImage] = useState(true);
 
-  const handleLike = () => dispatch(likePost(post._id));
-  const handleDislike = () => dispatch(dislikePost(post._id));
-  const handleDelete = () => dispatch(deletePost(post._id));
-  const handleSave = () => dispatch(savePost(post._id));
-  const handleCopyUrl = () => dispatch(copyUrlForPost(post._id));
+  useEffect(() => {
+    if (post.imgUrl) {
+      checkImageUrl(post.imgUrl).then((isValid) => setIsValidImage(isValid));
+    }
+  }, [post.imgUrl]);
+
+  const { likeAPost, dislikeAPost, saveAPost, unsaveAPost } = usePosts();
+  const handleLike = () => likeAPost(post.id);
+  const handleDislike = () => dislikeAPost(post.id);
+  const handleSave = () => saveAPost(post.id);
+  const handleUnsave = () => unsaveAPost(post.id);
 
   return (
-    <div className="bg-white border rounded-lg shadow-md p-4 m-2 w-full md:w-1/3">
-      <h3 className="text-xl font-semibold mb-2">{post.title}</h3>
-      <p className="text-gray-600 mb-4">{post.content}</p>
+    <div className="bg-white rounded-lg shadow-sm mb-4">
+      <div className="p-4">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center space-x-2">
+            <img
+              src={user.profilePicture}
+              alt={user.name}
+              className="w-10 h-10 rounded-full"
+            />
+            <div>
+              <h3 className="font-medium">{user.name}</h3>
+              <p className="text-sm text-gray-500">
+                {formatDate(user.createdAt)}
+              </p>
+            </div>
+          </div>
+          <div className="relative">
+            <button
+              onClick={() => setShowActions(!showActions)}
+              className="p-2 hover:bg-gray-100 rounded-full"
+            >
+              <BiDotsHorizontalRounded className="text-xl" />
+            </button>
+            {showActions && (
+              <PostActions
+                post={post}
+                edit={edit}
+                onClose={() => setShowActions(false)}
+              />
+            )}
+          </div>
+        </div>
 
-      <div className="flex justify-between items-center mb-2">
-        <div className="flex space-x-3">
-          <button
-            onClick={handleLike}
-            className="flex items-center text-blue-600 hover:text-blue-800"
-          >
-            <AiFillLike className="mr-1" /> Like
-          </button>
-          <button
-            onClick={handleDislike}
-            className="flex items-center text-red-600 hover:text-red-800"
-          >
-            <AiFillDislike className="mr-1" /> Dislike
-          </button>
-          <button
-            onClick={handleSave}
-            className="flex items-center text-green-600 hover:text-green-800"
-          >
-            <AiOutlineSave className="mr-1" /> Save
-          </button>
-          <button
-            onClick={handleCopyUrl}
-            className="flex items-center text-gray-600 hover:text-gray-800"
-          >
-            <AiOutlineLink className="mr-1" /> Copy URL
+        <p className="mb-4">{post.desc}</p>
+        {post.imgUrl && (
+          <>
+            {isValidImage ? (
+              <img
+                src={post.imgUrl}
+                alt="Post content"
+                className="w-full h-80 object-cover rounded-lg mb-4"
+              />
+            ) : (
+              <div className="w-full h-80 flex items-center justify-center bg-gray-100 rounded-lg mb-4">
+                <p className="text-gray-500">Image not available</p>
+              </div>
+            )}
+          </>
+        )}
+
+        <div className="flex items-center justify-between pt-3 border-t">
+          <div className="flex space-x-4">
+            <button
+              onClick={() => likeAPost(post._id)}
+              className="flex items-center space-x-1 text-gray-500 hover:text-third-color"
+            >
+              <BiLike className="text-xl" />
+              <span>{post.likes.length}</span>
+            </button>
+            <button onClick={() => dislikeAPost(post._id)} className="flex items-center space-x-1 text-gray-500 hover:text-third-color">
+              <BiDislike className="text-xl -mb-1" />
+              <span>{post.dislikes.length}</span>
+            </button>
+          </div>
+          <button className="text-gray-500 hover:text-third-color">
+            <BiBookmark className="text-xl" />
           </button>
         </div>
-        <button
-          onClick={handleDelete}
-          className="flex items-center text-red-600 hover:text-red-800"
-        >
-          <AiFillDelete className="mr-1" /> Delete
-        </button>
-      </div>
-
-      <div className="text-sm text-gray-500">
-        <span>Likes: {post.likes}</span> | <span>Comments: {post.commentsCount}</span>
       </div>
     </div>
   );
-};
+}
 
-export default PostCard;
+export default Post;

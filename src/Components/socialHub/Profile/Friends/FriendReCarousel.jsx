@@ -3,9 +3,11 @@ import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-
-export default function ItemsCarousel({ items, CardComponent, message }) {
-  if (!items || items.length === 0) {
+export default function FriendReCarousel({ items, CardComponent, message  }) {
+  const validItems = items.filter(
+    (item) => item.senderName && item.senderName.length > 0
+  );
+  if (!validItems || validItems.length === 0) {
     return <p className="text-gray-500">{message}</p>;
   }
 
@@ -21,9 +23,8 @@ export default function ItemsCarousel({ items, CardComponent, message }) {
         1280: { slidesPerView: 4 }, // أربع شرائح للشاشات الكبيرة
       }}
     >
-      {items.map((item) => (
-        <SwiperSlide key={item.id}>
-          {/* عرض المكون المخصص لكل مزاد */}
+      {validItems.map((item) => (
+        <SwiperSlide key={item._id}>
           <CardComponent item={item} />
         </SwiperSlide>
       ))}

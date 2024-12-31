@@ -18,34 +18,34 @@ const Profile = () => {
     () => location.pathname.split("/"),
     [location.pathname, id]
   );
-  
+
   const edit = useMemo(() => id === Cookies.get("userID"), [id]);
 
+  const fetchUserById = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(`${API.getUserById}/${id}`);
+      setUser(response.data);
+    } catch (error) {
+      showToast("error", "Error fetching user data");
+      console.error("Error fetching user data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
   useEffect(() => {
-    window.scrollTo(0,0);
-    const fetchUserById = async () => {
-      setLoading(true);
-      try {
-        const response = await axios.get(`${API.getUserById}/${id}`);
-        setUser(response.data);
-      } catch (error) {
-        showToast("error", "Error fetching user data");
-        console.error("Error fetching user data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+    window.scrollTo(0, 0);
     fetchUserById();
   }, [id]);
 
   const currentTab = useMemo(() => pathSegments[4] || null, [pathSegments]);
-  
+
   return (
     <div className="-m-2">
       <ProfileAndCover user={user} loading={loading} edit={edit} />
       <UserInfo user={user} loading={loading} edit={edit} />
       <Tabs openTab={currentTab} id={id} />
-      <Outlet context={{ user, edit }} />
+      <Outlet context={{ user, edit, loading ,fetchUserById }} />
     </div>
   );
 };

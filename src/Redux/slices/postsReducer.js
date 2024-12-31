@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import Cookies from "js-cookie";
 import { API } from "../../Api/Api";
 import { showToast } from "../../Utils/showToast";
 
@@ -9,13 +8,10 @@ import { showToast } from "../../Utils/showToast";
 // Get Posts
 export const fetchPostsUser = createAsyncThunk(
   "posts/fetchPostsUser",
-  async (_, { rejectWithValue }) => {
+  async (userId, { rejectWithValue }) => {
     try {
-      const response = await axios.get(
-        `${API.getPostsUser}/${Cookies.get("userID")}`
-      );
-
-      return response.data;
+      const response = await axios.get(`${API.getPostsUser}/${userId}`);
+      return response.data.posts;
     } catch (error) {
       return rejectWithValue(
         error.response ? error.response.data : error.message
@@ -169,7 +165,7 @@ const postsSlice = createSlice({
       })
       .addCase(fetchPostsUser.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.posts = action.payload;
+        state.posts = action.payload || [];
       })
       .addCase(fetchPostsUser.rejected, (state, action) => {
         state.status = "failed";
@@ -190,7 +186,6 @@ const postsSlice = createSlice({
       })
       .addCase(deletePost.rejected, (state, action) => {
         state.error = action.payload;
-        showToast("error", action.payload);
       })
       // Update Post
       .addCase(updatePost.fulfilled, (state, action) => {
@@ -208,10 +203,18 @@ const postsSlice = createSlice({
       // Like Post
       .addCase(likePost.fulfilled, (state, action) => {
         const index = state.posts.findIndex(
-          (post) => post.id === action.meta.arg
+          (post) => post._id === action.meta.arg
         );
         if (index !== -1) {
-          state.posts[index].likes += 1;
+          const userId = action.payload.userId; // ID المستخدم اللي عمل لايك
+          // لو المستخدم موجود في الديسلايك، احذفه
+          state.posts[index].dislikes = state.posts[index].dislikes.filter(
+            (id) => id !== userId
+          );
+          // لو مش موجود في اللايك، أضفه
+          if (!state.posts[index].likes.includes(userId)) {
+            state.posts[index].likes.push(userId);
+          }
         }
       })
       .addCase(likePost.rejected, (state, action) => {
@@ -220,10 +223,18 @@ const postsSlice = createSlice({
       // Dislike Post
       .addCase(dislikePost.fulfilled, (state, action) => {
         const index = state.posts.findIndex(
-          (post) => post.id === action.meta.arg
+          (post) => post._id === action.meta.arg
         );
         if (index !== -1) {
-          state.posts[index].likes -= 1;
+          const userId = action.payload.userId; // ID المستخدم اللي عمل ديسلايك
+          // لو المستخدم موجود في اللايك، احذفه
+          state.posts[index].likes = state.posts[index].likes.filter(
+            (id) => id !== userId
+          );
+          // لو مش موجود في الديسلايك، أضفه
+          if (!state.posts[index].dislikes.includes(userId)) {
+            state.posts[index].dislikes.push(userId);
+          }
         }
       })
       .addCase(dislikePost.rejected, (state, action) => {

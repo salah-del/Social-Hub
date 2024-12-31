@@ -23,7 +23,7 @@ const ProfileAndCover = ({ user, loading, edit }) => {
 
       {/* Profile Image */}
       <div className="relative group flex float-end">
-        {loading === "loading" ? (
+        {loading ? (
           <div className="mr-5 -mt-[60px] ">
             <Skeleton circle height={105} width={105} />
           </div>

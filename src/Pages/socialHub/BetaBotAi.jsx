@@ -6,7 +6,7 @@ import { API } from "../../Api/Api";
 const BetaBotAI = () => {
   const [messages, setMessages] = useState([]);
   const [userInput, setUserInput] = useState("");
-  const [isTyping, setIsTyping] = useState(false); // حالة لتتبع ما إذا كان الروبوت يكتب
+  const [isTyping, setIsTyping] = useState(false); 
 
   const handleSendMessage = async () => {
     if (!userInput.trim()) return;
@@ -36,10 +36,10 @@ const BetaBotAI = () => {
       console.error("Error fetching response:", error);
       setMessages((prevMessages) => [
         ...prevMessages,
-        { sender: "bot", text: "عذرًا، حدث خطأ ما." },
+        { sender: "bot", text: "Oops! Something went wrong." },
       ]);
     } finally {
-      setIsTyping(false); // تعيين حالة الكتابة إلى false بعد استلام الاستجابة
+      setIsTyping(false); 
     }
   };
 
@@ -71,7 +71,7 @@ const BetaBotAI = () => {
               </div>
             </div>
           ))}
-          {isTyping && ( 
+          {isTyping && (
             <div className="flex justify-start mb-4">
               <div className="max-w-[70%] p-4 rounded-lg bg-gray-300 text-gray-800">
                 Typing...

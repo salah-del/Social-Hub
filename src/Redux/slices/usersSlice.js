@@ -269,6 +269,7 @@ const userSlice = createSlice({
       .addCase(rejectFriend.fulfilled, (state, action) => {
         state.userData = action.payload;
         state.status = "succeeded";
+        showToast("success", "Friend request rejected");
       })
       .addCase(rejectFriend.rejected, (state, action) => {
         state.status = "failed";

@@ -1,24 +1,96 @@
+import { API } from "../../../../Api/Api";
+import profile from "../../../../assets/profile.jpg";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { Link } from "react-router-dom";
+import Skeleton from "react-loading-skeleton";
+import { useUsers } from "../../../../Hooks/useUsers";
+import { useOutletContext } from "react-router-dom";
 export function FriendRequest({ item }) {
+  const { fetchUserById } = useOutletContext();
+  const { handleAcceptFriend, handleRejectFriend } = useUsers();
+  const [loading, setLoading] = useState(false);
+  const [matualFriends, setMatualFriends] = useState([]);
+
+  const getMutualFriends = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        `${API.getMutualFriends}/${item.sender}`
+      );
+      setMatualFriends(response.data);
+    } catch (error) {
+      console.error(
+        error.response?.data?.message ||
+          "Something went wrong with fetching mutual friends."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getMutualFriends();
+  }, [item.sender]);
+
+  const [isClicked, setIsClicked] = useState(false);
+
+  const handleAcceptFriendBtn = async () => {
+    await handleAcceptFriend(item.sender);
+    setIsClicked(true);
+    fetchUserById(item.sender);
+  };
+  const handleRejectFriendBtn = async () => {
+    await handleRejectFriend(item.sender);
+    setIsClicked(true);
+    fetchUserById(item.sender);
+  };
+
   return (
     <div className="bg-white rounded-lg shadow-sm p-4">
       <div className="flex items-center space-x-4">
-        <img
-          src={item.avatar}
-          alt={item.name}
-          className="w-16 h-16 rounded-full"
-        />
+        <Link to={`/socialHub/profile/${item.sender}`}>
+          <img
+            src={item.senderImg || profile}
+            alt={item.senderName}
+            className="w-16 h-16 rounded-full"
+          />
+        </Link>
         <div>
-          <h3 className="font-medium">{item.name}</h3>
+          <Link
+            to={`/socialHub/profile/${item.sender}`}
+            className="font-medium"
+          >
+            {item.senderName}
+          </Link>
           <p className="text-sm text-gray-500">
-            {item.mutualFriends} mutual friends
+            {loading ? (
+              <Skeleton width={100} height={15} />
+            ) : (
+              `${matualFriends.length} mutual friends`
+            )}
           </p>
         </div>
       </div>
       <div className="mt-4 flex space-x-2">
-        <button className="flex-1 bg-sec-color trans hover:opacity-90 text-white py-2 rounded">
+        <button
+          onClick={handleAcceptFriendBtn}
+          disabled={isClicked}
+          className={`flex-1 bg-sec-color trans hover:opacity-90 text-white py-2 rounded ${
+            isClicked ? "opacity-60 cursor-not-allowed hover:opacity-50" : ""
+          }`}
+        >
           Accept
         </button>
-        <button className="flex-1 bg-gray-200 text-gray-700 trans py-2 rounded hover:bg-gray-300">
+        <button
+          onClick={handleRejectFriendBtn}
+          disabled={isClicked}
+          className={`flex-1 bg-gray-200 text-gray-700 trans py-2 rounded hover:bg-gray-300 ${
+            isClicked
+              ? "opacity-50 cursor-not-allowed hover:opacity-50 bg-gray-300 "
+              : ""
+          }`}
+        >
           Decline
         </button>
       </div>

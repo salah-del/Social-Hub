@@ -32,12 +32,10 @@ const CoinsActionsHook = () => {
   const dailyBonus = async () => {
     try {
       const response = await axios.post(API.dailyBonus);
-      if (response?.status === 200) {
         setDailyCoins(response.data);
-        sweetalert.done(response.data.message);
+        sweetalert.done("Coins have been successfully assembled");
         setIsSuccess(true);
         console.log(response.data);
-      }
     } catch (error) {
       sweetalert.info(error.response?.data?.message);
       setIsSuccess(false);

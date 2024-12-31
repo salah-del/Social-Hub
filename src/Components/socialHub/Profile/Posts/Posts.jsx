@@ -1,48 +1,77 @@
-import { useState } from "react";
-import CreatePost from "./CreatePost";
-import Post from "./Post";
-
+import { useEffect, useState } from "react";
+import PostCard from "./PostCard";
+import { usePosts } from "../../../../Hooks/usePosts";
+import { useOutletContext } from "react-router-dom";
+import Loader from "../../../../Utils/Loader";
+import AddNewPostModal from "./AddNewPostModal";
+import Modal from "../../../../Utils/Modal";
 function Posts() {
-  // Temporary mock data - replace with actual data fetching
-  const [posts] = useState([
-    {
-      id: 1,
-      authorName: "John Doe",
-      authorAvatar: "https://i.pravatar.cc/150?img=1",
-      content: "Just another day at the office! 💼",
-      image: "https://picsum.photos/800/600?random=1",
-      likes: 42,
-      timestamp: "2 hours ago",
-    },
-    {
-      id: 2,
-      authorName: "Jane Smith",
-      authorAvatar: "https://i.pravatar.cc/150?img=2",
-      content: "Beautiful sunset today! 🌅",
-      image: "https://picsum.photos/800/600?random=2",
-      likes: 23,
-      timestamp: "4 hours ago",
-    },
-    {
-      id: 3,
-      authorName: "Jane Smith",
-      authorAvatar: "https://i.pravatar.cc/150?img=2",
-      content: "Beautiful sunset today! 🌅",
-      // image: 'https://picsum.photos/800/600?random=2',
-      likes: 23,
-      timestamp: "4 hours ago",
-    },
-  ]);
+  const { user, edit, loading } = useOutletContext();
+  const { fetchUserPosts, posts, status, error } = usePosts();
+  const [isAddNewPostModalOpen, setIsAddNewPostModalOpen] = useState(false);
+  console.log(posts, user);
+
+  useEffect(() => {
+    if (user && user._id) fetchUserPosts(user._id);
+  }, [user]);
+
+  if (status === "loading" || status === "idle" || !user || loading) {
+    return (
+      <div className={`w-full flex items-center justify-center mt-32`}>
+        <Loader />
+      </div>
+    );
+  }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-7">
-      <CreatePost />
-      <div className="space-y-4">
-        {posts.map((post) => (
-          <Post key={post.id} post={post} />
-        ))}
+    <>
+      <div className="w-full flex flex-col gap-6 ">
+        <div className="w-full flex items-center justify-between">
+          <h2 className="text-2xl font-bold text-gray-800 ">
+            {edit ? "Your posts" : "Posts"}
+          </h2>
+          {posts && posts.length > 0 && edit && (
+            <button
+              onClick={() => setIsAddNewPostModalOpen(true)}
+              className="ml-auto text-xs bg-main-color px-3 py-2 text-white trans hover:bg-sec-color rounded-md "
+            >
+              Add New Post
+            </button>
+          )}
+        </div>
+        {posts && posts.length <= 0 && (
+          <div className="w-full mt-16 text-center flex items-center flex-col gap-3">
+            <h1 className="  text-gray-500 text-2xl font-semibold">
+              {edit
+                ? "There are no posts yet, share something special today!"
+                : "There are currently no posts on this account."}
+            </h1>
+            {edit && (
+              <button className="text-xs bg-main-color px-3 py-2 text-white trans hover:bg-sec-color rounded-md ">
+                Add New Video
+              </button>
+            )}
+          </div>
+        )}
       </div>
-    </div>
+
+      <div className="max-w-4xl mx-auto px-4 py-7">
+        <div className="space-y-4">
+          {posts.map((post) => (
+            <PostCard key={post._id} post={post} user={user} edit={edit} />
+          ))}
+        </div>
+      </div>
+
+      {isAddNewPostModalOpen && (
+        <Modal title={"Add New Video"} onClose={() => setNewPost(false)}>
+          <AddNewVideoModal
+            addVideo={{}}
+            addVideoLoading={status === "loading"}
+          />
+        </Modal>
+      )}
+    </>
   );
 }
 
