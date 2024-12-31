@@ -1,6 +1,11 @@
 import React, { memo, useEffect, useState } from 'react';
 import { BsBookmark, BsBookmarkFill } from 'react-icons/bs';
 import Cookies from 'js-cookie';
+import axios from 'axios';
+import { API } from '../../../../Api/Api';
+import { useOutletContext } from 'react-router-dom';
+import SavedVideos from './SavedVideos';
+import SavedPosts from './SavedPosts';
 
 const SavedItemCard = ({ item, onToggleSave }) => {
   return (
@@ -30,22 +35,40 @@ const SavedItemCard = ({ item, onToggleSave }) => {
   );
 };
 
-const  Saved = memo(() => {
-  
-  const currUserId = Cookies.get("userID");
-  // useEffect(() => { 
-  //   const getSavedItems
-  // }, [currUserId])
-  
+const Saved = memo(() => {
 
+  // const [loading, setLoading] = useState(true);
+  // const [savedItems, setSavedItems] = useState([]);
+  
+  // const currUserId = Cookies.get("userID");
+  
+  // useEffect(() => { 
+  //   const getSavedItems = async () => {
+  //     try {
+  //       setLoading(true);
+  //       const res = await axios.get(API.getSavedItems);
+  //       console.log(res.data);
+  //       setSavedItems(res.data.items);
+  //     } catch (error) {
+        
+  //       setLoading(false);
+  //     } finally { 
+  //       setLoading(false);
+  //     }
+  //   }
+  //   getSavedItems();
+  // }, [currUserId])
+
+  const {user, edit} = useOutletContext();
+  
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
+    <div className="w-full flex flex-col gap-6 ">
       <h2 className="text-2xl font-bold text-gray-800 mb-6">Saved Items</h2>
-      {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {savedItems.map((item) => (
-          <SavedItemCard key={item.id} item={item} onToggleSave={toggleSave} />
-        ))}
-      </div> */}
+      <div className='flex flex-col gap-5 max-w-full'>
+        <SavedVideos savedVideos={user?.savedVideos || null} />
+        <SavedPosts user={user || null} edit={edit} />
+      </div>
+      
     </div>
   );
 })

@@ -6,7 +6,7 @@ const Tabs = ({openTab, id}) => {
   const [activeTab, setActiveTab] = useState(openTab || "posts");
   useEffect(() => { 
     setActiveTab(openTab || "posts")
-  }, [id]);
+  }, [openTab,id]);
   const tabs = [
     { id: "posts", to: "", name: "POSTS", icon: <FaTable size={16} /> },
     { id: "videos", to: "videos", name: "VIDEOS", icon: <BiSolidVideos size={18} /> },

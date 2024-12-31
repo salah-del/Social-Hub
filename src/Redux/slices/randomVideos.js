@@ -5,10 +5,10 @@ import { API } from "../../Api/Api";
 
 export const getRandomVideos = createAsyncThunk(
     'randomVideos/getRandomVideos',
-    async (_, { rejectWithValue }) => {
+    async ({page}, { rejectWithValue }) => {
         try {
-            const res = await axios.get(API.getRandomVideos);
-            return res.data.videos;
+            const res = await axios.get(`${API.getRandomVideos}?page=${page}`);
+            return { videos: res.data.videos, page };
         } catch (error) {
         // Handle network errors (e.g., no connection, server is down)
             if (!error.response) {
@@ -39,7 +39,8 @@ const randomVideos = createSlice({
         videos: [],
         status: "idle",
         error: null,
-        hasFetched: false,
+        currentPage: 0,
+        hasMore: true,
     },
     extraReducers: (builder) => {
         builder
@@ -48,15 +49,19 @@ const randomVideos = createSlice({
             state.status = "loading";
             state.error = null;
         })
-        .addCase(getRandomVideos.fulfilled, (state, action) => { 
-            state.videos = [...state.videos, ...action.payload];
+        .addCase(getRandomVideos.fulfilled, (state, action) => {
             state.status = "succeeded";
-            state.hasFetched = true;
+            state.videos = [...state.videos, ...action.payload.videos];
+            state.currentPage = action.payload.page;
+            state.hasMore = action.payload.videos.length > 0;
         })
         .addCase(getRandomVideos.rejected, (state, action) => {
             state.status = "failed";
             state.error = action.payload;
-        })
+            if (action.payload === "No more videos available.") {
+                state.hasMore = false;
+            }
+        });
     }
 });
 
