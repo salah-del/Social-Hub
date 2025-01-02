@@ -6,12 +6,18 @@ import { useSelector } from "react-redux";
 const ChatSidebar = ({ setSelectedChat }) => {
   const { user } = useSelector((state) => state.user);
   const [myContacts, setMyContacts] = useState([]);
+  const [isActive, setIsActive] = useState(-1);
   
   useEffect(() => {
     if (user?.friends?.length > 0) {
       setMyContacts(user.friends);
     }
   }, [user]);
+  
+  const handleSetSelectedChat = (contact, index) => {
+    setSelectedChat(contact);
+    setIsActive(index);
+  };
   
   return (
     <div className="w-full sm:w-1/4 bg-white border-l border-gray-300 py-4">
@@ -27,13 +33,12 @@ const ChatSidebar = ({ setSelectedChat }) => {
 
       {/* Contacts List */}
       <ul>
-        {myContacts.map((contact) => (
+        {myContacts.map((contact, index) => (
           <li
             key={contact.friendId}
-            className="flex items-center gap-3 p-3 hover:bg-gray-200 trans cursor-pointer "
-            onClick={() => setSelectedChat(contact)}
+            className={`flex items-center gap-3 p-3 ${isActive == index ? "bg-gray-200" : " hover:bg-gray-200"}  trans cursor-pointer `}
+            onClick={() => handleSetSelectedChat(contact, index)}
           >
-
             { contact && contact.friendProfilePicture ? (
               <Img
                 className="max-w-9 h-9 rounded-full"

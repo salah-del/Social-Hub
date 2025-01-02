@@ -49,6 +49,13 @@ ul {
 .friendsInModal::-webkit-scrollbar { 
   display: none;
 } 
+.chatScreen::-webkit-scrollbar-thumb{ 
+  background-color: #e2e2e2;
+  border-radius: 10px;
+} 
+.chatScreen::-webkit-scrollbar-track{ 
+  background-color: transparent;
+} 
 
 a {
   text-decoration: none;
@@ -60,16 +67,3 @@ a {
   }
 }
 
-
-/* @keyframes spin-slow {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-.animate-spin-slow {
-  animation: spin-slow 2s linear infinite;
-} */
