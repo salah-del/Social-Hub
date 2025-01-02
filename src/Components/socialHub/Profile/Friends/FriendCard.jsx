@@ -11,6 +11,7 @@ import { BsPersonCheckFill } from "react-icons/bs";
 export function FriendCard({ friend, edit }) {
   const { user: loggedInUser } = useSelector((state) => state.user);
   const [isMyFriend, setisMyFriend] = useState(false);
+
   console.log(friend);
   useEffect(() => {
     const isMyFriend = () => {
@@ -83,7 +84,7 @@ export function FriendCard({ friend, edit }) {
             className="flex-1 flex items-center justify-center space-x-2 text-white bg-sec-color shadow hover:opacity-90 trans py-2 rounded "
           >
             <IoPersonAddSharp />
-            <span>Add Friend</span>
+            <span>{isMyFriend ? "Already friend" : "Add Friend"}</span>
           </button>
         )}
       </div>

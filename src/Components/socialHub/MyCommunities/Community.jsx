@@ -17,7 +17,6 @@ const Community = memo(({user, communityId, leaveCommunity}) => {
     const [isCurrUserAdmin, setIsCurrUserAdmin] = useState(false);
     // Fetch and process community details
     useEffect(() => {
-        
         const fetchCommunity = async () => {
             if (communityId) {
                 try {
