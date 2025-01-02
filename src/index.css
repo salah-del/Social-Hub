@@ -56,6 +56,13 @@ ul {
 .chatScreen::-webkit-scrollbar-track{ 
   background-color: transparent;
 } 
+.msg-area::-webkit-scrollbar-thumb{ 
+  background-color: #e2e2e2;
+  border-radius: 10px;
+} 
+.msg-area::-webkit-scrollbar-track{ 
+  background-color: transparent;
+} 
 
 a {
   text-decoration: none;

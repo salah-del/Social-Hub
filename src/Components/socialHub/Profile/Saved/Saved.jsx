@@ -36,39 +36,20 @@ const SavedItemCard = ({ item, onToggleSave }) => {
 };
 
 const Saved = memo(() => {
-
-  // const [loading, setLoading] = useState(true);
-  // const [savedItems, setSavedItems] = useState([]);
   
-  // const currUserId = Cookies.get("userID");
-  
-  // useEffect(() => { 
-  //   const getSavedItems = async () => {
-  //     try {
-  //       setLoading(true);
-  //       const res = await axios.get(API.getSavedItems);
-  //       console.log(res.data);
-  //       setSavedItems(res.data.items);
-  //     } catch (error) {
-        
-  //       setLoading(false);
-  //     } finally { 
-  //       setLoading(false);
-  //     }
-  //   }
-  //   getSavedItems();
-  // }, [currUserId])
 
   const {user, edit} = useOutletContext();
   
   return (
-    <div className="w-full flex flex-col gap-6 ">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6">Saved Items</h2>
-      <div className='flex flex-col gap-5 max-w-full'>
-        <SavedVideos savedVideos={user?.savedVideos || null} />
+    <div className="w-full">
+      <div className='w-full flex  flex-col gap-5'>
+        <div className='flex flex-col gap-5 border-b  pb-5'>
+          <h2 className="text-xl font-bold text-gray-600"> Videos</h2>
+          {<SavedVideos savedVideos={user?.savedVideos || null} edit={edit} />}
+        </div>
+        <h2 className="text-xl font-bold text-gray-600"> Posts</h2>
         <SavedPosts user={user || null} edit={edit} />
       </div>
-      
     </div>
   );
 })

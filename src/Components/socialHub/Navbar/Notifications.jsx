@@ -1,11 +1,13 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { FaBell, FaTimes } from "react-icons/fa";
 import { formatDate } from "../../../Utils/formatDate";
 import NotificationsHook from "../../../Hooks/NotificationsHook";
 import Loader from "../../../Utils/Loader";
+import { socket } from "../../../Pages/socialHub/SocialHubLayout";
 const Notifications = () => {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef();
+
   const {
     notifications,
     unreadNotifications,
@@ -15,6 +17,17 @@ const Notifications = () => {
     fetchUnreadNotifications,
     markAllAsRead,
   } = NotificationsHook();
+  
+  useEffect(() => {
+    // Handle new notifications in real-time
+    socket.on("new-notification", (notification) => {
+      console.log("New notification received:", notification);
+      fetchUnreadNotifications();
+    });
+    return () => {
+      socket.disconnect();
+    };
+  }, [socket]);
 
   const handelMarkAllAsRead = async () => {
     await markAllAsRead();
@@ -63,7 +76,7 @@ const Notifications = () => {
             />
           </div>
           <div className="max-h-[262px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
-            {/* عرض تحميل إذا كانت البيانات قيد الجلب */}
+            {/* Show loader while fetching data */}
             {loadingGeneral ? (
               <div className="flex justify-center items-center py-4">
                 <Loader width={"30px"} />

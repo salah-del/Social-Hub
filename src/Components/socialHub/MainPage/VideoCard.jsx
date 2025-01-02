@@ -15,7 +15,7 @@ import { showToast } from "../../../Utils/showToast";
 import sweetalert from "../../../Utils/sweetalert";
 import { isVideoURL } from "../../../Utils/validateURLs";
 import { copyURL } from './../../../Utils/copyURL';
-const VideoCard = React.memo(({ video, handleOpenVideoEdit, handleDeleteVideo, inProfile}) => {
+const VideoCard = React.memo(({ video, handleOpenVideoEdit, handleDeleteVideo, inProfile, isSaved=false, unsaveVideo}) => {
   const navigateTo = useNavigateTo();
   const [user, setUser] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -39,11 +39,17 @@ const VideoCard = React.memo(({ video, handleOpenVideoEdit, handleDeleteVideo, i
     if (inView) {
       // Fetch user data only when in view
       const getUser = async () => {
-        const res = await axios.get(`${API.getUserById}/${video.userId}`);
-        setUser(res.data);
-        setIsLoaded(true); // Mark as loaded
+        try {
+          const res = await axios.get(`${API.getUserById}/${video.userId}`);
+          setUser(res.data);
+          setIsLoaded(true); // Mark as loaded
+        } catch (error) {
+          setUser(null);
+        }
       };
-      getUser();
+      if (video && video.userId)
+        getUser();
+      setIsLoaded(true); // Mark as loaded
     }
   }, [inView, video.userId]);
 
@@ -120,20 +126,6 @@ const optionsRef = useRef(null);
     }
   }
 
-  const isValidImage = (url) => { 
-    const img = new Image();
-    img.onload = () => {
-      setimgURL(url); // Valid image
-      setImgUrl(url); 
-    };
-    img.onerror = () => {
-      setimgURL("");
-      setImgUrl("/src/assets/noImage.jpg") ;
-    };
-    img.src = url;
-  }
-  
-
   return (
     <div  ref={ref} className="relative max-w-full flex flex-col items-center cursor-pointer trans ">
       {inView ? (
@@ -191,9 +183,10 @@ const optionsRef = useRef(null);
                   <SlOptionsVertical className="text-sm" />
                   {isOptionsOpen && <div  className="absolute  flex flex-col items-start overflow-hidden  -top-10 right-8 z-10 w-36 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm  ">
                       <button onClick={handleCopyVideoURL} className="w-full text-left pl-2 trans hover:bg-gray-200 cursor-pointer py-1">Copy video URL</button>
-                      <button onClick={handleSaveVideo} className="w-full text-left pl-2 trans hover:bg-gray-200 cursor-pointer py-1">Save Video</button>
-                      {video.userId === userId && inProfile && <button onClick={handleClickEditBtn} className="w-full text-left pl-2 trans hover:bg-gray-200 cursor-pointer py-1">Edit Video</button>}
-                      {video.userId === userId && inProfile &&  <button onClick={handleClickDeleteBtn} className="w-full text-main-color text-left pl-2 trans hover:bg-gray-200 cursor-pointer py-1">Delete Video</button>}
+                      {!isSaved && <button onClick={handleSaveVideo} className="w-full text-left pl-2 trans hover:bg-gray-200 cursor-pointer py-1">Save Video</button>}
+                      { isSaved && <button onClick={() => unsaveVideo(video._id)} className="w-full text-left pl-2 trans hover:bg-gray-200 cursor-pointer py-1">Unsave Video</button>}
+                      {video.userId && video.userId === userId && inProfile && <button onClick={handleClickEditBtn} className="w-full text-left pl-2 trans hover:bg-gray-200 cursor-pointer py-1">Edit Video</button>}
+                      {video.userId && video.userId === userId && inProfile &&  <button onClick={handleClickDeleteBtn} className="w-full text-main-color text-left pl-2 trans hover:bg-gray-200 cursor-pointer py-1">Delete Video</button>}
                   </div>}
                 </div>
               </div>

@@ -1,9 +1,28 @@
-import { BiMessageRounded, BiDotsHorizontalRounded } from "react-icons/bi";
+import { BiMessageRounded} from "react-icons/bi";
 import FriendMenu from "./FriendMenu";
 import { IoPersonAddSharp } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import profile from "../../../../assets/profile.jpg";
-export function FriendCard({ friend, edit }) {
+import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+export function FriendCard({ friend, edit}) {
+  const {user:loggedInUser} = useSelector((state) => state.user)
+  const [isMyFriend, setisMyFriend] = useState(false)
+  
+
+  
+
+  useEffect(() => {
+    const isMyFriend = () => { 
+      const res = loggedInUser.friends.some((user) => user.friendId == friend.friendId);
+      setisMyFriend(res);
+    }
+    if (loggedInUser)  
+      isMyFriend();
+  }, [loggedInUser])
+  
+
+
   console.log(friend);
   return (
     <div className="bg-white rounded-lg shadow-sm p-4">
@@ -39,7 +58,7 @@ export function FriendCard({ friend, edit }) {
         ) : (
           <button className="flex-1 flex items-center justify-center text-white space-x-2 bg-sec-color hover:opacity-90 py-2 rounded">
             <IoPersonAddSharp />
-            <span>Add Friend</span>
+            <span>{isMyFriend ? "Already friend" : "Add Friend"}</span>
           </button>
         )}
       </div>
