@@ -2,6 +2,7 @@ import axios from "axios";
 import { API } from "../Api/Api";
 import sweetalert from "../Utils/sweetalert";
 import { useState } from "react";
+import { showToast } from "../Utils/showToast";
 
 const CoinsActionsHook = () => {
   const [coins, setCoins] = useState({ balance: 0 });
@@ -32,14 +33,27 @@ const CoinsActionsHook = () => {
   const dailyBonus = async () => {
     try {
       const response = await axios.post(API.dailyBonus);
-        setDailyCoins(response.data);
-        sweetalert.done("Coins have been successfully assembled");
-        setIsSuccess(true);
-        console.log(response.data);
+      setDailyCoins(response.data);
+      sweetalert.done("Coins have been successfully assembled");
+      setIsSuccess(true);
+      console.log(response.data);
     } catch (error) {
       sweetalert.info(error.response?.data?.message);
       setIsSuccess(false);
-      // console.error(error.response?.data);
+    }
+  };
+
+  const SendCoins = async (setLoading, data) => {
+    setLoading(true);
+    try {
+      const response = await axios.post(API.SendCoins, data);
+      showToast("success", "Coins transferred successfully");
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+      showToast("error", "Failed to transfer coins");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -69,6 +83,7 @@ const CoinsActionsHook = () => {
     bonusCoins,
     deductCoins,
     loading,
+    SendCoins,
   };
 };
 

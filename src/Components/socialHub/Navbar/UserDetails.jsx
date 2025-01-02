@@ -26,7 +26,7 @@ const UserDetails = ({ user, status, userPlan }) => {
       </div>
       {user?.profilePicture ? (
         <img
-          src={user.profilePicture}
+          src={user.profilePicture || profile}
           className="w-10 h-10 rounded-full"
           alt="profilePicture"
         />
