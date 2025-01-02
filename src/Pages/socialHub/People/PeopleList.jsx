@@ -8,7 +8,6 @@ import "react-loading-skeleton/dist/skeleton.css";
 const PeopleList = () => {
   const { fetchAllUsers, users, status, handleSearchByName } = useUsers();
   const [searchQuery, setSearchQuery] = useState("");
-  console.log(users);
 
   useEffect(() => {
     fetchAllUsers();
@@ -73,17 +72,16 @@ const PeopleList = () => {
           </div>
         )}
       </div>
-      {!users ||
-        (status !== "loading" && (
-          <div className={`flex items-center justify-center mt-[18px]`}>
-            <button
-              onClick={() => fetchAllUsers()}
-              className={`bg-gray-200 border-[1.5px] border-gray-300 px-4 py-2 rounded-lg text-black hover:shadow`}
-            >
-              Show More
-            </button>
-          </div>
-        ))}
+      {status !== "loading" && (
+        <div className={`flex items-center justify-center mt-[18px]`}>
+          <button
+            onClick={() => fetchAllUsers()}
+            className={`bg-gray-200 border-[1.5px] border-gray-300 px-4 py-2 rounded-lg text-black hover:shadow`}
+          >
+            Show More
+          </button>
+        </div>
+      )}
     </div>
   );
 };

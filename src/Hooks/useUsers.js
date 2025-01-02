@@ -9,6 +9,8 @@ import {
   rejectFriend,
   updateUser,
   searchByName,
+  blockUser,
+  unBlockUser,
 } from "../Redux/slices/usersSlice";
 
 export const useUsers = () => {
@@ -53,6 +55,14 @@ export const useUsers = () => {
     dispatch(searchByName(query));
   };
 
+  const blockUsers = (payload) => {
+    return dispatch(blockUser(payload)).unwrap(); 
+  };
+  
+  const unBlockUsers = (payload) => {
+    return dispatch(unBlockUser(payload)).unwrap(); 
+  };
+
   return {
     users,
     userData,
@@ -68,5 +78,7 @@ export const useUsers = () => {
     handleRejectFriend,
     handleUpdateUser,
     handleSearchByName,
+    blockUsers,
+    unBlockUsers,
   };
 };

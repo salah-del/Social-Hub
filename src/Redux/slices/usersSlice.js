@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { API } from "../../Api/Api";
 import { showToast } from "../../Utils/showToast";
+import sweetalert from "../../Utils/sweetalert";
 
 // Helper function to handle errors
 const handleError = (error, rejectWithValue) => {
@@ -143,12 +144,13 @@ export const blockUser = createAsyncThunk(
     }
   }
 );
+
 export const unBlockUser = createAsyncThunk(
   "users/unBlockUser",
-  async ({ userToBlockId }, { rejectWithValue }) => {
+  async ({ userToUnblockId }, { rejectWithValue }) => {
     try {
       const response = await axios.post(API.unBlockUser, {
-        userToBlockId,
+        userToUnblockId,
       });
       return response.data;
     } catch (error) {
@@ -279,6 +281,7 @@ const userSlice = createSlice({
       .addCase(blockUser.fulfilled, (state, action) => {
         state.userData = action.payload;
         state.status = "succeeded";
+        showToast("success", "User has been successfully blocked");
       })
       .addCase(blockUser.rejected, (state, action) => {
         state.status = "failed";
@@ -288,6 +291,7 @@ const userSlice = createSlice({
       .addCase(unBlockUser.fulfilled, (state, action) => {
         state.userData = action.payload;
         state.status = "succeeded";
+        showToast("success", "User has been successfully unblocked");
       })
       .addCase(unBlockUser.rejected, (state, action) => {
         state.status = "failed";

@@ -13,10 +13,10 @@ export default function Friends() {
         <Loader />
       </div>
     );
-  }
+  } 
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-5 mb-4">
+    <div className="max-w-7xl mx-auto px-4 py-5 mb-32">
       {edit && (
         <div className="mb-8">
           <h2 className="text-2xl font-bold mb-4">Friend Requests</h2>

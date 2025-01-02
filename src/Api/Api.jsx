@@ -38,12 +38,12 @@ export const API = {
   saveVideo: `${BASE_URL}/videos/save`, //   /:videoId
   unSaveVideo: `${BASE_URL}/videos/unsave`, //   /:videoId
   likeVideo: `${BASE_URL}/users/like`, //   /:videoId
-  disLikeVideo:`${BASE_URL}/users/dislike`, //   /:videoId
+  disLikeVideo: `${BASE_URL}/users/dislike`, //   /:videoId
   /* ======= Users ======= */
   getAllUsers: `${BASE_URL}/users/getRandomUsers`,
   searchByName: `${BASE_URL}/users/Search_Users_Name`,
   getUserById: `${BASE_URL}/users/find`, //     /:userID
-  getMutualFriends: `${BASE_URL}/users/getMutual`,  //     /:FriendID
+  getMutualFriends: `${BASE_URL}/users/getMutual`, //     /:FriendID
   updateUser: `${BASE_URL}/users`, // :userId
   subscribe: `${BASE_URL}/users/sub`, //   /:userID
   unsubscribe: `${BASE_URL}/users/unsub`, //   /:userID
@@ -58,7 +58,7 @@ export const API = {
   deleteUser: `${BASE_URL}/users`, //   /:userId
   likeVideo: `${BASE_URL}/users/like`, //   /:videoId
   dislikeVideo: `${BASE_URL}/users/dislike`, //   /:videoId
-  getSavedItems: `${BASE_URL}/users/saved-items`, 
+  getSavedItems: `${BASE_URL}/users/saved-items`,
   /* ======= Communities ======= */
   createCommunity: `${BASE_URL}/communities/create`,
   getCommunityById: `${BASE_URL}/communities/community`, // /:idCommunity
@@ -72,9 +72,10 @@ export const API = {
   markIsReadNotifications: `${BASE_URL}/notifications/MarkIsRead`, //     /:idNotification
   /* ======= Balance ======= */
   getBalance: `${BASE_URL}/balances/get-balance`,
+  dailyBonus: `${BASE_URL}/premium-plans/Statistics`,
+  SendCoins: `${BASE_URL}/premium-plans/transfer`,
   bonusCoins: `${BASE_URL}/balances/bonus-coins`,
   deductCoins: `${BASE_URL}/balances/deduct-coins`,
-  dailyBonus: `${BASE_URL}/premium-plans/Statistics`,
   /* ======= ChatGPT ======= */
   sendMasgageToChatGPT: `${BASE_URL}/chatRoutes/chatBot`,
   /* ======= Owners ======= */
