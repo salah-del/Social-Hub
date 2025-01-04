@@ -40,7 +40,7 @@ const Navbar = ({ toggleSidebar }) => {
           </div>
 
           <div className="max-sm:hidden">
-            <Notifications />
+            {/* <Notifications /> */}
           </div>
 
           <UserDetails user={user} status={status} userPlan={userPlan} />
@@ -51,7 +51,7 @@ const Navbar = ({ toggleSidebar }) => {
         <div className="flex items-center space-x-6 max-[340px]:space-x-4">
           <DailyBonus />
           <Massages />
-          <Notifications />
+          {/* <Notifications /> */}
         </div>
       </div>
     </nav>

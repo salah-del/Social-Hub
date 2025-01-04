@@ -20,7 +20,7 @@ const Notifications = () => {
   
   useEffect(() => {
     // Handle new notifications in real-time
-    socket.on("new-notification", (notification) => {
+    socket.on("notification-received", (notification) => {
       console.log("New notification received:", notification);
       fetchUnreadNotifications();
     });

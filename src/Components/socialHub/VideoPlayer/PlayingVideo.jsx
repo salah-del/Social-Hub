@@ -50,7 +50,7 @@ const PlayingVideo = () => {
         console.log("ReactPlayer Error:", error);
         if (error == 101 || error == 150) {
             setRestrictions(true)
-            setError("This video can't be played here for some restrictions, you can visit it on from here.");
+            setError("This video can't be played here for some restrictions, you can visit it on Youtube from here.");
         }
         else if (error == 100) { 
             setError("This video was removed or marked private.");
@@ -82,15 +82,15 @@ const PlayingVideo = () => {
                 />}
                 {
                     error && restrictions && 
-                    <div className='flex w-full bg-gray-100 rounded-md h-full items-center justify-center flex-col gap-2'>
-                        <p className='text-xl font-semibold text-gray-600'>{error}</p>
+                    <div className='flex w-full text-center  bg-gray-100 rounded-md h-full items-center justify-center flex-col gap-2'>
+                        <p className='text-sm sm:text-xl font-semibold text-gray-600'>{error}</p>
                         <a href={video.videoUrl} target='_blank' className='px-3 py-2 rounded-md bg-main-color text-sm text-white trans hover:bg-sec-color'>Open video</a>
                     </div>
                 }
                 {
                     error && !restrictions && 
-                    <div className='flex w-full bg-gray-100 rounded-md h-full items-center justify-center flex-col gap-2'>
-                        <p className='text-xl font-semibold text-gray-600'>{error}</p>
+                    <div className='flex w-full bg-gray-100 text-center rounded-md h-full items-center justify-center flex-col gap-2'>
+                        <p className='text-sm sm:text-xl font-semibold text-gray-600'>{error}</p>
                     </div>
                 }
             </div>
@@ -99,7 +99,7 @@ const PlayingVideo = () => {
             <div className='w-full flex flex-col md:flex-row  justify-between md:items-center gap-5 md:gap-0'>
                 <ChannelDetails channelId={channelDetails?._id} name={channelDetails?.name} profilePicture={channelDetails?.profilePicture} />
                 <div className='flex items-center justify-between md:gap-5'>
-                    <PlayingVideoOptions videoURL={video.videoUrl} />
+                    <PlayingVideoOptions video={video} videoURL={video.videoUrl} />
                     {
                         loading 
                         ? <Skeleton width={148} height={50} borderRadius={100} />

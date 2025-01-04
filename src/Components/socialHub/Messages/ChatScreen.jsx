@@ -1,15 +1,13 @@
-import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { io } from "socket.io-client";
+import React, { memo, useEffect, useRef, useState } from "react";
 import { API } from "../../../Api/Api";
+import { socket } from "../../../Pages/socialHub/SocialHubLayout";
 import { getMsgDateFormatted } from "../../../Utils/getMsgDateFormatted";
 import { showToast } from "../../../Utils/showToast";
 import Loader from "./../../../Utils/Loader";
-import { socket } from "../../../Pages/socialHub/SocialHubLayout";
 
-
-const ChatScreen = ({ chat }) => {
+const ChatScreen = memo(({ chat }) => {
   const [loading, setLoading] = useState(true);
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
@@ -40,10 +38,16 @@ const ChatScreen = ({ chat }) => {
   };
   
   useEffect(() => {
-    socket.on("msg-recieve", (newMessage) => {
+    const handleMsgReceive = (newMessage) => {
       console.log("new msg : ", newMessage);
       setMessages((prevMessages) => [...prevMessages, newMessage]);
-    });
+    };
+
+    socket.on("msg-recieve", handleMsgReceive);
+
+    return () => {
+      socket.off("msg-recieve", handleMsgReceive);
+    };
   }, []);
 
   useEffect(() => {
@@ -51,7 +55,7 @@ const ChatScreen = ({ chat }) => {
       try {
         setLoading(true);
         const res = await axios.get(`${API.getMessages}`, {
-          params: { receiverId: chat.friendId },
+          params: { receiverId: chat?._id },
         });
         setMessages(res.data);
       } catch (error) {
@@ -61,10 +65,10 @@ const ChatScreen = ({ chat }) => {
       }
     };
 
-    if (chat?.friendId) {
+    if (chat?._id) {
       fetchMessages();
     }
-  }, [chat]);
+  }, [chat?._id]);
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
@@ -73,7 +77,7 @@ const ChatScreen = ({ chat }) => {
     const newMessage = {
       msg: message,
       senderId: userId,
-      to: chat.friendId,
+      to: chat?._id,
       content: message,
       timestamp: Date.now(),
     };
@@ -84,7 +88,7 @@ const ChatScreen = ({ chat }) => {
 
     try {
       await axios.post(`${API.SendMessege}`, {
-        receiverId: chat.friendId,
+        receiverId: chat?._id,
         content: newMessage.content,
       });
 
@@ -106,7 +110,7 @@ const ChatScreen = ({ chat }) => {
   return (
     <div className="flex flex-col w-full  bg-gray-50">
       <div className="flex items-center justify-between p-4 border-b border-gray-300">
-        <h3 className="text-lg font-semibold">{chat.friendName}</h3>
+        <h3 className="text-lg font-semibold">{chat?.name}</h3>
       </div>
 
       <div ref={chatScreenRef} className="flex-1 overflow-x-hidden overflow-y-auto p-4 space-y-4 chatScreen">
@@ -151,6 +155,6 @@ const ChatScreen = ({ chat }) => {
       </form>
     </div>
   );
-};
+});
 
 export default ChatScreen;

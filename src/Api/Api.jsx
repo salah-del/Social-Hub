@@ -17,6 +17,7 @@ export const API = {
   unsavePost: `${BASE_URL}/routPost/unsavePost`, //     /:idPost
   /* ======= Masseges ======= */
   SendMessege: `${BASE_URL}/messages`, // Post
+  getUsersInChat: `${BASE_URL}/messages/getUsersWithChatMessages`, // Post
   getMessages: `${BASE_URL}/messages/conversation`, // /:recieverId
   /* ======= Comments ======= */
   addComment: `${BASE_URL}/comments`,

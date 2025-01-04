@@ -1,21 +1,36 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { FaSearch, FaUserCircle } from "react-icons/fa";
 import { Img } from "react-image";
 import Skeleton from "react-loading-skeleton";
-import { useSelector } from "react-redux";
+import Cookies from "js-cookie";
+import { API } from "../../../Api/Api";
 const ChatSidebar = ({ setSelectedChat }) => {
-  const { user } = useSelector((state) => state.user);
+  const userId = Cookies.get("userID");
   const [myContacts, setMyContacts] = useState([]);
   const [isActive, setIsActive] = useState(-1);
   
   useEffect(() => {
-    if (user?.friends?.length > 0) {
-      setMyContacts(user.friends);
+    const getFriends = async () => { 
+      try {
+        const res = await axios.get(API.getUsersInChat);
+        console.log(res);
+        setMyContacts(res.data.messages);
+      } catch (error) {
+        
+      }
     }
-  }, [user]);
+    if (userId) {
+      getFriends();
+    }
+  }, [userId]);
   
   const handleSetSelectedChat = (contact, index) => {
-    setSelectedChat(contact);
+    let contactSent = { 
+      _id: (userId  == contact.receiverId) ? contact.senderId : contact.receiverId ,
+      name: contact.receiverName,
+    }
+    setSelectedChat(contactSent);
     setIsActive(index);
   };
   
@@ -35,14 +50,14 @@ const ChatSidebar = ({ setSelectedChat }) => {
       <ul>
         {myContacts.map((contact, index) => (
           <li
-            key={contact.friendId}
+            key={contact.recieverId}
             className={`flex items-center gap-3 p-3 ${isActive == index ? "bg-gray-200" : " hover:bg-gray-200"}  trans cursor-pointer `}
             onClick={() => handleSetSelectedChat(contact, index)}
           >
-            { contact && contact.friendProfilePicture ? (
+            { contact && contact.receiverProfilePicture ? (
               <Img
                 className="max-w-9 h-9 rounded-full"
-                src={contact.friendProfilePicture}
+                src={contact.receiverProfilePicture}
                 loader={
                   <div className="w-9 h-9 rounded-full">
                     <Skeleton height="100%" width="100%" borderRadius={"100%"} />
@@ -53,8 +68,8 @@ const ChatSidebar = ({ setSelectedChat }) => {
               <FaUserCircle className="text-gray-300 w-9 h-9" />
             )}
             <div>
-              <p className="font-semibold text-sm text-gray-700">{contact?.firendName?.length > 20 ? contact.friendName.slice(20) + "..." : contact.friendName}</p>
-              {/* <p className="text-sm text-gray-500">{contact.lastMessage}</p> */}
+              <p className="font-semibold text-sm text-gray-700">{contact?.receiverName?.length > 20 ? contact.receiverName.slice(20) + "..." : contact.receiverName}</p>
+              <p className="text-sm text-gray-500">{contact.content}</p>
             </div>
           </li>
         ))}

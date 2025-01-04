@@ -120,6 +120,7 @@ const userSlice = createSlice({
   name: "user",
   initialState: {
     user: null,
+    savedVideos: [],
     status: "idle",
     error: null,
   },
@@ -127,6 +128,21 @@ const userSlice = createSlice({
     updateUserCommunities: (state, action) => {
       if (state.user) {
         state.user.communities = action.payload;
+      }
+    },
+    saveVideo: (state, action) => {
+      if (state.user) {
+        state.user.savedVideos.push(action.payload);
+      }
+    },
+    unSaveVideo: (state, action) => {
+      if (state.user) {
+        state.user.savedVideos = state.user.savedVideos.filter(video => video._id !== action.payload._id);
+      }
+    },
+    savePost: (state, action) => {
+      if (state.user) {
+        state.user.savedPosts.push(action.payload);
       }
     },
   },
@@ -192,5 +208,5 @@ const userSlice = createSlice({
   },
 });
 
-export const {  updateUserCommunities } = userSlice.actions;
+export const {  updateUserCommunities, saveVideo, unSaveVideo ,savePost} = userSlice.actions;
 export default userSlice.reducer;

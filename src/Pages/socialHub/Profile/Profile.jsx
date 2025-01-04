@@ -8,6 +8,7 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import { API } from "../../../Api/Api";
 import { showToast } from "../../../Utils/showToast";
+import { useSelector } from "react-redux";
 
 const Profile = () => {
   const [user, setUser] = useState(null);
@@ -18,6 +19,7 @@ const Profile = () => {
     () => location.pathname.split("/"),
     [location.pathname, id]
   );
+  
 
   const edit = useMemo(() => id === Cookies.get("userID"), [id]);
 
