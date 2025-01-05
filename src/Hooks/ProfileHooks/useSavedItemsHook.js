@@ -1,29 +1,57 @@
 import axios from "axios";
-import { API } from "../../Api/Api";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { API } from "../../Api/Api";
+import { saveVideo } from "../../Redux/slices/userSlice";
 import { showToast } from "../../Utils/showToast";
 
 const useSavedItems = () => {
-    const [savedItems, setsavedItems] = useState([]);
-    const [loading, setLoading] = useState(false);
+    const [videos, setVideos] = useState([]);
+    const [videosLoading, setVideosLoading] = useState(false);
     const [error, setError] = useState(null);
+    const dispatch = useDispatch();
 
-    const getSavedItems = async () => {
+    
+    const getSavedVideos = async (savedVideos) => {
         try {
-            setLoading(true);
-            const res = await axios.get(API.getSavedItems);
-            setsavedItems(res.data);
-
+            setVideosLoading(true)
+            const videoPromises = savedVideos.map(async (video) => {
+                const res = await axios.get(`${API.getVideo}/${video._id}`);
+                return res.data.video; // Return the video data
+            });
+            const videos = await Promise.all(videoPromises);
+            setVideos(videos);
         } catch (error) {
-            setError(error.response?.data?.message || "Something went wrong while getting saved items.");
-            showToast("error",error.response?.data?.message || "Something went wrong while getting saved items.");
-        } finally {
-            setLoading(false);
+            console.error('Error fetching videos:', error);
+            setVideosLoading(false)
+        } finally { 
+            setVideosLoading(false)
         }
     };
-    
 
-    return { getSavedItems };
+    const handleSaveVideo = async (video) => {
+        try {
+            const response = await axios.post(`${API.saveVideo}/${video._id}`);
+            console.log(response.data);
+            showToast('success', "Video saved successfully");
+            dispatch(saveVideo(video));
+        } catch (error) {
+            showToast("error", error?.response?.data?.message || "Failed to save video");
+        }
+    }
+    const handleUnsaveVideo = async(comingVideo) => { 
+        const oldSavedVideos = videos ;
+        setVideos(videos.filter((video) => video._id !== comingVideo._id));
+        try {
+            await axios.post(`${API.unSaveVideo}/${comingVideo._id}`);
+            showToast('success', "Video unsaved successfully")
+        } catch (error) {
+            showToast('error', error?.response?.data?.message || "Video wasn't unsaved");
+            setVideos(oldSavedVideos);
+        }
+    }
+    
+    return { videos,videosLoading, handleSaveVideo,handleUnsaveVideo, getSavedVideos };
 };
 
 export default useSavedItems;

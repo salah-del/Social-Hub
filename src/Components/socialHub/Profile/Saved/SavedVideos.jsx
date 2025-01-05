@@ -1,63 +1,34 @@
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import { useEffect } from "react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import VideoCard from "../../MainPage/VideoCard";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { API } from "../../../../Api/Api";
-import { showToast } from "../../../../Utils/showToast";
+import { Autoplay, Navigation, Pagination } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
+import useSavedItems from "../../../../Hooks/ProfileHooks/useSavedItemsHook";
 import Loader from "../../../../Utils/Loader";
+import VideoCard from "../../MainPage/VideoCard";
 
 const SavedVideos = ({savedVideos, edit}) => {
-    console.log(savedVideos);
     
-    const [loading, setloading] = useState(false)
-    const [videos, setVideos] = useState([]);
+    const {videos,videosLoading:loading,  handleUnsaveVideo, getSavedVideos} = useSavedItems();
 
     useEffect(() => {
-        const getVideosUserId = async () => {
-            try {
-                setloading(true)
-                const videoPromises = savedVideos.map(async (video) => {
-                    const res = await axios.get(`${API.getVideo}/${video._id}`);
-                    return res.data.video; // Return the video data
-                });
-                const videos = await Promise.all(videoPromises);
-                setVideos(videos)
-            } catch (error) {
-                console.error('Error fetching videos:', error);
-                setloading(false)
-            } finally { 
-                setloading(false)
-            }
-        };
-
-        if (savedVideos?.length) {
-            getVideosUserId();
+        if (savedVideos?.length && videos.length == 0) {
+            console.log("called")
+            getSavedVideos(savedVideos);
         }
     }, [savedVideos]);
 
-    const handleUnsaveVideo = async(videoId) => { 
-        const oldSavedVideos = videos ;
-        setVideos(videos.filter((video) => video._id!== videoId));
-        try {
-            const res = await axios.post(`${API.unSaveVideo}/${videoId}`);
-            showToast('success', "Video unsaved successfully")
-        } catch (error) {
-            
-            showToast('error', error?.response?.data?.message || "Video wasn't unsaved");
-            setVideos(oldSavedVideos);
-        }
+    const handleUnSaveVideoClicked = (video) => { 
+        handleUnsaveVideo(video);
     }
 
-    return ( loading ? 
-        <div className="w-full h-32 flex items-center justify-center">
+    return ( (loading || (edit && !savedVideos)) ? 
+        <div className="w-full h-[250px] flex items-center justify-center">
             <Loader />
         </div>
         : (
-            (savedVideos && savedVideos.length > 0) ? 
+            (videos && videos.length > 0) ? 
             <Swiper className="w-full"
                 modules={[Navigation, Pagination, Autoplay]} // إضافة الموديولات المطلوبة
                 spaceBetween={24} // المسافة بين الشرائح
@@ -72,7 +43,7 @@ const SavedVideos = ({savedVideos, edit}) => {
                 {videos && videos.map((video) => (
                     <SwiperSlide key={video._id} >
                         <div>
-                            <VideoCard video={video} isSaved={edit} unsaveVideo={handleUnsaveVideo} />
+                            <VideoCard video={video} isSaved={edit} unsaveVideo={handleUnSaveVideoClicked} />
                         </div>
                     </SwiperSlide>
                 ))}

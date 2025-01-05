@@ -15,6 +15,9 @@ import { showToast } from "../../../Utils/showToast";
 import sweetalert from "../../../Utils/sweetalert";
 import { isVideoURL } from "../../../Utils/validateURLs";
 import { copyURL } from './../../../Utils/copyURL';
+import { saveVideo, unSaveVideo } from "../../../Redux/slices/userSlice";
+import { useDispatch } from "react-redux";
+import useSavedItems from "../../../Hooks/ProfileHooks/useSavedItemsHook";
 const VideoCard = React.memo(({ video, handleOpenVideoEdit, handleDeleteVideo, inProfile, isSaved=false, unsaveVideo}) => {
   const navigateTo = useNavigateTo();
   const [user, setUser] = useState(null);
@@ -22,6 +25,7 @@ const VideoCard = React.memo(({ video, handleOpenVideoEdit, handleDeleteVideo, i
   const [isOptionsOpen, setIsOptionsOpen] = useState(false);
   const { ref, inView } = useInView({ triggerOnce: true }); // Trigger once when in view
   const userId = Cookies.get("userID");
+  const {handleSaveVideo} = useSavedItems()
 
   const isValidUrl = useCallback(
     (url) => {
@@ -115,15 +119,9 @@ const optionsRef = useRef(null);
       showToast( "error", "Invalid Video URL");
     }
   };
-  
-  const handleSaveVideo = async () => { 
-    try {
-      const response = await axios.post(`${API.saveVideo}/${video._id}`);
-      console.log(response.data);
-      showToast('success', "Video saved successfully");
-    } catch (error) {
-      showToast("error", error?.response?.data?.message || "Failed to save video");
-    }
+
+  const handleSaveVideoClicked = () => {
+    handleSaveVideo(video);
   }
 
   return (
@@ -183,8 +181,8 @@ const optionsRef = useRef(null);
                   <SlOptionsVertical className="text-sm" />
                   {isOptionsOpen && <div  className="absolute  flex flex-col items-start overflow-hidden  -top-10 right-8 z-10 w-36 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm  ">
                       <button onClick={handleCopyVideoURL} className="w-full text-left pl-2 trans hover:bg-gray-200 cursor-pointer py-1">Copy video URL</button>
-                      {!isSaved && <button onClick={handleSaveVideo} className="w-full text-left pl-2 trans hover:bg-gray-200 cursor-pointer py-1">Save Video</button>}
-                      { isSaved && <button onClick={() => unsaveVideo(video._id)} className="w-full text-left pl-2 trans hover:bg-gray-200 cursor-pointer py-1">Unsave Video</button>}
+                      {!isSaved && <button onClick={handleSaveVideoClicked} className="w-full text-left pl-2 trans hover:bg-gray-200 cursor-pointer py-1">Save Video</button>}
+                      { isSaved && <button onClick={() => unsaveVideo(video)} className="w-full text-left pl-2 trans hover:bg-gray-200 cursor-pointer py-1">Unsave Video</button>}
                       {video.userId && video.userId === userId && inProfile && <button onClick={handleClickEditBtn} className="w-full text-left pl-2 trans hover:bg-gray-200 cursor-pointer py-1">Edit Video</button>}
                       {video.userId && video.userId === userId && inProfile &&  <button onClick={handleClickDeleteBtn} className="w-full text-main-color text-left pl-2 trans hover:bg-gray-200 cursor-pointer py-1">Delete Video</button>}
                   </div>}

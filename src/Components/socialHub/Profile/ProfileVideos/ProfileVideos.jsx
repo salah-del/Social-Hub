@@ -1,12 +1,10 @@
-import { memo, useEffect, useState } from "react";
+import { memo, useEffect } from "react";
 import Skeleton from "react-loading-skeleton";
-import { useSelector } from "react-redux";
+import { useOutletContext, useParams } from "react-router-dom";
 import useProfileVideosHook from "../../../../Hooks/ProfileHooks/useProfileVideosHook";
-import Loader from "../../../../Utils/Loader";
 import Modal from "../../../../Utils/Modal";
 import VideoGrid from "../../MainPage/VideoGrid";
 import AddNewVideoModal from "./AddNewVideoModal";
-import { useOutletContext, useParams } from "react-router-dom";
 
 const ProfileVideos = memo(() => {
     // const {user, status, error:userError} = useSelector((state) => state.user);
