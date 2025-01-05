@@ -8,11 +8,11 @@ import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { useUsers } from "../../../../Hooks/useUsers";
 import { BsPersonCheckFill } from "react-icons/bs";
-export function FriendCard({ friend, edit }) {
+export function FriendCard({ friend, edit, onAction, unblock }) {
   const { user: loggedInUser } = useSelector((state) => state.user);
   const [isMyFriend, setisMyFriend] = useState(false);
-
-  console.log(friend);
+//  console.log(friend);
+ 
   useEffect(() => {
     const isMyFriend = () => {
       const res = loggedInUser.friends.some(
@@ -24,7 +24,7 @@ export function FriendCard({ friend, edit }) {
   }, [loggedInUser]);
 
   const { handleAddFriend, error } = useUsers();
-  const [didSendRequest, setDidSendRequest] = useState(false);
+  const [didSendRequest, setDidSendRequest] = useState(friend.sentRequest);
 
   const handleAddFriendBtnClicked = () => {
     setDidSendRequest(true);
@@ -37,8 +37,8 @@ export function FriendCard({ friend, edit }) {
         <div className="flex items-center space-x-4">
           <Link to={`/socialHub/profile/${friend.friendId}`}>
             <img
-              src={friend.friendProfilePicture || profile}
-              alt={friend.friendName}
+              src={friend.profilePicture || profile}
+              alt={friend.name}
               className="w-16 h-16 rounded-full"
             />
           </Link>
@@ -47,29 +47,35 @@ export function FriendCard({ friend, edit }) {
               to={`/socialHub/profile/${friend.friendId}`}
               className="font-medium"
             >
-              {friend.friendName}
+              {friend.name}
             </Link>
             <p className="text-sm text-gray-500">
-              {friend.mutualFriends.length} mutual friends
+              {friend.mutualFriendsCount} mutual friends
             </p>
           </div>
         </div>
-        {edit && <FriendMenu friend={friend} edit={edit} />}
+        <FriendMenu
+          friend={friend}
+          edit={edit}
+          onAction={onAction}
+          unblock={unblock}
+        />
       </div>
       <div className="flex space-x-2">
         {edit ? (
           <button className="flex-1 flex items-center justify-center space-x-2 text-white bg-gray-400 shadow hover:bg-gray-500 trans py-2 rounded ">
             <BiMessageRounded />
-            <span>Message</span>
+            <span>Send Message</span>
           </button>
         ) : friend.friendId === Cookies.get("userID") ? (
           <span className="text-gray-500 text-lg font-semibold mx-auto py-1">
             This is you
           </span>
         ) : isMyFriend ? (
-          <span className="text-gray-500 text-lg font-semibold  mx-auto py-1">
-            Your friend
-          </span>
+          <button className="flex-1 flex w-full items-center justify-center space-x-2 text-white bg-gray-500 shadow hover:bg-gray-600 trans py-2 rounded ">
+            <BiMessageRounded />
+            <span>Talk to your Friend</span>
+          </button>
         ) : didSendRequest ? (
           <button
             className="flex-1 flex items-center justify-center  py-2 bg-gray-500 cursor-not-allowed text-white rounded transition"
@@ -84,7 +90,7 @@ export function FriendCard({ friend, edit }) {
             className="flex-1 flex items-center justify-center space-x-2 text-white bg-sec-color shadow hover:opacity-90 trans py-2 rounded "
           >
             <IoPersonAddSharp />
-            <span>{isMyFriend ? "Already friend" : "Add Friend"}</span>
+            <span>Add Friend</span>
           </button>
         )}
       </div>

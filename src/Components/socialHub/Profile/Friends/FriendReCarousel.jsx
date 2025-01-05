@@ -3,7 +3,12 @@ import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-export default function FriendReCarousel({ items, CardComponent, message  }) {
+export default function FriendReCarousel({
+  items,
+  CardComponent,
+  message,
+  handleFriendRequestAction,
+}) {
   const validItems = items.filter(
     (item) => item.senderName && item.senderName.length > 0
   );
@@ -25,7 +30,7 @@ export default function FriendReCarousel({ items, CardComponent, message  }) {
     >
       {validItems.map((item) => (
         <SwiperSlide key={item._id}>
-          <CardComponent item={item} />
+          <CardComponent item={item} handleFriendRequestAction={handleFriendRequestAction} />
         </SwiperSlide>
       ))}
     </Swiper>

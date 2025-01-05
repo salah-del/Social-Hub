@@ -2,7 +2,11 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import PopupModal from "./PopupModal";
 import UserInformation from "./Update/UserInformation";
+import { usePosts } from "../../../Hooks/usePosts";
 const UserInfo = ({ user, loading, edit }) => {
+  const { posts, status } = usePosts();
+  console.log(user);
+
   return (
     <div className="flex flex-col items-start gap-4 mt-11 md:mt-3">
       {loading ? (
@@ -23,7 +27,7 @@ const UserInfo = ({ user, loading, edit }) => {
           </>
         ) : (
           <>
-            <li className="cursor-pointer">{ 0} Post</li>
+            <li className="cursor-pointer">{posts.length} Post</li>
             <PopupModal
               count={user?.SubscriberedOrFollowed?.length}
               title="Following"

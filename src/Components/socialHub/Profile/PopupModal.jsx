@@ -1,37 +1,52 @@
 import React, { useEffect, useState } from "react";
-import { AiOutlineClose, AiOutlineUser } from "react-icons/ai"; // أيقونات
-import { useDispatch, useSelector } from "react-redux";
-import { getUserById } from "../../../Redux/slices/getUserById";
+import { AiOutlineClose } from "react-icons/ai";
+import { useSelector } from "react-redux";
 import profile from "../../../assets/profile.jpg";
 import LazyImage from "../../../Utils/LazyImage";
 import { Link } from "react-router-dom";
+import { API } from "../../../Api/Api";
+import axios from "axios";
+import Skeleton from "react-loading-skeleton"; // استيراد Skeleton
+import "react-loading-skeleton/dist/skeleton.css"; // استيراد أنماط Skeleton
+
 function PopupModal({ count, title, usersId }) {
   const [isOpen, setIsOpen] = useState(false);
   const toggleModal = () => setIsOpen(!isOpen);
 
-  const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
+
+  const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState([]);
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      if (usersId?.length > 0) {
-        try {
-          // جلب البيانات باستخدام Promise.all
-          const Users = await Promise.all(
-            usersId.map((id) => dispatch(getUserById(id)).unwrap())
-          );
-          setUsers(Users);
-        } catch (error) {
-          console.error(`Error fetching ${title}:`, error);
-        }
+  const fetchUsers = async () => {
+    if (usersId?.length > 0) {
+      setLoading(true);
+      try {
+        // جلب البيانات باستخدام Promise.all
+        const Users = await Promise.all(
+          usersId.map(async (id) => {
+            try {
+              const response = await axios.get(`${API.getUserById}/${id}`);
+              return response.data; // استخدم البيانات المسترجعة
+            } catch (error) {
+              console.error("Error fetching user data", error);
+            }
+          })
+        );
+        setUsers(Users.filter(Boolean)); // إزالة الـ undefined لو فيه أخطاء أثناء الجلب
+      } catch (error) {
+        console.error(`Error fetching ${title}:`, error);
+      } finally {
+        setLoading(false);
       }
-    };
+    }
+  };
+  console.log(users);
+  
 
+  useEffect(() => {
     fetchUsers();
-  }, [user, dispatch]);
-
-  // console.log(users);
+  }, [user]);
 
   return (
     <>
@@ -63,12 +78,20 @@ function PopupModal({ count, title, usersId }) {
 
             {/* قائمة الـ Following */}
             <ul className="space-y-4 overflow-y-auto max-h-[320px]">
-              {users.length === 0 ? (
+              {loading ? (
+                // عرض Skeleton أثناء التحميل
+                Array.from({ length: 5 }).map((_, index) => (
+                  <li key={index} className="flex items-center gap-3">
+                    <Skeleton circle width={40} height={40} />
+                    <Skeleton width={150} height={23} />
+                  </li>
+                ))
+              ) : users.length === 0 ? (
                 <p className="text-gray-500 text-center">{`No ${title} found.`}</p>
               ) : (
                 users.map((value, index) => (
                   <Link key={index} to={`/socialHub/profile/${value._id}`}>
-                    <li className="flex items-center gap-3 hover:bg-gray-100 rounded-lg p-2 transition cu">
+                    <li className="flex items-center gap-3 hover:bg-gray-100 rounded-lg p-2 transition cursor-pointer">
                       <LazyImage
                         src={value?.profilePicture || profile}
                         alt="profile"

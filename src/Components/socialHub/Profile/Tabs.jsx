@@ -3,6 +3,12 @@ import { FaTable, FaBookmark, FaUserFriends } from "react-icons/fa";
 import { BiSolidVideos } from "react-icons/bi";
 import { Link } from "react-router-dom";
 const Tabs = ({openTab, id}) => {
+
+    
+
+
+
+
   const [activeTab, setActiveTab] = useState(openTab || "posts");
   useEffect(() => { 
     setActiveTab(openTab || "posts")

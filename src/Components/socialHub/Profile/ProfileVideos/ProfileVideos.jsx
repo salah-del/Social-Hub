@@ -87,4 +87,4 @@ const ProfileVideos = memo(() => {
     )
 })
 
-export default ProfileVideos
+export default ProfileVideos;

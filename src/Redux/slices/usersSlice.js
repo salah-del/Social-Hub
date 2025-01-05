@@ -7,13 +7,13 @@ import sweetalert from "../../Utils/sweetalert";
 // Helper function to handle errors
 const handleError = (error, rejectWithValue) => {
   if (!error.response) {
-    console.error("Network error:", error.message);
+    // console.error("Network error:", error.message);
     return rejectWithValue(
       "Network error, please check your connection and try again."
     );
   }
   if (error.response?.data) {
-    console.error("Backend error:", error.response.data);
+    // console.error("Backend error:", error.response.data);
     return rejectWithValue(
       error.response.data.message || "Something went wrong with the backend."
     );

@@ -6,7 +6,8 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
 const PeopleList = () => {
-  const { fetchAllUsers, users, status, handleSearchByName } = useUsers();
+  const { fetchAllUsers, users, status, error, handleSearchByName } =
+    useUsers();
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
@@ -22,6 +23,8 @@ const PeopleList = () => {
       fetchAllUsers();
     }
   };
+
+  console.log(users);
 
   return (
     <div className="">
@@ -64,7 +67,7 @@ const PeopleList = () => {
               </div>
             </div>
           ))
-        ) : users && users.length > 0 ? (
+        ) : users && users.length > 0 && !error ? (
           users.map((person) => <PeopleCard key={person._id} person={person} />)
         ) : (
           <div className="text-red-500 col-span-2 flex justify-center items-center h-[420px] font-bold">
@@ -72,7 +75,7 @@ const PeopleList = () => {
           </div>
         )}
       </div>
-      {status !== "loading" && (
+      {status === "loading" || !error && (
         <div className={`flex items-center justify-center mt-[18px]`}>
           <button
             onClick={() => fetchAllUsers()}

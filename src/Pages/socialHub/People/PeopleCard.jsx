@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { useUsers } from "../../../Hooks/useUsers";
 import { API } from "../../../Api/Api";
 import axios from "axios";
+import { isValidUrl } from "../../../Utils/validateURLs";
 const PeopleCard = ({ person }) => {
   const { handleSubscribe, handleUnsubscribe, handleAddFriend, error } =
     useUsers();
@@ -58,7 +59,9 @@ const PeopleCard = ({ person }) => {
       {/* صورة المستخدم */}
       <Link to={`/socialHub/profile/${person._id}`}>
         <img
-          src={person.profilePicture || profile}
+          src={
+            isValidUrl(person.profilePicture) ? person.profilePicture : profile
+          }
           alt={person.name}
           className="w-[96px] h-[96px] rounded-full"
         />

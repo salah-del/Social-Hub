@@ -95,21 +95,6 @@ export const dislikePost = createAsyncThunk(
   }
 );
 
-// Copy URL for Post
-export const copyUrlForPost = createAsyncThunk(
-  "posts/copyUrlForPost",
-  async (idPost, { rejectWithValue }) => {
-    try {
-      const response = await axios.get(API.copyUrlForPost(idPost));
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(
-        error.response ? error.response.data : error.message
-      );
-    }
-  }
-);
-
 // Save Post
 export const savePost = createAsyncThunk(
   "posts/savePost",
@@ -155,6 +140,11 @@ const postsSlice = createSlice({
     clearError(state) {
       state.error = null;
     },
+    resetPostsState(state) {
+      state.posts = [];
+      state.status = "idle";
+      state.error = null;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -173,7 +163,7 @@ const postsSlice = createSlice({
       })
       // Add Post
       .addCase(addPost.fulfilled, (state, action) => {
-        state.posts.push(action.payload);
+        state.posts.unshift(action.payload);
         showToast("success", "Post added successfully");
       })
       .addCase(addPost.rejected, (state, action) => {
@@ -181,7 +171,14 @@ const postsSlice = createSlice({
       })
       // Delete Post
       .addCase(deletePost.fulfilled, (state, action) => {
-        state.posts = state.posts.filter((post) => post.id !== action.meta.arg);
+        // البحث عن البوست باستخدام id أو _id حسب ما تفضل
+        const postIndex = state.posts.findIndex(
+          (post) => post._id === action.meta.arg
+        );
+        if (postIndex !== -1) {
+          // splice هنحذف البوست باستخدام
+          state.posts.splice(postIndex, 1);
+        }
         showToast("success", "Post deleted successfully");
       })
       .addCase(deletePost.rejected, (state, action) => {
@@ -190,7 +187,7 @@ const postsSlice = createSlice({
       // Update Post
       .addCase(updatePost.fulfilled, (state, action) => {
         const index = state.posts.findIndex(
-          (post) => post.id === action.meta.arg.idPost
+          (post) => post._id === action.meta.arg.idPost
         );
         if (index !== -1) {
           state.posts[index] = { ...state.posts[index], ...action.payload };
@@ -240,17 +237,8 @@ const postsSlice = createSlice({
       .addCase(dislikePost.rejected, (state, action) => {
         state.error = action.payload;
       })
-      // Copy URL for Post
-      .addCase(copyUrlForPost.fulfilled, (state, action) => {
-        console.log("Post URL copied successfully:", action.payload);
-        showToast("success", "Post URL copied successfully");
-      })
-      .addCase(copyUrlForPost.rejected, (state, action) => {
-        state.error = action.payload;
-      })
       // Save Post
       .addCase(savePost.fulfilled, (state, action) => {
-        console.log("Post saved successfully:", action.payload);
         showToast("success", "Post saved successfully");
       })
       .addCase(savePost.rejected, (state, action) => {
@@ -258,7 +246,6 @@ const postsSlice = createSlice({
       })
       // Unsave Post
       .addCase(unsavePost.fulfilled, (state, action) => {
-        console.log("Post unsaved successfully:", action.payload);
         showToast("success", "Post unsaved successfully");
       })
       .addCase(unsavePost.rejected, (state, action) => {
@@ -267,5 +254,5 @@ const postsSlice = createSlice({
   },
 });
 
-export const { clearError } = postsSlice.actions;
+export const { clearError , resetPostsState } = postsSlice.actions;
 export default postsSlice.reducer;

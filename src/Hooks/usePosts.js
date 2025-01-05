@@ -1,4 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
+import { useMemo } from "react"; // استخدام useMemo بدلاً من useCallback
 import {
   fetchPostsUser,
   addPost,
@@ -6,50 +7,79 @@ import {
   updatePost,
   likePost,
   dislikePost,
-  copyUrlForPost,
   savePost,
   unsavePost,
+  resetPostsState,
 } from "../Redux/slices/postsReducer";
 
 export const usePosts = () => {
   const dispatch = useDispatch();
   const { posts, status, error } = useSelector((state) => state.posts);
 
-  const fetchUserPosts = (userId) => {
-    dispatch(fetchPostsUser(userId));
-  };
+  // استخدام useMemo لتجنب إعادة إنشاء الوظيفة في كل مرة
+  const fetchUserPosts = useMemo(
+    () => (userId) => {
+      return dispatch(fetchPostsUser(userId)).unwrap();
+    },
+    [dispatch]
+  );
 
-  const createPost = (data) => {
-    return dispatch(addPost(data)).unwrap();
-  };
+  const createPost = useMemo(
+    () => (data) => {
+      return dispatch(addPost(data)).unwrap();
+    },
+    [dispatch]
+  );
 
-  const removePost = (postId) => {
-    return dispatch(deletePost(postId)).unwrap();
-  };
+  const removePost = useMemo(
+    () => (postId) => {
+      return dispatch(deletePost(postId)).unwrap();
+    },
+    [dispatch]
+  );
 
-  const editPost = (postId, data) => {
-    return dispatch(updatePost({ idPost: postId, data })).unwrap();
-  };
+  const editPost = useMemo(
+    () => (postId, data) => {
+      return dispatch(updatePost({ idPost: postId, data })).unwrap();
+    },
+    [dispatch]
+  );
 
-  const likeAPost = (postId) => {
-    return dispatch(likePost(postId)).unwrap();
-  };
+  const likeAPost = useMemo(
+    () => (postId) => {
+      return dispatch(likePost(postId)).unwrap();
+    },
+    [dispatch]
+  );
 
-  const dislikeAPost = (postId) => {
-    return dispatch(dislikePost(postId)).unwrap();
-  };
+  const dislikeAPost = useMemo(
+    () => (postId) => {
+      return dispatch(dislikePost(postId)).unwrap();
+    },
+    [dispatch]
+  );
 
-  const copyPostUrl = (postId) => {
-    return dispatch(copyUrlForPost(postId)).unwrap();
-  };
+  const saveAPost = useMemo(
+    () => (postId) => {
+      return dispatch(savePost(postId)).unwrap();
+    },
+    [dispatch]
+  );
 
-  const saveAPost = (postId) => {
-    return dispatch(savePost(postId)).unwrap();
-  };
+  const unsaveAPost = useMemo(
+    () => (postId) => {
+      return dispatch(unsavePost(postId)).unwrap();
+    },
+    [dispatch]
+  );
 
-  const unsaveAPost = (postId) => {
-    return dispatch(unsavePost(postId)).unwrap();
-  };
+  // إعادة تعيين الحالة باستخدام useMemo
+  const resetPosts = useMemo(
+    () => () => {
+      dispatch(resetPostsState());
+    },
+    [dispatch]
+  );
 
   return {
     posts,
@@ -61,8 +91,8 @@ export const usePosts = () => {
     editPost,
     likeAPost,
     dislikeAPost,
-    copyPostUrl,
     saveAPost,
     unsaveAPost,
+    resetPosts,
   };
 };

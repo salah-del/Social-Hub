@@ -7,13 +7,25 @@ import AddNewPostModal from "./AddNewPostModal";
 import Modal from "../../../../Utils/Modal";
 function Posts() {
   const { user, edit, loading } = useOutletContext();
-  const { fetchUserPosts, posts, status, error } = usePosts();
+  const { fetchUserPosts, posts, status, error, resetPosts } = usePosts();
   const [isAddNewPostModalOpen, setIsAddNewPostModalOpen] = useState(false);
-  console.log(posts, user);
+
+  console.log(posts);
+  
+  const deletePostLocally = (id) => {
+    const updatedPosts = posts.filter((post) => post._id !== id);
+  };
+
+  const handlefetchUserPosts = async (id) => {
+    // resetPosts();
+    await fetchUserPosts(id);
+  };
 
   useEffect(() => {
-    if (user && user._id) fetchUserPosts(user._id);
-  }, [user]);
+    if (user && user._id) {
+      handlefetchUserPosts(user._id);
+    }
+  }, [user, fetchUserPosts]);
 
   if (status === "loading" || status === "idle" || !user || loading) {
     return (
@@ -47,7 +59,10 @@ function Posts() {
                 : "There are currently no posts on this account."}
             </h1>
             {edit && (
-              <button className="text-xs bg-main-color px-3 py-2 text-white trans hover:bg-sec-color rounded-md ">
+              <button
+                onClick={() => setIsAddNewPostModalOpen(true)}
+                className="text-xs bg-main-color px-3 py-2 text-white trans hover:bg-sec-color rounded-md "
+              >
                 Add New Video
               </button>
             )}
@@ -58,17 +73,23 @@ function Posts() {
       <div className="max-w-4xl mx-auto px-4 py-7">
         <div className="space-y-4">
           {posts.map((post) => (
-            <PostCard key={post._id} post={post} user={user} edit={edit} />
+            <PostCard
+              key={post._id}
+              post={post}
+              user={user}
+              edit={edit}
+              openComments={true}
+            />
           ))}
         </div>
       </div>
 
       {isAddNewPostModalOpen && (
-        <Modal title={"Add New Video"} onClose={() => setNewPost(false)}>
-          <AddNewVideoModal
-            addVideo={{}}
-            addVideoLoading={status === "loading"}
-          />
+        <Modal
+          title={"Add New Post"}
+          onClose={() => setIsAddNewPostModalOpen(false)}
+        >
+          <AddNewPostModal setCloseModal={setIsAddNewPostModalOpen} />
         </Modal>
       )}
     </>

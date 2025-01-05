@@ -7,19 +7,20 @@ import AddNewTagModal from "../../MainPage/EditVideo/AddNewTagModal";
 import Loader from "../../../../Utils/Loader";
 import { usePosts } from "../../../../Hooks/usePosts";
 
-const AddNewPostModal = memo(({ setCloseModal }) => {
-  const { createPost } = usePosts();
-  const [addPostLoading, setaddPostLoading] = useState(false);
+const UpdatePostModal = memo(({ setCloseModal, post }) => {
+  const { editPost } = usePosts();
+  const [updatePostLoading, setupdatePostLoading] = useState(false);
 
   const [imgUrl, setimgUrl] = useState("");
   const [addNewTagModal, setAddNewTagModal] = useState(false);
 
   const [inputs, setInputs] = useState({
-    title: "",
-    desc: "",
-    imgUrl: "",
-    tags: [],
+    title: post.title,
+    desc: post.desc,
+    imgUrl: post.imgUrl,
+    tags: post.tags,
   });
+  console.log(inputs);
 
   const [errors, setErrors] = useState({
     title: "",
@@ -127,17 +128,17 @@ const AddNewPostModal = memo(({ setCloseModal }) => {
     return isValid;
   };
 
-  const handleAddPost = async () => {
+  const handleUpdatePost = async () => {
     if (isValidInputs()) {
-      setaddPostLoading(true);
+      setupdatePostLoading(true);
       const details = {
         title: inputs.title,
         imgUrl: inputs.imgUrl,
         desc: inputs.desc,
         tags: inputs.tags,
       };
-      await createPost(details);
-      setaddPostLoading(false);
+      await editPost(post._id, details);
+      setupdatePostLoading(false);
       setCloseModal(false);
     }
   };
@@ -160,7 +161,7 @@ const AddNewPostModal = memo(({ setCloseModal }) => {
       {/* View image directly */}
       <div className="flex sm:max-w-full flex-col items-start gap-4">
         {/* Image */}
-        {imgUrl && !errors.imgUrl ? (
+        {inputs.imgUrl && !errors.imgUrl ? (
           <Img
             src={inputs.imgUrl}
             className="max-w-full h-48 rounded-md"
@@ -293,16 +294,16 @@ const AddNewPostModal = memo(({ setCloseModal }) => {
           />
         </label>
 
-        {!addPostLoading && (
+        {!updatePostLoading && (
           <button
-            onClick={handleAddPost}
+            onClick={handleUpdatePost}
             className="ml-auto text-sm bg-main-color mt-2 px-3 py-2 text-white trans hover:bg-sec-color rounded-md "
           >
-            Add Post
+            Update Post
           </button>
         )}
-        {addPostLoading && (
-          <div className="ml-auto text-sm w-[89px] mt-1 flex items-center justify-center py-2 text-white  ">
+        {updatePostLoading && (
+          <div className="ml-auto text-sm w-[89px] mt-2 flex items-center justify-center py-2 text-white  ">
             <Loader width={"24px"} />
           </div>
         )}
@@ -317,4 +318,4 @@ const AddNewPostModal = memo(({ setCloseModal }) => {
   );
 });
 
-export default AddNewPostModal;
+export default UpdatePostModal;

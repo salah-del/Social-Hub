@@ -9,14 +9,15 @@ import CoinsActionsHook from "../../../../Hooks/CoinsActionsHook";
 import { useUsers } from "../../../../Hooks/useUsers";
 import sweetalert from "../../../../Utils/sweetalert";
 import { Link } from "react-router-dom";
-export default function FriendMenu({ friend, edit }) {
+import Cookies from "js-cookie";
+export default function FriendMenu({ friend, edit, onAction, unblock }) {
   const { blockUsers, unBlockUsers } = useUsers();
   const menuRef = useRef();
   const [isOpen, setIsOpen] = useState(false);
   const [showInput, setShowInput] = useState(false);
   const [loadingSendCoins, setloadingSendCoins] = useState(false);
   const [dataSendCoins, setDataSendCoins] = useState({
-    recipientName: friend.friendName,
+    recipientName: friend.name,
     amount: "",
   });
 
@@ -31,14 +32,14 @@ export default function FriendMenu({ friend, edit }) {
     if (dataSendCoins.amount) {
       await SendCoins(setloadingSendCoins, dataSendCoins);
       setDataSendCoins({ ...dataSendCoins, amount: "" });
-      // await  getCoins();
+      await getCoins();
       handleCloseMenu();
       setShowInput(false);
     }
   };
 
   const handleCopy = () => {
-    const textToCopy = friend.friendName;
+    const textToCopy = friend.name;
     navigator.clipboard.writeText(textToCopy);
     handleCloseMenu();
   };
@@ -52,11 +53,13 @@ export default function FriendMenu({ friend, edit }) {
     });
     if (result.isConfirmed) {
       await blockUsers({ userToBlockId: friend.friendId });
+      onAction("block");
     }
   };
 
   const handleUnBlockUser = async () => {
     await unBlockUsers({ userToUnblockId: friend.friendId });
+    onAction("unblock");
     handleCloseMenu();
   };
 
@@ -89,37 +92,39 @@ export default function FriendMenu({ friend, edit }) {
       {isOpen && (
         <div className="absolute right-0 mt-2 w-64 bg-white border border-gray-300 rounded-lg z-10">
           <ul className="rounded-lg">
-            <li
-              className={`${showInput ? "bg-gray-100" : ""} flex flex-col items-start px-4 py-2 text-gray-700 rounded-t-lg hover:bg-gray-100 cursor-pointer`}
-              onClick={() => setShowInput(true)}
-            >
-              <div className="flex items-center">
-                <BsFillSendFill size={16} className="mr-2" />
-                Send Coins
-              </div>
-              {showInput && (
-                <div className="w-full mt-2">
-                  <input
-                    type="number"
-                    value={dataSendCoins.amount}
-                    onChange={(e) =>
-                      setDataSendCoins({
-                        ...dataSendCoins,
-                        amount: e.target.value,
-                      })
-                    }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sec-color"
-                    placeholder="Enter amount"
-                  />
-                  <button
-                    className="mt-2 w-full bg-sec-color text-white py-2 rounded-md hover:bg-main-color transition"
-                    onClick={handleSendCoins}
-                  >
-                    {loadingSendCoins ? "Sending..." : "Send"}
-                  </button>
+            {!unblock && (
+              <li
+                className={`${showInput ? "bg-gray-100" : ""} flex flex-col items-start px-4 py-2 text-gray-700 rounded-t-lg hover:bg-gray-100 cursor-pointer`}
+                onClick={() => setShowInput(true)}
+              >
+                <div className="flex items-center">
+                  <BsFillSendFill size={16} className="mr-2" />
+                  Send Coins
                 </div>
-              )}
-            </li>
+                {showInput && (
+                  <div className="w-full mt-2">
+                    <input
+                      type="number"
+                      value={dataSendCoins.amount}
+                      onChange={(e) =>
+                        setDataSendCoins({
+                          ...dataSendCoins,
+                          amount: e.target.value,
+                        })
+                      }
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sec-color"
+                      placeholder="Enter amount"
+                    />
+                    <button
+                      className="mt-2 w-full bg-sec-color text-white py-2 rounded-md hover:bg-main-color transition"
+                      onClick={handleSendCoins}
+                    >
+                      {loadingSendCoins ? "Sending..." : "Send"}
+                    </button>
+                  </div>
+                )}
+              </li>
+            )}
             {showInput && (
               <MdCancel
                 onClick={() => setShowInput(false)}
@@ -144,20 +149,24 @@ export default function FriendMenu({ friend, edit }) {
               <IoCopy size={16} className="mr-2" />
               Copy Name
             </li>
-            <li
-              className="flex items-center text-red-500 px-4 rounded-b-lg py-2 hover:bg-gray-100 cursor-pointer"
-              onClick={handleBlockUser}
-            >
-              <FaBan size={16} className="mr-2" />
-              Block
-            </li>
-            <li
-              className="flex items-center text-gray-700 px-4 py-2 hover:bg-gray-100 cursor-pointer"
-              onClick={handleUnBlockUser}
-            >
-              <CgUnblock size={18} className="mr-1.5 " />
-              Unblock
-            </li>
+            {!unblock && friend.friendId !== Cookies.get("userID") && (
+              <li
+                className="flex items-center text-red-500 px-4 rounded-b-lg py-2 hover:bg-gray-100 cursor-pointer"
+                onClick={handleBlockUser}
+              >
+                <FaBan size={16} className="mr-2" />
+                Block
+              </li>
+            )}
+            {unblock && (
+              <li
+                className="flex items-center text-gray-700 px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                onClick={handleUnBlockUser}
+              >
+                <CgUnblock size={18} className="mr-1.5 " />
+                Unblock
+              </li>
+            )}
           </ul>
         </div>
       )}

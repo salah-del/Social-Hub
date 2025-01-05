@@ -6,11 +6,13 @@ import { Link } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import { useUsers } from "../../../../Hooks/useUsers";
 import { useOutletContext } from "react-router-dom";
-export function FriendRequest({ item }) {
-  const { fetchUserById } = useOutletContext();
+export function FriendRequest({ item, handleFriendRequestAction }) {
   const { handleAcceptFriend, handleRejectFriend } = useUsers();
+
   const [loading, setLoading] = useState(false);
   const [matualFriends, setMatualFriends] = useState([]);
+
+  console.log(item);
 
   const getMutualFriends = async () => {
     try {
@@ -37,13 +39,25 @@ export function FriendRequest({ item }) {
 
   const handleAcceptFriendBtn = async () => {
     await handleAcceptFriend(item.sender);
+    // unblockedFriends تعريف بيانات الصديق الجديد بشكل يتطابق مع هيكل unblockedFriends
+    const friend = {
+      friendId: item.sender,
+      profilePicture: item.senderImg, 
+      name: item.senderName, 
+      isBlocked: false,
+      isFriend: true, 
+      mutualFriendsCount: matualFriends.length, 
+      mutualFriendsIds: matualFriends.map((mf) => mf.id || mf._id || mf), 
+    };
+    // استدعاء الدالة لإضافة الصديق للقائمة المناسبة
+    handleFriendRequestAction(friend, "accept");
     setIsClicked(true);
-    fetchUserById(item.sender);
   };
+
   const handleRejectFriendBtn = async () => {
     await handleRejectFriend(item.sender);
+    handleFriendRequestAction(item, "reject");
     setIsClicked(true);
-    fetchUserById(item.sender);
   };
 
   return (
