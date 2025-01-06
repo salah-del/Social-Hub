@@ -15,6 +15,7 @@ export const API = {
   copyUrlForPost: (idPost) => `${BASE_URL}/routPost/${idPost}/copyUrl`,
   savePost: `${BASE_URL}/routPost/savePost`, //     /:idPost
   unsavePost: `${BASE_URL}/routPost/unsavePost`, //     /:idPost
+  getSavedPosts: `${BASE_URL}/routPost/getSavedPosts`, //     /:idPost
   /* ======= Masseges ======= */
   SendMessege: `${BASE_URL}/messages`, // Post
   getUsersInChat: `${BASE_URL}/messages/getUsersWithChatMessages`, // Post
@@ -40,6 +41,7 @@ export const API = {
   unSaveVideo: `${BASE_URL}/videos/unsave`, //   /:videoId
   likeVideo: `${BASE_URL}/users/like`, //   /:videoId
   disLikeVideo: `${BASE_URL}/users/dislike`, //   /:videoId
+  getSavedVideos : `${BASE_URL}/videos/getSavedVideos`,
   /* ======= Users ======= */
   getAllUsers: `${BASE_URL}/users/getRandomUsers`,
   searchByName: `${BASE_URL}/users/Search_Users_Name`,

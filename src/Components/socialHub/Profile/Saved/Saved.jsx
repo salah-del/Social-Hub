@@ -1,47 +1,55 @@
-import React, { memo, useEffect, useState } from 'react';
-import { useOutletContext, useParams } from 'react-router-dom';
+import React, { memo, useRef, useState, useEffect } from 'react';
+import { Navigate, useOutletContext, useParams } from 'react-router-dom';
 import SavedPosts from './SavedPosts';
 import SavedVideos from './SavedVideos';
-import { useSelector } from 'react-redux';
-import { showToast } from '../../../../Utils/showToast';
-import axios from 'axios';
-import { API } from '../../../../Api/Api';
 
 const Saved = memo(() => {
-  // if the user isn't the logged in 
-  const {edit} = useOutletContext();
-  const [userPassed, setUserPassed] = useState(null);
-  const {id} = useParams();
+  const { user, edit } = useOutletContext();
+  const { id } = useParams();
 
-  useEffect(() => { 
-    // if this is your account and user isn't null
-    if (id) { 
-      const getUserData = async () => { 
-        try {
-            // setLoading(true);
-            const response = await axios.get(`${API.getUserById}/${id}`);
-            setUserPassed(response.data);
-        } catch (error) {
-          showToast("error", "Error fetching user data");
-          console.error("Error fetching user data:", error);
+  const [isPostsInView, setIsPostsInView] = useState(false);
+  const ref = useRef(null);
+
+  // Navigate if trying to access saved videos of another profile
+  if (!edit && id) return <Navigate to={`/socialHub/profile/${id}`} />;
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsPostsInView(true);
         }
-      }
-      getUserData();
+      },
+      { threshold: 1 } // Adjust threshold as needed
+    );
+
+    if (ref.current) {
+      observer.observe(ref.current);
     }
+
+    return () => {
+      if (ref.current) {
+        observer.unobserve(ref.current);
+      }
+    };
   }, []);
-  
+
   return (
     <div className="w-full">
-      <div className='w-full flex  flex-col gap-5'>
-        <div className='flex flex-col gap-5 border-b  pb-5'>
-          <h2 className="text-xl font-bold text-gray-600"> Videos</h2>
-          {<SavedVideos savedVideos={userPassed?.savedVideos || null} edit={edit} />}
+      <div className="w-full flex flex-col gap-5">
+        <div className="flex flex-col gap-5 border-b pb-8">
+          <h2 className="text-xl font-bold text-gray-600">Videos</h2>
+          {<SavedVideos />}
         </div>
-        <h2 className="text-xl font-bold text-gray-600"> Posts</h2>
-        <SavedPosts user={userPassed || null} edit={edit} />
+        <div  className="flex flex-col gap-5">
+          <h2 className="text-xl font-bold text-gray-600">Posts</h2>
+          <div ref={ref}>
+            {isPostsInView && <SavedPosts user={user} edit={edit} />}
+          </div>
+        </div>
       </div>
     </div>
   );
-})
+});
 
 export default Saved;

@@ -3,16 +3,18 @@ import FriendMenu from "./FriendMenu";
 import { IoPersonAddSharp } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import profile from "../../../../assets/profile.jpg";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { useUsers } from "../../../../Hooks/useUsers";
 import { BsPersonCheckFill } from "react-icons/bs";
+import useNavigateTo from "../../../../Utils/navigateTo";
+import { clearChat } from "../../../../Redux/slices/chatSlice";
 export function FriendCard({ friend, edit, onAction, unblock }) {
   const { user: loggedInUser } = useSelector((state) => state.user);
   const [isMyFriend, setisMyFriend] = useState(false);
-//  console.log(friend);
- 
+  //  console.log(friend);
+
   useEffect(() => {
     const isMyFriend = () => {
       const res = loggedInUser.friends.some(
@@ -30,6 +32,17 @@ export function FriendCard({ friend, edit, onAction, unblock }) {
     setDidSendRequest(true);
     handleAddFriend(friend.friendId);
   };
+  const dispatch = useDispatch();
+  const navigateTo = useNavigateTo();
+  const handleNavToUserChat = () => { 
+    dispatch(clearChat());
+    navigateTo({
+      dest: `/socialHub/myMessages`,
+      state: {
+        friend: {_id: friend.friendId, name:friend.name, photoUrl:friend.profilePicture},
+      }
+    })
+  }
 
   return (
     <div className="bg-white rounded-lg shadow-sm p-4">
@@ -63,7 +76,7 @@ export function FriendCard({ friend, edit, onAction, unblock }) {
       </div>
       <div className="flex space-x-2">
         {edit ? (
-          <button className="flex-1 flex items-center justify-center space-x-2 text-white bg-gray-400 shadow hover:bg-gray-500 trans py-2 rounded ">
+          <button onClick={handleNavToUserChat} className="flex-1 flex items-center justify-center space-x-2 text-white bg-gray-400 shadow hover:bg-gray-500 trans py-2 rounded ">
             <BiMessageRounded />
             <span>Send Message</span>
           </button>
@@ -72,7 +85,7 @@ export function FriendCard({ friend, edit, onAction, unblock }) {
             This is you
           </span>
         ) : isMyFriend ? (
-          <button className="flex-1 flex w-full items-center justify-center space-x-2 text-white bg-gray-500 shadow hover:bg-gray-600 trans py-2 rounded ">
+          <button onClick={handleNavToUserChat} className="flex-1 flex w-full items-center justify-center space-x-2 text-white bg-gray-500 shadow hover:bg-gray-600 trans py-2 rounded ">
             <BiMessageRounded />
             <span>Talk to your Friend</span>
           </button>
