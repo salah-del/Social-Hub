@@ -21,8 +21,9 @@ export const API = {
   getMessages: `${BASE_URL}/messages/conversation`, // /:recieverId
   /* ======= Comments ======= */
   addComment: `${BASE_URL}/comments`,
-  replyComment: `${BASE_URL}/comments`,
+  replyComment: `${BASE_URL}/comments/addReply`,
   getComments: `${BASE_URL}/comments`, //     /:idPost
+  RepliesOnComment : `${BASE_URL}/comments/replies`,//     /:idComment
   deleteComment: `${BASE_URL}/comments`, //     /:idComment
   /* ======= Videos ======= */
   addVideo: `${BASE_URL}/videos`,

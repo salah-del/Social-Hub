@@ -7,9 +7,9 @@ import ButtonForm from "../../../helpers/ButtonForm";
 import { useUsers } from "../../../../Hooks/useUsers";
 import { useDispatch } from "react-redux";
 import { getCurrUser } from "../../../../Redux/slices/userSlice";
-function ProfilePicture({ user }) {
+function ProfilePicture({ user, setProfilePicture }) {
   const dispatch = useDispatch();
-  const { fetchUserById, handleUpdateUser, statusUpdate } = useUsers();
+  const {handleUpdateUser, statusUpdate } = useUsers();
   const [isOpen, setIsOpen] = useState(false);
   const toggleModal = () => setIsOpen(!isOpen);
   const [values, setValues] = useState({
@@ -36,8 +36,8 @@ function ProfilePicture({ user }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     await handleUpdateUser(user._id, values);
+    setProfilePicture(values.profilePicture);
     toggleModal();
-    fetchUserById(user._id);
     dispatch(getCurrUser(user._id));
   };
   return (

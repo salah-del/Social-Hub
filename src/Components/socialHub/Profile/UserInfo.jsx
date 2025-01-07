@@ -3,9 +3,16 @@ import "react-loading-skeleton/dist/skeleton.css";
 import PopupModal from "./PopupModal";
 import UserInformation from "./Update/UserInformation";
 import { usePosts } from "../../../Hooks/usePosts";
+import { useEffect, useState } from "react";
 const UserInfo = ({ user, loading, edit }) => {
   const { posts, status } = usePosts();
-  console.log(user);
+  const [nameUser, setnameUser] = useState("");
+
+  useEffect(() => {
+    if (user) {
+      setnameUser(user.name);
+    }
+  }, [user]);
 
   return (
     <div className="flex flex-col items-start gap-4 mt-11 md:mt-3">
@@ -13,9 +20,9 @@ const UserInfo = ({ user, loading, edit }) => {
         <Skeleton width={200} height={30} />
       ) : (
         <div className="flex items-center max-[450px]:items-start gap-3 max-[450px]:flex-col">
-          <h2 className="text-2xl font-bold text-gray-800">{user?.name}</h2>
+          <h2 className="text-2xl font-bold text-gray-800">{nameUser}</h2>
           {/* Update User */}
-          <UserInformation user={user} edit={edit} />
+          <UserInformation user={user} edit={edit} setnameUser={setnameUser} />
         </div>
       )}
       <ul className="flex gap-5 max-sm:gap-2">

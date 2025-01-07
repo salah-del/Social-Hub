@@ -41,7 +41,7 @@ function PopupModal({ count, title, usersId }) {
       }
     }
   };
-  console.log(users);
+  // console.log(users);
   
 
   useEffect(() => {

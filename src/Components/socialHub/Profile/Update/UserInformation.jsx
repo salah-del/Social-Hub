@@ -7,9 +7,12 @@ import ButtonForm from "../../../helpers/ButtonForm";
 import { useUsers } from "../../../../Hooks/useUsers";
 import { useDispatch } from "react-redux";
 import { getCurrUser } from "../../../../Redux/slices/userSlice";
-function UserInformation({ user, edit }) {
+import LoaderW from "../../../../Utils/LoaderW";
+function UserInformation({ user, edit, setnameUser }) {
+  console.log(user);
+
   const dispatch = useDispatch();
-  const { fetchUserById, handleUpdateUser, statusUpdate } = useUsers();
+  const { handleUpdateUser, statusUpdate } = useUsers();
   const [isOpen, setIsOpen] = useState(false);
   const toggleModal = () => setIsOpen(!isOpen);
   const [fields, setFields] = useState([]);
@@ -59,21 +62,60 @@ function UserInformation({ user, edit }) {
     }
 
     await handleUpdateUser(user._id, selectedValues);
+    setnameUser(values.name);
     toggleModal();
-    fetchUserById(user._id);
     dispatch(getCurrUser(user._id));
+  };
+
+  const { handleSubscribe, handleUnsubscribe } = useUsers();
+  const [isFollow, setIsFollow] = useState(user?.isFollowing || false);
+  const [loadingFollow, setLoadingFollow] = useState(false);
+  const [loadingUnFollow, setLoadingUnFollow] = useState(false);
+
+  const handleUnFollowBtnClicked = async () => {
+    setIsFollow(false);
+    setLoadingFollow(true);
+    await handleUnsubscribe(user._id);
+    setLoadingFollow(false);
+  };
+
+  const handleFollowBtnClicked = async () => {
+    setIsFollow(true);
+    setLoadingUnFollow(true);
+    await handleSubscribe(user._id);
+    setLoadingUnFollow(false);
   };
 
   return (
     <>
-      <div
-        className={`${
-          !edit && "hidden"
-        } px-3 py-1 -mb-1 bg-gray-500 hover:bg-gray-600 rounded-full text-c-white transition-colors duration-200 cursor-pointer`}
-        onClick={toggleModal}
-      >
-        Edit Profile
-      </div>
+      {edit ? (
+        <div
+          className={`px-3 py-1 -mb-1 bg-gray-500 hover:bg-gray-600 rounded-full text-c-white transition-colors duration-200 cursor-pointer`}
+          onClick={toggleModal}
+        >
+          Edit Profile
+        </div>
+      ) : isFollow ? (
+        <div
+          onClick={handleUnFollowBtnClicked}
+          disabled={loadingUnFollow}
+          className="mx- px-3 py-1 -mb-1  bg-gray-500 hover:bg-gray-600 rounded-lg text-c-white transition-colors duration-200 cursor-pointer"
+        >
+          {loadingUnFollow ? (
+            <LoaderW className="w-[24px] mx-auto" />
+          ) : (
+            "Unfollow"
+          )}
+        </div>
+      ) : (
+        <div
+          onClick={handleFollowBtnClicked}
+          disabled={loadingFollow}
+          className="px-3 py-1 -mb-1   bg-gray-500 hover:bg-gray-600 rounded-lg text-c-white transition-colors duration-200 cursor-pointer"
+        >
+          {loadingFollow ? <LoaderW className="w-[24px] mx-auto" /> : "Follow"}
+        </div>
+      )}
 
       {isOpen && (
         <div

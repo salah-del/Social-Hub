@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import PostCard from "./PostCard";
+import PostCard from "../Posts/PostCard";
 import { usePosts } from "../../../../Hooks/usePosts";
 import { useOutletContext } from "react-router-dom";
 import Loader from "../../../../Utils/Loader";
@@ -10,14 +10,14 @@ function Posts() {
   const { fetchUserPosts, posts, status, error, resetPosts } = usePosts();
   const [isAddNewPostModalOpen, setIsAddNewPostModalOpen] = useState(false);
 
-  console.log(posts);
-  
+  // console.log(posts);
+
   const deletePostLocally = (id) => {
     const updatedPosts = posts.filter((post) => post._id !== id);
   };
 
   const handlefetchUserPosts = async (id) => {
-    // resetPosts();
+    resetPosts();
     await fetchUserPosts(id);
   };
 
@@ -63,7 +63,7 @@ function Posts() {
                 onClick={() => setIsAddNewPostModalOpen(true)}
                 className="text-xs bg-main-color px-3 py-2 text-white trans hover:bg-sec-color rounded-md "
               >
-                Add New Video
+                Add New Post
               </button>
             )}
           </div>

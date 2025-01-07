@@ -2,7 +2,6 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { API } from "../../Api/Api";
 import { showToast } from "../../Utils/showToast";
-import sweetalert from "../../Utils/sweetalert";
 
 // Helper function to handle errors
 const handleError = (error, rejectWithValue) => {
@@ -230,7 +229,7 @@ const userSlice = createSlice({
       .addCase(subscribe.fulfilled, (state, action) => {
         state.userData = action.payload;
         state.status = "succeeded";
-        showToast("success", state.userData);
+        showToast("success", "Followed successfully");
       })
       .addCase(subscribe.rejected, (state, action) => {
         state.status = "failed";
@@ -240,7 +239,7 @@ const userSlice = createSlice({
       .addCase(unsubscribe.fulfilled, (state, action) => {
         state.userData = action.payload;
         state.status = "succeeded";
-        showToast("success", state.userData);
+        showToast("success", "Unfollowed successfully");
       })
       .addCase(unsubscribe.rejected, (state, action) => {
         state.status = "failed";

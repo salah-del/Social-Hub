@@ -28,11 +28,11 @@ export const useUsers = () => {
   };
 
   const handleSubscribe = (userId) => {
-    return dispatch(subscribe(userId));
+    return dispatch(subscribe(userId)).unwrap();
   };
 
   const handleUnsubscribe = (userId) => {
-    return dispatch(unsubscribe(userId));
+    return dispatch(unsubscribe(userId)).unwrap();
   };
 
   const handleAddFriend = (friendId) => {

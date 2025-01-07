@@ -4,7 +4,7 @@ import PostActions from "./PostActions";
 import { formatDate } from "../../../../Utils/formatDate";
 import checkImageUrl from "../../../../Utils/checkImageUrl";
 import { usePosts } from "../../../../Hooks/usePosts";
-import CommentsModal from "./CommentsModal";
+import CommentsModal from "../Posts/Comments/CommentsModal";
 import profile from "../../../../assets/profile.jpg";
 function PostCard({ post, user, edit, openComments }) {
   const [showActions, setShowActions] = useState(false);
@@ -65,10 +65,7 @@ function PostCard({ post, user, edit, openComments }) {
   };
 
   const [isCommentsModalOpen, setIsCommentsModalOpen] = useState(false);
-  const handleOpenCommentsModal = () => {
-    setIsCommentsModalOpen(true);
-  };
-
+  const [commentsCount, setCommentsCount] = useState(post.comments.length);
   const menuRef = useRef();
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -118,7 +115,8 @@ function PostCard({ post, user, edit, openComments }) {
         </div>
       </div>
 
-      <p className="mb-4">{post.desc}</p>
+      <p className="mb-0 text-lg text-gray-900 font-semibold">{post.title}</p>
+      <p className="mb-4 text-sm text-gray-500">{post.desc}</p>
       {post.imgUrl &&
         (isValidImage ? (
           <img
@@ -159,10 +157,10 @@ function PostCard({ post, user, edit, openComments }) {
         </div>
         <div>
           <button
-            onClick={handleOpenCommentsModal}
+            onClick={() => setIsCommentsModalOpen(true)}
             className={`flex items-center space-x-1 text-gray-500 ${openComments && "hover:underline"}`}
           >
-            <span>{post.comments.length} Comments</span>
+            <span>{commentsCount} Comments</span>
           </button>
         </div>
       </div>
@@ -171,7 +169,8 @@ function PostCard({ post, user, edit, openComments }) {
           post={post}
           user={user}
           edit={edit}
-          setIsCommentsModalOpen={setIsCommentsModalOpen}
+          setCommentsCount={setCommentsCount}
+          setModalOpen={setIsCommentsModalOpen}
         />
       )}
     </div>
