@@ -37,6 +37,19 @@ const MyCommunities = memo(() => {
     });
   };
 
+  const handleDeleteCommunity = (commId, restore = false) => { 
+      setallMyCommunities((prev) => {
+        const updatedCommunities = restore
+          ? [...prev, user.communities.find((comm) => comm._id === commId)]
+          : prev.filter((id) => id !== commId);
+
+        // Dispatch an action to update Redux state
+        dispatch(updateUserCommunities(updatedCommunities));
+
+        return updatedCommunities;
+      });
+  };
+
   const handleAddCreatedCommunity = (comm) => { 
     if (comm) { 
       setallMyCommunities([...allMyCommunities, comm]);
@@ -71,7 +84,7 @@ const MyCommunities = memo(() => {
           {user && allMyCommunities &&  allMyCommunities.length > 0 && (
               <div className="grid lg:grid-cols-1 xl:grid-cols-2 gap-4">
                   {allMyCommunities.map((communityID) => (
-                      <Community user={user ? user : null} key={communityID} communityId={communityID} leaveCommunity={handleLeaveCommunity}  />
+                      <Community user={user ? user : null} key={communityID} communityId={communityID} leaveCommunity={handleLeaveCommunity} deleteCommunity={handleDeleteCommunity}  />
                   ))}
               </div>
           )}

@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useState } from "react";
-import { socket } from "../Pages/socialHub/SocialHubLayout";
 import { API } from "../Api/Api";
 import { showToast } from "../Utils/showToast";
 
@@ -44,7 +43,6 @@ const useChat = () => {
                 content: newMessage.content,
             });
 
-            socket.current.emit("send-msg", newMessage);
         } catch (error) {
             showToast("error", "Error sending the message.");
             setMessages(tempMessages); // Rollback messages on failure

@@ -20,6 +20,9 @@ import { FaRegBookmark, FaBookmark } from "react-icons/fa6";
 import useSavedItems from "../../../Hooks/ProfileHooks/useSavedItemsHook";
 import { BiEdit, BiTrash, BiShare } from "react-icons/bi";
 
+import checkImageUrl from "../../../Utils/checkImageUrl";
+
+
 const VideoCard = React.memo(({ video, handleOpenVideoEdit, handleDeleteVideo, inProfile, isSaved=false, unsaveVideo}) => {
   const navigateTo = useNavigateTo();
   const [user, setUser] = useState(null);
@@ -126,6 +129,16 @@ const optionsRef = useRef(null);
     handleSaveVideo(video);
   }
 
+  const checkImg = async (url) => { 
+    await checkImageUrl(url).then((isValid) => {
+      if (isValid) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+  }
+
   return (
     <div  ref={ref} className="relative max-w-full flex flex-col items-center cursor-pointer trans ">
       {inView ? (
@@ -152,6 +165,7 @@ const optionsRef = useRef(null);
       {inView && (isLoaded ? <div className="flex gap-2 mt-3 w-full items-center">
         <div role="button" onClick={handleNavToUser}> 
           { user && user.profilePicture ? (
+            isValidUrl(user.profilePicture) && checkImg(user.profilePicture) ? 
             <LazyImage
               className="max-w-9 h-9 rounded-full"
               src={user.profilePicture}
@@ -161,17 +175,24 @@ const optionsRef = useRef(null);
                 </div>
               }
             />
+            : 
+            <FaUserCircle className="text-gray-300 w-9 h-9" />
           ) : (
             <FaUserCircle className="text-gray-300 w-9 h-9" />
           )}
         </div>
-        <div className="w-full flex flex-col gap-0.5">
-              <div  className="relative group inline-block w-fit">
-                    <h3 role="button" onClick={handleNavToVideoPlayer} className="text-sm lg:text-xs xl:text-sm font-semibold">
+        <div className="w-full flex flex-col gap-0.5  ">
+              <div  className="relative group inline-block">
+                    <h3
+                      role="button"
+                      onClick={handleNavToVideoPlayer}
+                      className="text-sm flex-wrap break-words text-wrap lg:text-xs xl:text-sm font-semibold break-all whitespace-normal overflow-hidden"
+                    >
                       {video.title.length > 50 ? video.title.slice(0, 50) + " ..." : video.title}
                     </h3>
+
                   <div
-                      className="opacity-0 w-[110%] hover:hidden text-sm  invisible group-hover:opacity-100 group-hover:visible absolute top-1/2 -left-2 trans  mt-2 bg-white text-gray-800 border border-gray-300 shadow-lg  z-10">
+                      className="opacity-0 w-[100%] hover:hidden text-sm  invisible group-hover:opacity-100 break-all whitespace-normal group-hover:visible absolute top-1/2 -left-2 trans  mt-2 bg-white text-gray-800 border border-gray-300 shadow-lg  z-10">
                       <p className="p-1 text-sm">{video.title}</p>
                   </div>
               </div>

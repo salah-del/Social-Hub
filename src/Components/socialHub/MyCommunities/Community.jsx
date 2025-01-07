@@ -8,8 +8,9 @@ import CommunityMembers from './CommunityMembers';
 import InviteUsersModal from './InviteUsersModal';
 import sweetalert from '../../../Utils/sweetalert';
 import { showToast } from '../../../Utils/showToast';
+import { BiTrash } from "react-icons/bi";
 
-const Community = memo(({user, communityId, leaveCommunity}) => {
+const Community = memo(({user, communityId, leaveCommunity, deleteCommunity}) => {
     const [community, setcommunity] = useState(null)
     const [loading, setloading] = useState(true)
     const [error, seterror] = useState(null)
@@ -23,7 +24,8 @@ const Community = memo(({user, communityId, leaveCommunity}) => {
                     setloading(true)
                     const comm = await axios.get(`${API.getCommunityById}/${communityId}`);
                     setcommunity(comm.data.community); 
-                    setIsCurrUserAdmin(comm.data.community.admins.includes(user._id)); 
+                    console.log(comm.data.community);
+                    setIsCurrUserAdmin(comm.data.community.admins.some((admin) => admin._id === user._id)); 
                 } catch (error) {
                     seterror(error);
                 } finally{ 
@@ -59,12 +61,38 @@ const Community = memo(({user, communityId, leaveCommunity}) => {
                 showToast('success', `You left the community`);
             } catch (error) {
                 console.error("Failed to leave the community:", error);
-                showToast('error', `${error.response.data.message || "You didn't leave the community"}`);
+                showToast('error', `${error?.response?.data?.message || "You didn't leave the community"}`);
                 // restore it again if error happend
                 leaveCommunity(null, community._id); 
             }
         }
     };
+
+    const handleDeleteCommunity = async () => { 
+        const details = {
+            title: 'Are you sure you want to delete community?',
+            text: `You are about to delete ${community ? community.name : "this community"}`,
+            confirmBtn: "Delete",
+            cancelBtn: "Cancel"
+        };
+        
+        const result = await sweetalert.deleteOrNot({ ...details });
+        if (result.isConfirmed)  { 
+            // optimistic remove
+            deleteCommunity(community._id)  // restore is false 
+            try {
+                // Call backend to leave the community
+                await axios.delete(`${API.deleteCommunity}/${community._id}`);
+                showToast('success', `Community deleted successfully`);
+            } catch (error) {
+                console.error("Failed to leave the community:", error);
+                showToast('error', `${error?.response?.data?.message || "Community wasn't deleted successfully"}`);
+                // restore it again if error happend
+                leaveCommunity(null, community._id); // restore is the id like true
+            }
+        }
+        
+    }
     
     return (
         <>
@@ -81,7 +109,10 @@ const Community = memo(({user, communityId, leaveCommunity}) => {
                 <div className="flex items-center justify-between">
                     <div className=" flex gap-1 max-sm:mr-auto items-center ">
                         <h3 className="font-bold text-sm sm:text-lg">{community.name.length > 18 ? community.name.slice(0, 15) + "..."  : community.name}</h3>
-                        {isCurrUserAdmin && <p>Delete</p>}
+                        {isCurrUserAdmin && 
+                            <button onClick={handleDeleteCommunity} className='p-2 ml-2 rounded-md trans hover:bg-gray-200'>
+                                <BiTrash className='text-xl text-main-color' />
+                            </button>}
                     </div>
                     <div className="flex gap-2   items-center">
                         {/* <p className="text-xs text-gray-600">Created {getDateFormatted(community.createdAt)}</p> */}

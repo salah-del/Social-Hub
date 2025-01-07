@@ -6,11 +6,14 @@ import VideoGrid from "../../Components/socialHub/MainPage/VideoGrid";
 import { getRandomVideos } from "../../Redux/slices/randomVideos";
 import { useLocation } from "react-router-dom";
 import Loader from "../../Utils/Loader";
+import { socket } from "./SocialHubLayout";
 
 const MainPage = () => {
   const dispatch = useDispatch();
   const { videos, status, error, currentPage, hasMore } = useSelector((state) => state.randomVideos);
   const [isFetchingMore, setIsFetchingMore] = useState(false);
+  
+  
 
   useEffect(() => {
     // Fetch initial videos on mount

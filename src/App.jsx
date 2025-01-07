@@ -1,11 +1,11 @@
 import Cookies from "js-cookie";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { Toaster } from "react-hot-toast";
 import { Route, Routes } from "react-router-dom";
 import LandingPageLayout from "./Pages/LandingPage/LandingPageLayout";
 import ProtectedRoute from "./Pages/ProtectedRoute";
 import PublicRoute from "./Pages/PublicRoute";
-import SocialHubLayout from "./Pages/socialHub/SocialHubLayout";
+import SocialHubLayout, { socket } from "./Pages/socialHub/SocialHubLayout";
 import Loader from "./Utils/Loader";
 import OTPField from "./Pages/Auth/OTPField";
 
@@ -35,6 +35,9 @@ import Friends from './Components/socialHub/Profile/Friends/Friends';
 const App = () => {
   const userID = Cookies.get("userID");
   const isAuthenticated = Boolean(userID); // if user has value (isAuth = true) else (isAuth = false)
+  
+  
+
   return (
     <div className="flex flex-col min-h-screen">
       <main className="flex-grow">

@@ -5,11 +5,18 @@ import useProfileVideosHook from "../../../../Hooks/ProfileHooks/useProfileVideo
 import Modal from "../../../../Utils/Modal";
 import VideoGrid from "../../MainPage/VideoGrid";
 import AddNewVideoModal from "./AddNewVideoModal";
+import UploadVideoModal from "./UploadVideoModal";
 
 const ProfileVideos = memo(() => {
     // const {user, status, error:userError} = useSelector((state) => state.user);
     const {user} = useOutletContext();
-    const {videos, getUserVideos, loading:loadingVideos, addVideoLoading,  error, addNewVideo,handleAddNewVideoModal, isAddNewVideoModalOpen, deleteVideo} = useProfileVideosHook();
+    const {videos, getUserVideos, 
+        loading:loadingVideos, addVideoLoading,  error, 
+        addNewVideo,handleAddNewVideoModal, 
+        isAddNewVideoModalOpen, deleteVideo,
+        handleOpenUploadVideoModal,
+        isUploadVideoModal
+    } = useProfileVideosHook();
     const {id} = useParams();
     useEffect(() => { 
         if (user && id) { 
@@ -23,13 +30,7 @@ const ProfileVideos = memo(() => {
         if (user && user._id)
             addNewVideo(user._id, inputs);
     }
-
-    // loading page
-    // if (status === "loading") { 
-    //     return <div className={`w-full flex items-center justify-center mt-10`} ><Loader /></div>
-    // } 
     
-    // Loading videos from backend
     if (loadingVideos)  
         return (
             <div className="w-full flex flex-col gap-5 ">
@@ -54,9 +55,14 @@ const ProfileVideos = memo(() => {
         <div className="w-full flex flex-col gap-6 ">
             <div className="w-full flex items-center justify-between">
                 <h2 className="text-2xl font-bold text-gray-800 ">{edit ? "My videos" : "Videos"}</h2>
-                {edit && videos && videos.length > 0 && <button onClick={handleAddNewVideoModal} className="ml-auto text-xs bg-main-color px-3 py-2 text-white trans hover:bg-sec-color rounded-md ">
-                    Add New Video
-                </button>}
+                <div className="flex items-center gap-3">
+                    {edit && videos && videos.length > 0 && <button onClick={handleOpenUploadVideoModal} className="ml-auto text-xs border border-main-color px-3 py-2 text-main-color trans hover:bg-gray-100 rounded-md ">
+                        Upload from Device
+                    </button>}
+                    {edit && videos && videos.length > 0 && <button onClick={handleAddNewVideoModal} className="ml-auto text-xs bg-main-color px-3 py-2 text-white trans hover:bg-sec-color rounded-md ">
+                        Add New Video
+                    </button>}
+                </div>
             </div>
 
             {videos && videos.length > 0 && <div className="mb-10">
@@ -77,8 +83,14 @@ const ProfileVideos = memo(() => {
             
             {
                 isAddNewVideoModalOpen && 
-                <Modal title={'Add New Video'} onClose={handleAddNewVideoModal} >
+                <Modal title={'Add new video'} onClose={handleAddNewVideoModal} >
                     <AddNewVideoModal addVideo={handleAddNewVideo} addVideoLoading={addVideoLoading}  />
+                </Modal>
+            }
+            {
+                isUploadVideoModal && 
+                <Modal title={'Upload video from device'} onClose={handleOpenUploadVideoModal} >
+                    <UploadVideoModal addVideo={handleAddNewVideo} addVideoLoading={addVideoLoading}  />
                 </Modal>
             }
         </div>

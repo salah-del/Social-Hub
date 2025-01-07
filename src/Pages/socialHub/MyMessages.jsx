@@ -21,29 +21,37 @@ const MyMessages = () => {
 
   const dispatch = useDispatch();
   const handleChangeSelectedChat = (chat) => { 
-    console.log("Sent chat ", chat);
     setSelectedChat(chat);
   }
 
   useEffect(() => {
-      const handleMsgReceive = (newMessage) => {
-        console.log("select", selectedChat);
-        if (selectedChat)
-          console.log(selectedChat._id == newMessage.senderId)
-        if (selectedChat && selectedChat._id == newMessage.senderId) { 
-          dispatch(receiveMessage(newMessage));
-        }
-        
-        const sender = {senderId: newMessage.senderId, receiverName:newMessage.senderName, receiverProfilePicture:newMessage.senderImg, content: newMessage.msg}
-        dispatch(reorderChatsWhenReceive(sender));
-      };
 
-      socket.on("msg-recieve", handleMsgReceive);
+    const handleMsgReceive = (newMessage) => {
+      console.log("Selected Chat:", selectedChat);
 
-      return () => {
-          socket.off("msg-recieve", handleMsgReceive);
+      if (selectedChat && selectedChat._id === newMessage.senderId) {
+        dispatch(receiveMessage(newMessage));
+      }
+
+      const sender = {
+        senderId: newMessage.senderId,
+        receiverName: newMessage.senderName,
+        receiverProfilePicture: newMessage.senderImg,
+        content: newMessage.msg,
       };
-  }, [dispatch, selectedChat]);
+      dispatch(reorderChatsWhenReceive(sender));
+    };
+
+
+    // Listen for events
+    socket.current.on("msg-recieve", handleMsgReceive);
+
+    return () => {
+      // Cleanup listeners
+      socket.current.off("msg-recieve", handleMsgReceive);
+    };
+  }, [dispatch, selectedChat, socket]);
+
   
   return (
     

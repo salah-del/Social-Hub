@@ -1,16 +1,16 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { FaSearch, FaUserCircle } from "react-icons/fa";
+import Cookies from "js-cookie";
+import React, { useEffect } from "react";
+import { FaUserCircle } from "react-icons/fa";
 import { Img } from "react-image";
 import Skeleton from "react-loading-skeleton";
+
 import Cookies from "js-cookie";
-import { useDispatch, useSelector } from "react-redux";
-import { getMyChats, setActiveChat } from "../../../Redux/slices/userChats";
+
 const ChatSidebar = ({ setSelectedChat, friendChat }) => {
   const userId = Cookies.get("userID");
   const {chats, status, error, activeChat} = useSelector((state) => state.userChats);
   const dispatch = useDispatch();
-  console.log(chats);
+
   
 
   useEffect(() => {
@@ -27,22 +27,38 @@ const ChatSidebar = ({ setSelectedChat, friendChat }) => {
     setSelectedChat(contactSent);
     dispatch(setActiveChat(id));
   };
+
+
+  const checkImg = async (url) => { 
+    await checkImageUrl(url).then((isValid) => {
+      if (isValid) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+  }
   
   return (
     <div className="w-full sm:w-1/4 bg-white border-l border-gray-300 py-4">
-      {/* Search Bar */}
-      <div className="flex items-center mb-4 px-4">
-        <FaSearch className="text-gray-500 mr-2" />
-        <input
-          type="text"
-          placeholder="Search contacts..."
-          className="w-full text-sm px-3 py-2 border rounded-md focus:outline-none"
-        />
-      </div>
-
+      {
+        status === "loading" && 
+        <div className="w-full h-full ">
+          {Array.from({ length: chats.length > 0 ? chats.length : 5 }).map((_, index) => (
+            <div key={index} className="flex items-center p-3  gap-3 ">
+                <Skeleton height="36px" width="36px" borderRadius={"100%"} />
+                <div className=" flex flex-col gap-1">
+                    <Skeleton height="20px" width="160px" />
+                    <Skeleton height="20px" width="80px" />
+                </div>
+            </div>
+          ))}
+        </div>
+      }
       {/* chats List */}
       <ul>
-        {chats.map((contact) =>{
+        {status == "succeeded" && chats.map((contact) =>{
+
           const chatId = (contact?.receiverId && userId  !== contact?.receiverId) ? contact?.receiverId : 
                           (contact?.senderId && userId  !== contact?.senderId) ? contact?.senderId : null;
           return (
@@ -52,6 +68,7 @@ const ChatSidebar = ({ setSelectedChat, friendChat }) => {
             onClick={() => handleSetSelectedChat(contact)}
           >
             { contact && contact.receiverProfilePicture ? (
+              checkImg(contact.receiverProfilePicture) ? 
               <Img
                 className="max-w-9 h-9 rounded-full"
                 src={contact.receiverProfilePicture}
@@ -60,7 +77,9 @@ const ChatSidebar = ({ setSelectedChat, friendChat }) => {
                     <Skeleton height="100%" width="100%" borderRadius={"100%"} />
                   </div>
                 }
-              />
+              /> 
+              :
+              <FaUserCircle className="text-gray-300 w-9 h-9" />
             ) : (
               <FaUserCircle className="text-gray-300 w-9 h-9" />
             )}

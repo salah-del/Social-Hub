@@ -2,7 +2,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import React, { memo, useEffect, useRef, useState } from "react";
 import { API } from "../../../Api/Api";
-import { socket } from "../../../Pages/socialHub/SocialHubLayout";
+// import { socket } from "../../../Pages/socialHub/SocialHubLayout";
 import { getMsgDateFormatted } from "../../../Utils/getMsgDateFormatted";
 import { showToast } from "../../../Utils/showToast";
 import Loader from "./../../../Utils/Loader";
@@ -12,7 +12,8 @@ import { fetchMessages, sendMessage } from "../../../Redux/slices/chatSlice";
 import { reorderChatsWhenSend } from "../../../Redux/slices/userChats";
 
 const ChatScreen = memo(({ chat, friendChat }) => {
-  console.log(chat);
+
+
   
   const [message, setMessage] = useState("");
   const chatScreenRef = useRef(null);
@@ -20,9 +21,14 @@ const ChatScreen = memo(({ chat, friendChat }) => {
   const {user} = useSelector((state) => state.user);
   const [groupedMessages, setGroupedMessages] = useState({});
   const { messages, loading, error } = useSelector((state) => state.chat);
+
+  
   const dispatch = useDispatch()
   useEffect(() => {
+    if (chat?._id) { 
       dispatch(fetchMessages(chat._id));
+    }
+
   }, [chat._id, dispatch]);
 
   const handleSendMessage = (receiverId) => {
@@ -62,12 +68,9 @@ const ChatScreen = memo(({ chat, friendChat }) => {
   };
 
   useEffect(() => {
-    console.log("Changed");
-    
-    if (messages.length) {
-      groupMessagesByDate(messages);
-    }
-  }, [messages]); // Trigger re-grouping when `messages` changes
+
+    groupMessagesByDate(messages);
+  }, [chat?._id, messages]); // Trigger re-grouping when `messages` changes
 
   
 

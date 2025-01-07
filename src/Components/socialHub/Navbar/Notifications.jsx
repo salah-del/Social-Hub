@@ -22,15 +22,19 @@ const Notifications = () => {
   const [expandedMessages, setExpandedMessages] = useState({});
 
   useEffect(() => {
-    // Handle new notifications in real-time
-    socket.on("notification-received", (notification) => {
-      console.log("New notification received:", notification);
-      fetchUnreadNotifications();
-    });
-    return () => {
-      socket.disconnect();
-    };
-  }, [socket]);
+      // Listener for new notifications
+      console.log("Enter");
+      
+      socket.on("new-notification", (notification) => {
+        console.log("Entering");
+        console.log("New Notification:", notification);
+        // Handle the notification (e.g., show a toast, update state, etc.)
+      });
+  
+      return () => {
+        socket.off("new-notification"); // Cleanup the event listener when component unmounts
+      };
+    }, [socket]);
 
   const handleMarkAllAsRead = async () => {
     await markAllAsRead();
