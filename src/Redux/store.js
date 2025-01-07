@@ -4,7 +4,6 @@ import randomVideos from "./slices/randomVideos";
 import trendyVideos from "./slices/trendyVideos";
 import getUserSlice from "./slices/getUserById";
 import postsSlice from "./slices/postsReducer";
-import commentsSlice from "./slices/commentsReducer";
 import usersSlice from "./slices/usersSlice";
 import userChats from "./slices/userChats";
 import chatReducer from "./slices/chatSlice";
@@ -16,7 +15,6 @@ const store = configureStore({
     trendyVideos: trendyVideos,
     getUser: getUserSlice,
     posts: postsSlice,
-    comments: commentsSlice,
     users: usersSlice,
     userChats: userChats,
     chat: chatReducer,

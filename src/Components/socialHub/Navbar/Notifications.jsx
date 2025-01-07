@@ -1,10 +1,10 @@
-import { useState, useRef, useEffect, useMemo } from "react";
+import { useState, useRef, useEffect } from "react";
 import { FaBell, FaTimes } from "react-icons/fa";
 import { formatDate } from "../../../Utils/formatDate";
 import NotificationsHook from "../../../Hooks/NotificationsHook";
 import Loader from "../../../Utils/Loader";
 import { socket } from "../../../Pages/socialHub/SocialHubLayout";
-// import { socket } from "../../../Pages/socialHub/SocialHubLayout";
+
 const Notifications = () => {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef();
@@ -19,7 +19,8 @@ const Notifications = () => {
     markAllAsRead,
   } = NotificationsHook();
 
-  
+  const [expandedMessages, setExpandedMessages] = useState({});
+
   useEffect(() => {
       // Listener for new notifications
       console.log("Enter");
@@ -35,7 +36,7 @@ const Notifications = () => {
       };
     }, [socket]);
 
-  const handelMarkAllAsRead = async () => {
+  const handleMarkAllAsRead = async () => {
     await markAllAsRead();
     fetchUnreadNotifications();
   };
@@ -55,6 +56,17 @@ const Notifications = () => {
   useEffect(() => {
     fetchUnreadNotifications();
   }, [unreadNotifications.length]);
+
+  const toggleExpandMessage = (id) => {
+    setExpandedMessages((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
+
+  const truncateMessage = (message, length) => {
+    return message.length > length ? message.slice(0, length) + "..." : message;
+  };
 
   return (
     <div className="relative" ref={menuRef}>
@@ -95,7 +107,19 @@ const Notifications = () => {
                 >
                   <div className="space-y-1">
                     <p className="text-c-black font-semibold text-sm">
-                      {notification.message}
+                      {expandedMessages[notification._id]
+                        ? notification.message
+                        : truncateMessage(notification.message, 120)}
+                      {notification.message.length > 120 && (
+                        <button
+                          onClick={() => toggleExpandMessage(notification._id)}
+                          className="text-sec-colortext-sm ml-2"
+                        >
+                          {expandedMessages[notification._id]
+                            ? "Show Less"
+                            : "Show More"}
+                        </button>
+                      )}
                     </p>
                     <p className="text-xs text-gray-400">
                       {formatDate(notification.createdAt)}
@@ -113,7 +137,7 @@ const Notifications = () => {
             )}
 
             {loadingNotifications ? (
-              <div className={`flex justify-center h-[262px] items-center`}>
+              <div className="flex justify-center h-[262px] items-center">
                 <Loader width={"50px"} />
               </div>
             ) : notifications.notifications ? (
@@ -124,11 +148,23 @@ const Notifications = () => {
                 {notifications.notifications.map((notification, index) => (
                   <div
                     key={index}
-                    className={`flex items-start   border-b border-h-bg1 px-4 py-2 hover:bg-c-bg2`}
+                    className="flex items-start border-b border-h-bg1 px-4 py-2 hover:bg-c-bg2"
                   >
                     <div className="space-y-1">
                       <p className="text-c-black font-semibold text-sm">
-                        {notification.message}
+                        {expandedMessages[notification._id]
+                          ? notification.message
+                          : truncateMessage(notification.message, 120)}
+                        {notification.message.length > 120 && (
+                          <button
+                            onClick={() => toggleExpandMessage(notification._id)}
+                            className="text-sec-color text-sm ml-2"
+                          >
+                            {expandedMessages[notification._id]
+                              ? "Show Less"
+                              : "Show More"}
+                          </button>
+                        )}
                       </p>
                       <p className="text-xs text-gray-400">
                         {formatDate(notification.createdAt)}
@@ -139,7 +175,9 @@ const Notifications = () => {
               </div>
             ) : (
               <div
-                className={`text-center text-sm ${notifications.message && " py-4 border-t"} text-gray-500`}
+                className={`text-center text-sm ${
+                  notifications.message && " py-4 border-t"
+                } text-gray-500`}
               >
                 {notifications.message}
               </div>
@@ -153,7 +191,7 @@ const Notifications = () => {
               Show old notifications
             </button>
             <button
-              onClick={handelMarkAllAsRead}
+              onClick={handleMarkAllAsRead}
               disabled={
                 unreadNotifications.length === 0 || loadingNotifications
               }

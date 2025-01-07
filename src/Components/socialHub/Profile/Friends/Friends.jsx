@@ -9,7 +9,8 @@ import { useEffect, useState } from "react";
 
 export default function Friends() {
   const { user, edit, loading } = useOutletContext();
-
+  console.log(user);
+  
   const [friendRequests, setFriendRequests] = useState([]);
   const [blockedFriends, setBlockedFriends] = useState([]);
   const [unblockedFriends, setUnblockedFriends] = useState([]);
@@ -35,6 +36,7 @@ export default function Friends() {
       getUserFriendsInfo();
     }
   }, [user]);
+  
 
   const handleFriendRequestAction = (friend, actionType) => {
     if (actionType === "reject") {

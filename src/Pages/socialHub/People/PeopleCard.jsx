@@ -8,10 +8,13 @@ import { useUsers } from "../../../Hooks/useUsers";
 import { API } from "../../../Api/Api";
 import axios from "axios";
 import { isValidUrl } from "../../../Utils/validateURLs";
+import LoaderW from "../../../Utils/loaderW";
 const PeopleCard = ({ person }) => {
   const { handleSubscribe, handleUnsubscribe, handleAddFriend, error } =
     useUsers();
   const [isFollow, setIsFollow] = useState(person?.youFollow || false);
+  const [loadingFollow, setLoadingFollow] = useState(false);
+  const [loadingUnFollow, setLoadingUnFollow] = useState(false);
   const [didSendRequest, setDidSendRequest] = useState(
     person?.sendFriendRequest || false
   );
@@ -23,14 +26,18 @@ const PeopleCard = ({ person }) => {
     }
   }, [error]);
 
-  const handleUnFollowBtnClicked = () => {
+  const handleUnFollowBtnClicked = async () => {
+    setLoadingUnFollow(true);
+    await handleUnsubscribe(person._id);
     setIsFollow(false);
-    handleUnsubscribe(person._id);
+    setLoadingUnFollow(false);
   };
 
-  const handleFollowBtnClicked = () => {
+  const handleFollowBtnClicked = async () => {
+    setLoadingFollow(true);
+    await handleSubscribe(person._id);
     setIsFollow(true);
-    handleSubscribe(person._id);
+    setLoadingFollow(false);
   };
   const handleAddFriendBtnClicked = () => {
     setDidSendRequest(true);
@@ -81,23 +88,29 @@ const PeopleCard = ({ person }) => {
       {/* أزرار الإجراءات */}
       <div className="ml-4 flex flex-col max-[540px]:flex-row max-[365px]:flex-col items-end gap-2">
         {/* زر المتابعة/إلغاء المتابعة */}
-        {isFollow ? (
-          <button
-            onClick={handleUnFollowBtnClicked}
-            className="px-4 py-2 bg-sec-color text-white    hover:bg-main-color rounded-lg flex items-center transition "
-          >
-            <SlUserUnfollow className="mr-2" />
-            UnFollow
-          </button>
-        ) : (
-          <button
-            onClick={handleFollowBtnClicked}
-            className="px-[26px] py-2 bg-white hover:bg-gray-50 shadow  rounded-lg flex items-center transition"
-          >
-            <SlUserFollow className="mr-2" />
-            Follow
-          </button>
-        )}
+        <button
+          onClick={isFollow ? handleUnFollowBtnClicked : handleFollowBtnClicked}
+          disabled={isFollow ? loadingUnFollow : loadingFollow}
+          className="px-4 py-2 bg-sec-color text-white hover:bg-main-color rounded-lg flex items-center transition"
+        >
+          {isFollow ? (
+            loadingUnFollow ? (
+              <LoaderW className="w-[24px] mx-auto" />
+            ) : (
+              <>
+                <SlUserUnfollow className="mr-2" />
+                Unfollow
+              </>
+            )
+          ) : loadingFollow ? (
+            <LoaderW className="w-[24px] mx-auto" />
+          ) : (
+            <>
+              <SlUserFollow className="mr-2" />
+              Follow
+            </>
+          )}
+        </button>
 
         {/* زر إرسال طلب صداقة */}
         {didSendRequest ? (

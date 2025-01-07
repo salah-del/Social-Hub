@@ -40,19 +40,18 @@ const Reports = () => {
   const downloadReport = async (reportId) => {
     try {
       const response = await axios.get(`${API.downloadReport}/${reportId}`, {
-        responseType: 'blob',  
+        responseType: "blob",
       });
 
-      
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download", `report_${reportId}.pdf`); 
+      link.setAttribute("download", `report_${reportId}.pdf`);
       document.body.appendChild(link);
       link.click();
       link.remove();
     } catch (error) {
-      console.error('Error downloading report:', error);
+      console.error("Error downloading report:", error);
     }
   };
 
@@ -205,14 +204,15 @@ const Reports = () => {
                     </p>
                   </div>
                 </div>
-
-                <button
-                  className="flex items-center text-sec-color hover:underline"
-                  onClick={() => downloadReport(report._id)}
-                >
-                  <FaDownload className="mr-2" />
-                  Download
-                </button>
+                {/*
+                  <button
+                    className="flex items-center text-sec-color hover:underline"
+                    onClick={() => downloadReport(report._id)}
+                  >
+                    <FaDownload className="mr-2" />
+                    Download
+                  </button>
+                  */}
               </li>
             ))}
           </ul>

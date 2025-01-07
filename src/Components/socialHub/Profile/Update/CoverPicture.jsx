@@ -5,8 +5,8 @@ import InputForm from "../../../helpers/InputForm";
 import PasswordForm from "../../../helpers/PasswordForm";
 import ButtonForm from "../../../helpers/ButtonForm";
 import { useUsers } from "../../../../Hooks/useUsers";
-function CoverPicture({ user }) {
-  const { fetchUserById, handleUpdateUser, statusUpdate } = useUsers();
+function CoverPicture({ user, setCoverPicture }) {
+  const { handleUpdateUser, statusUpdate } = useUsers();
   const [isOpen, setIsOpen] = useState(false);
   const toggleModal = () => setIsOpen(!isOpen);
 
@@ -34,8 +34,8 @@ function CoverPicture({ user }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     await handleUpdateUser(user._id, values);
+    setCoverPicture(values.coverPicture);
     toggleModal();
-    fetchUserById(user._id);
   };
   return (
     <>

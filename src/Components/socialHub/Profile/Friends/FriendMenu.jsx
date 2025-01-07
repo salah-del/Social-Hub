@@ -16,6 +16,7 @@ export default function FriendMenu({ friend, edit, onAction, unblock }) {
   const [isOpen, setIsOpen] = useState(false);
   const [showInput, setShowInput] = useState(false);
   const [loadingSendCoins, setloadingSendCoins] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [dataSendCoins, setDataSendCoins] = useState({
     recipientName: friend.name,
     amount: "",
@@ -45,20 +46,24 @@ export default function FriendMenu({ friend, edit, onAction, unblock }) {
   };
 
   const handleBlockUser = async () => {
-    handleCloseMenu();
-    const result = await sweetalert.deleteOrNot({
-      title: `Do you want to block this friend?`,
-      confirmBtn: "Block",
-      cancelBtn: "Cancel",
-    });
-    if (result.isConfirmed) {
+    // const result = await sweetalert.deleteOrNot({
+    //   title: `Do you want to block this friend?`,
+    //   confirmBtn: "Block",
+    //   cancelBtn: "Cancel",
+    // });
+    // if (result.isConfirmed) {
+      setLoading(true);
       await blockUsers({ userToBlockId: friend.friendId });
+      setLoading(false);
       onAction("block");
-    }
+    // }
+    handleCloseMenu();
   };
 
   const handleUnBlockUser = async () => {
+    setLoading(true);
     await unBlockUsers({ userToUnblockId: friend.friendId });
+    setLoading(false);
     onAction("unblock");
     handleCloseMenu();
   };
@@ -155,7 +160,7 @@ export default function FriendMenu({ friend, edit, onAction, unblock }) {
                 onClick={handleBlockUser}
               >
                 <FaBan size={16} className="mr-2" />
-                Block
+                {loading ? "Blocking..." : "Block"}
               </li>
             )}
             {unblock && (
@@ -164,7 +169,7 @@ export default function FriendMenu({ friend, edit, onAction, unblock }) {
                 onClick={handleUnBlockUser}
               >
                 <CgUnblock size={18} className="mr-1.5 " />
-                Unblock
+                {loading ? "Unblocking..." : "Unblock"}
               </li>
             )}
           </ul>
