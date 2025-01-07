@@ -6,12 +6,16 @@ import { showToast } from "../../Utils/showToast";
 const useProfileVideosHook = () => {
     const [videos, setVideos] = useState([]);
     const [isAddNewVideoModalOpen, setIsAddNewVideoModalOpen] = useState(false);
+    const [isUploadVideoModal, setIsUploadVideoModal] = useState(false);
     const [loading, setLoading] = useState(true);
     const [addVideoLoading, setAddVideoLoading] = useState(false);
     const [error, setError] = useState(null);
 
     const handleAddNewVideoModal = () => { 
         setIsAddNewVideoModalOpen(prev => !prev);
+    }
+    const handleOpenUploadVideoModal = () => { 
+        setIsUploadVideoModal(prev => !prev);
     }
 
     const getUserVideos = async (uId ) => {
@@ -59,7 +63,12 @@ const useProfileVideosHook = () => {
         setVideos((prevVideos) => prevVideos.filter((video) => video._id !== videoId))
     }
 
-    return { videos, loading, addVideoLoading, error, getUserVideos, addNewVideo, deleteVideo, handleAddNewVideoModal, isAddNewVideoModalOpen };
+    return { 
+        videos, loading, addVideoLoading, 
+        error, getUserVideos, addNewVideo, deleteVideo, 
+        handleAddNewVideoModal, isAddNewVideoModalOpen, 
+        handleOpenUploadVideoModal, isUploadVideoModal 
+    };
 };
 
 export default useProfileVideosHook;

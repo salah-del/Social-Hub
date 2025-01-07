@@ -2,7 +2,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import React, { memo, useEffect, useRef, useState } from "react";
 import { API } from "../../../Api/Api";
-import { socket } from "../../../Pages/socialHub/SocialHubLayout";
+// import { socket } from "../../../Pages/socialHub/SocialHubLayout";
 import { getMsgDateFormatted } from "../../../Utils/getMsgDateFormatted";
 import { showToast } from "../../../Utils/showToast";
 import Loader from "./../../../Utils/Loader";
@@ -19,12 +19,10 @@ const ChatScreen = memo(({ chat, friendChat }) => {
   const {user} = useSelector((state) => state.user);
   const [groupedMessages, setGroupedMessages] = useState({});
   const { messages, loading, error } = useSelector((state) => state.chat);
-  console.log("Messages: ", messages);
   
   const dispatch = useDispatch()
   useEffect(() => {
     if (chat?._id) { 
-      console.log(chat);
       dispatch(fetchMessages(chat._id));
     }
   }, [chat._id, dispatch]);

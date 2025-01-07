@@ -29,7 +29,6 @@ const InviteUsersModal = memo(({ community, followersArr, followedArr, onClose }
                 ) || [];
                 const usersArray = await Promise.all([...followers, ...followed]);
                 setUsers(usersArray);
-                
             } catch (error) {
                 if (error && error.response && error.response.data && error.response.data.message) { 
                     setError(error.response.data.message)

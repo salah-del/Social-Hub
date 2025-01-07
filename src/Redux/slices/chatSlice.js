@@ -2,7 +2,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { API } from "../../Api/Api";
-import { socket } from "../../Pages/socialHub/SocialHubLayout";
+import { socket, SOCKET_URL } from "../../Pages/socialHub/SocialHubLayout";
+import { io } from "socket.io-client";
 
 
 // Fetch messages thunk
@@ -10,7 +11,6 @@ export const fetchMessages = createAsyncThunk(
     "chat/fetchMessages",
     async (chatId, { rejectWithValue }) => {
         try {
-            console.log("fetching messages for chatId : ", chatId);
             const response = await axios.get(`${API.getMessages}`, {
                 params: { receiverId: chatId },
             });
@@ -26,9 +26,6 @@ export const sendMessage = createAsyncThunk(
     "chat/sendMessage",
     async ({ message, userId, senderImg, senderName, receiverId }, { rejectWithValue, getState, dispatch }) => {
         try {
-            console.log(senderImg);
-            console.log(senderName);
-            
             const newMessage = {
                 msg: message,
                 senderId: userId,
@@ -38,10 +35,7 @@ export const sendMessage = createAsyncThunk(
                 content: message,
                 timestamp: Date.now(),
             };
-
-            console.log("msg sent : ", newMessage);
             
-
             // Optimistic UI update
             dispatch(addMessage(newMessage));
 
@@ -49,10 +43,8 @@ export const sendMessage = createAsyncThunk(
                 receiverId: receiverId,
                 content: newMessage.content,
             });
-
             socket.current.emit("send-msg", newMessage);
-
-            console.log(res.data);
+            
 
             return newMessage;
         } catch (error) {
@@ -73,7 +65,6 @@ const chatSlice = createSlice({
             state.messages.push(action.payload);
         },
         receiveMessage: (state, action) => {
-            console.log("Action : ", action.payload);
             state.messages.push(action.payload);
         },
         clearChat:(state) => { 
@@ -88,7 +79,6 @@ const chatSlice = createSlice({
             })
             .addCase(fetchMessages.fulfilled, (state, action) => {
                 state.loading = false;
-                console.log("action:", action.payload);
                 if (action.payload.length <= 0) {
                     state.messages = []; // Clear the messages
                 } else {

@@ -10,7 +10,6 @@ const ChatSidebar = ({ setSelectedChat, friendChat }) => {
   const userId = Cookies.get("userID");
   const {chats, status, error, activeChat} = useSelector((state) => state.userChats);
   const dispatch = useDispatch();
-  console.log(chats);
   
 
   useEffect(() => {
