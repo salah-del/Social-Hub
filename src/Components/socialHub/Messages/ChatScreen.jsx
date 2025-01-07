@@ -12,6 +12,8 @@ import { fetchMessages, sendMessage } from "../../../Redux/slices/chatSlice";
 import { reorderChatsWhenSend } from "../../../Redux/slices/userChats";
 
 const ChatScreen = memo(({ chat, friendChat }) => {
+
+
   
   const [message, setMessage] = useState("");
   const chatScreenRef = useRef(null);
@@ -19,12 +21,14 @@ const ChatScreen = memo(({ chat, friendChat }) => {
   const {user} = useSelector((state) => state.user);
   const [groupedMessages, setGroupedMessages] = useState({});
   const { messages, loading, error } = useSelector((state) => state.chat);
+
   
   const dispatch = useDispatch()
   useEffect(() => {
     if (chat?._id) { 
       dispatch(fetchMessages(chat._id));
     }
+
   }, [chat._id, dispatch]);
 
   const handleSendMessage = (receiverId) => {
@@ -64,6 +68,7 @@ const ChatScreen = memo(({ chat, friendChat }) => {
   };
 
   useEffect(() => {
+
     groupMessagesByDate(messages);
   }, [chat?._id, messages]); // Trigger re-grouping when `messages` changes
 

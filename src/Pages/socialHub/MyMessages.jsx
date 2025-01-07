@@ -25,6 +25,7 @@ const MyMessages = () => {
   }
 
   useEffect(() => {
+
     const handleMsgReceive = (newMessage) => {
       console.log("Selected Chat:", selectedChat);
 
@@ -50,6 +51,7 @@ const MyMessages = () => {
       socket.current.off("msg-recieve", handleMsgReceive);
     };
   }, [dispatch, selectedChat, socket]);
+
   
   return (
     

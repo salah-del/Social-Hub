@@ -8,10 +8,12 @@ export const getMyChats = createAsyncThunk(
     async (friendChat, { rejectWithValue }) => {
         try {
             const res = await axios.get(API.getUsersInChat);
+
             
             return {userChats : res.data.messages, friendChat};
         } catch (error) {
             // Handle network errors (e.g., no connection, server is down)
+
             if (!error.response) {
                 console.error('Network error:', error.message);
                 return rejectWithValue('Network error, please check your connection and try again.');
@@ -52,7 +54,9 @@ const handleNewChat = (myContacts) => {
 };
 
 const chatsOrganizer = (friendChat, chats, userId) => {
+
     if (!friendChat) return { updatedChats: chats, activeChatIndex: null };
+
 
     const index = chats.findIndex(chat => {
         const friendId = userId !== chat.receiverId ? chat.receiverId : chat.senderId;
@@ -61,12 +65,14 @@ const chatsOrganizer = (friendChat, chats, userId) => {
 
     if (index === -1) {
         // New chat, add to the top
+
         return { updatedChats: [friendChat, ...chats], activeChatIndex: friendChat.receiverId };
     }
 
     // Existing chat, set as active
     return { updatedChats: chats, activeChatIndex: friendChat.receiverId };
 };
+
 
 const userChats = createSlice({
     name: 'userChats',
@@ -97,6 +103,7 @@ const userChats = createSlice({
                 let existingChat = state.chats.splice(existingChatIndex, 1)[0];
                 existingChat.content = action.payload.content;
                 // Add the existing chat to the top
+
                 state.chats.unshift(existingChat);
             } else {
                 // If the chat doesn't exist, add it to the top
