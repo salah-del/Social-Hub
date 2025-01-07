@@ -10,6 +10,7 @@ export const fetchMessages = createAsyncThunk(
     "chat/fetchMessages",
     async (chatId, { rejectWithValue }) => {
         try {
+            console.log("fetching messages for chatId : ", chatId);
             const response = await axios.get(`${API.getMessages}`, {
                 params: { receiverId: chatId },
             });
@@ -87,10 +88,16 @@ const chatSlice = createSlice({
             })
             .addCase(fetchMessages.fulfilled, (state, action) => {
                 state.loading = false;
-                state.messages = action.payload;
+                console.log("action:", action.payload);
+                if (action.payload.length <= 0) {
+                    state.messages = []; // Clear the messages
+                } else {
+                    state.messages = action.payload;
+                }
             })
             .addCase(fetchMessages.rejected, (state, action) => {
                 state.loading = false;
+                
                 state.error = action.payload;
             })
             .addCase(sendMessage.rejected, (state, action) => {

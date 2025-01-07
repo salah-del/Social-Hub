@@ -54,7 +54,7 @@ const handleNewChat = (myContacts) => {
 };
 
 const chatsOrganizer = (friendChat, chats, userId) => {
-    if (!friendChat) return { updatedChats: chats, activeChatIndex: -1 };
+    if (!friendChat) return { updatedChats: chats, activeChatIndex: null };
 
     const index = chats.findIndex(chat => {
         const friendId = userId !== chat.receiverId ? chat.receiverId : chat.senderId;
@@ -63,11 +63,11 @@ const chatsOrganizer = (friendChat, chats, userId) => {
 
     if (index === -1) {
         // New chat, add to the top
-        return { updatedChats: [friendChat, ...chats], activeChatIndex: 0 };
+        return { updatedChats: [friendChat, ...chats], activeChatIndex: friendChat.receiverId };
     }
 
     // Existing chat, set as active
-    return { updatedChats: chats, activeChatIndex: index };
+    return { updatedChats: chats, activeChatIndex: friendChat.receiverId };
 };
 
 // export const reorderChatsWhenReceive = (sender) => { 

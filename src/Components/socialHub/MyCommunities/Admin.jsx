@@ -39,7 +39,7 @@ const Admin = memo(({admin}) => {
                     </div>
                 </div>
             }
-            {!loading && adminData && !error && <Link to={`/socialHub/user/${admin._id}`} className="flex gap-1 items-center">
+            {!loading && adminData && !error && <Link to={`/socialHub/profile/${admin._id}`} className="flex gap-1 items-center">
                 
                 { adminData && adminData.profilePicture ? (
                 <LazyImage

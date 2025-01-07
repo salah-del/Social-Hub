@@ -3,6 +3,7 @@ import React, { memo, useEffect, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import { API } from '../../../Api/Api';
 import LazyImage from '../../../Utils/LazyImage';
+import { Img } from 'react-image';
 
 const Member = memo(({member, index}) => {
     // Get member's pic 
@@ -38,7 +39,7 @@ const Member = memo(({member, index}) => {
             {!loading && !error && <div style={{marginLeft : index > 0 ? "-15px" : "0px"}} className="flex gap-1 items-center">
                 
                 { memberData && memberData.profilePicture ? (
-                <LazyImage
+                <Img
                     className="w-10 h-10 rounded-full"
                     src={memberData.profilePicture}
                     loader={
@@ -48,8 +49,8 @@ const Member = memo(({member, index}) => {
                     }
                     />
                 ) : ( !loading && 
-                        <LazyImage
-                            className="w-11 h-11 rounded-full bg-white"
+                        <Img
+                            className="w-10 h-10 rounded-full bg-white"
                             src={`/src/assets/user.svg`}
                             loader={
                                 <div className="w-10 h-10 rounded-full">

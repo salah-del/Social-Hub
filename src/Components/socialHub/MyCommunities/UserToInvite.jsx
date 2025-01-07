@@ -94,7 +94,7 @@ const UserToInvite = memo(({ user, communityId }) => {
                             <FaUserCircle className="text-gray-300 w-10 h-10" />
                         )}
                         <p className="text-sm text-gray-600">
-                            {user.name.length > 12 ? user.name.slice(0, 12) + "..." : user.name}
+                            {user.name.length > 20 ? user.name.slice(0, 20) + "..." : user.name}
                         </p>
                     </div>
                     {!inviteLoading && !pendingUser && !inviteSent &&  <button
