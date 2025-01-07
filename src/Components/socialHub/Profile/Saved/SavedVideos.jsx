@@ -8,22 +8,19 @@ import useSavedItems from "../../../../Hooks/ProfileHooks/useSavedItemsHook";
 import Loader from "../../../../Utils/Loader";
 import VideoCard from "../../MainPage/VideoCard";
 
-const SavedVideos = ({savedVideos, edit}) => {
+const SavedVideos = () => {
     
     const {videos,videosLoading:loading,  handleUnsaveVideo, getSavedVideos} = useSavedItems();
 
     useEffect(() => {
-        if (savedVideos?.length && videos.length == 0) {
-            console.log("called")
-            getSavedVideos(savedVideos);
-        }
-    }, [savedVideos]);
+        getSavedVideos();
+    }, []);
 
     const handleUnSaveVideoClicked = (video) => { 
         handleUnsaveVideo(video);
     }
-
-    return ( (loading || (edit && !savedVideos)) ? 
+    
+    return ( loading ? 
         <div className="w-full h-[250px] flex items-center justify-center">
             <Loader />
         </div>
@@ -33,7 +30,6 @@ const SavedVideos = ({savedVideos, edit}) => {
                 modules={[Navigation, Pagination, Autoplay]} // إضافة الموديولات المطلوبة
                 spaceBetween={24} // المسافة بين الشرائح
                 slidesPerView={1} // عدد الشرائح المرئية في العرض
-                // autoplay={{ delay: 2000 }} // إعدادات التشغيل التلقائي
                 breakpoints={{
                     640: { slidesPerView: 2 }, // عرض شريحتين للشاشات الصغيرة
                     1024: { slidesPerView: 3 }, // ثلاث شرائح للشاشات المتوسطة
@@ -43,7 +39,7 @@ const SavedVideos = ({savedVideos, edit}) => {
                 {videos && videos.map((video) => (
                     <SwiperSlide key={video._id} >
                         <div>
-                            <VideoCard video={video} isSaved={edit} unsaveVideo={handleUnSaveVideoClicked} />
+                            <VideoCard video={video} isSaved={true} unsaveVideo={handleUnSaveVideoClicked} />
                         </div>
                     </SwiperSlide>
                 ))}

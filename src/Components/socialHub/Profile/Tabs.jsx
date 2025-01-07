@@ -1,14 +1,8 @@
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { FaTable, FaBookmark, FaUserFriends } from "react-icons/fa";
 import { BiSolidVideos } from "react-icons/bi";
 import { Link } from "react-router-dom";
-const Tabs = ({openTab, id}) => {
-
-    
-
-
-
-
+const Tabs = memo(({openTab, id, edit}) => {
   const [activeTab, setActiveTab] = useState(openTab || "posts");
   useEffect(() => { 
     setActiveTab(openTab || "posts")
@@ -17,7 +11,7 @@ const Tabs = ({openTab, id}) => {
     { id: "posts", to: "", name: "POSTS", icon: <FaTable size={16} /> },
     { id: "videos", to: "videos", name: "VIDEOS", icon: <BiSolidVideos size={18} /> },
     { id: "friends", to: "friends" , name: "FRIENDS", icon: <FaUserFriends size={18} /> },
-    { id: "saved", to: "saved", name: "SAVED", icon: <FaBookmark size={15} /> },
+    edit && { id: "saved", to: "saved", name: "SAVED", icon: <FaBookmark size={15} /> },
   ];
   return (
     <div>
@@ -42,6 +36,6 @@ const Tabs = ({openTab, id}) => {
       </div>
     </div>
   );
-};
+});
 
 export default Tabs;

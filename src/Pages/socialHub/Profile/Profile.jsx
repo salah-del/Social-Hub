@@ -48,7 +48,7 @@ const Profile = () => {
     <div className="-m-2">
       <ProfileAndCover user={user} loading={loading} edit={edit} />
       <UserInfo user={user} loading={loading} edit={edit} />
-      <Tabs openTab={currentTab} id={id} />
+      <Tabs openTab={currentTab} id={id} edit={edit} />
       <Outlet context={{ user, edit, loading ,fetchUserById }} />
     </div>
   );

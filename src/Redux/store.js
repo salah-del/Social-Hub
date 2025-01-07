@@ -5,6 +5,9 @@ import trendyVideos from "./slices/trendyVideos";
 import getUserSlice from "./slices/getUserById";
 import postsSlice from "./slices/postsReducer";
 import usersSlice from "./slices/usersSlice";
+import userChats from "./slices/userChats";
+import chatReducer from "./slices/chatSlice";
+
 const store = configureStore({
   reducer: {
     user: userSlice,
@@ -13,6 +16,8 @@ const store = configureStore({
     getUser: getUserSlice,
     posts: postsSlice,
     users: usersSlice,
+    userChats: userChats,
+    chat: chatReducer,
   },
 });
 

@@ -12,15 +12,13 @@ const useSavedItems = () => {
     const dispatch = useDispatch();
 
     
-    const getSavedVideos = async (savedVideos) => {
+    const getSavedVideos = async () => {
         try {
             setVideosLoading(true)
-            const videoPromises = savedVideos.map(async (video) => {
-                const res = await axios.get(`${API.getVideo}/${video._id}`);
-                return res.data.video; // Return the video data
-            });
-            const videos = await Promise.all(videoPromises);
-            setVideos(videos);
+            const res = await axios.get(API.getSavedVideos);
+            console.log(res.data);
+            
+            setVideos(res.data.savedVideos);
         } catch (error) {
             console.error('Error fetching videos:', error);
             setVideosLoading(false)

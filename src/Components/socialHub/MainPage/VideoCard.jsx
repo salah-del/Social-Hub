@@ -15,9 +15,11 @@ import { showToast } from "../../../Utils/showToast";
 import sweetalert from "../../../Utils/sweetalert";
 import { isVideoURL } from "../../../Utils/validateURLs";
 import { copyURL } from './../../../Utils/copyURL';
-import { saveVideo, unSaveVideo } from "../../../Redux/slices/userSlice";
-import { useDispatch } from "react-redux";
+import { IoCopy } from "react-icons/io5";
+import { FaRegBookmark, FaBookmark } from "react-icons/fa6";
 import useSavedItems from "../../../Hooks/ProfileHooks/useSavedItemsHook";
+import { BiEdit, BiTrash, BiShare } from "react-icons/bi";
+
 const VideoCard = React.memo(({ video, handleOpenVideoEdit, handleDeleteVideo, inProfile, isSaved=false, unsaveVideo}) => {
   const navigateTo = useNavigateTo();
   const [user, setUser] = useState(null);
@@ -179,21 +181,34 @@ const optionsRef = useRef(null);
                 <button onClick={handleNavToUser} className="w-fit text-xs trans hover:text-black">{user ? user.name : "Default User"}</button>
                 <div ref={optionsRef} onClick={handleOpenOptions} className="relative w-6 h-6 group rounded-full flex items-center justify-center trans focus:bg-gray-200 hover:bg-gray-200 -mr-1">
                   <SlOptionsVertical className="text-sm" />
-                  {isOptionsOpen && <div  className="absolute  flex flex-col items-start overflow-hidden  -top-10 right-8 z-10 w-36 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm  ">
-                      <button onClick={handleCopyVideoURL} className="w-full text-left pl-2 trans hover:bg-gray-200 cursor-pointer py-1">Copy video URL</button>
-                      {!isSaved && <button onClick={handleSaveVideoClicked} className="w-full text-left pl-2 trans hover:bg-gray-200 cursor-pointer py-1">Save Video</button>}
-                      { isSaved && <button onClick={() => unsaveVideo(video)} className="w-full text-left pl-2 trans hover:bg-gray-200 cursor-pointer py-1">Unsave Video</button>}
-                      {video.userId && video.userId === userId && inProfile && <button onClick={handleClickEditBtn} className="w-full text-left pl-2 trans hover:bg-gray-200 cursor-pointer py-1">Edit Video</button>}
-                      {video.userId && video.userId === userId && inProfile &&  <button onClick={handleClickDeleteBtn} className="w-full text-main-color text-left pl-2 trans hover:bg-gray-200 cursor-pointer py-1">Delete Video</button>}
+                  {isOptionsOpen && <div  className="absolute text-black flex flex-col items-start overflow-hidden  -top-14 right-8 z-10 w-44  transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm  ">
+                      <button onClick={handleCopyVideoURL} className="w-full flex gap-2 items-center text-left px-4 trans hover:bg-gray-200 cursor-pointer py-2">
+                        <IoCopy />
+                        <p className="">Copy Link</p>
+                      </button>
+                      {!isSaved && <button onClick={handleSaveVideoClicked} className="w-full flex items-center gap-2 text-left px-4 trans hover:bg-gray-200 cursor-pointer py-2">
+                        <FaBookmark />
+                        Save Video
+                      </button>}
+                      { isSaved && <button onClick={() => unsaveVideo(video)} className="w-full flex items-center gap-2 text-left px-4 trans hover:bg-gray-200 cursor-pointer py-2">
+                        <FaRegBookmark />
+                        Unsave Video
+                      </button>}
+                      {video.userId && video.userId === userId && inProfile && <button onClick={handleClickEditBtn} className="w-full flex items-center gap-2 text-left px-4 trans hover:bg-gray-200 cursor-pointer py-2">
+                        <BiEdit />
+                        Edit Video
+                      </button>}
+                      {video.userId && video.userId === userId && inProfile &&  <button onClick={handleClickDeleteBtn} className="w-full text-main-color flex items-center gap-2 text-left px-4 trans hover:bg-gray-200 cursor-pointer py-2">
+                        <BiTrash />
+                        Delete Video
+                      </button>}
                   </div>}
                 </div>
               </div>
-
               <div role="button" onClick={handleNavToVideoPlayer} className="w-full  font-normal items-center flex gap-1 text-xs" >
                 <p className=" trans ">{video.views} views</p>
                 <span className="w-1 h-1 rounded-full bg-gray-600 mt-0.5" />
                 <p className="text-xs ">{getDateFormatted(video.createdAt)}</p>
-                
               </div>
             </div>
         </div>

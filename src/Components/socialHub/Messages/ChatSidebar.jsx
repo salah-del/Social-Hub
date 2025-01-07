@@ -4,34 +4,28 @@ import { FaSearch, FaUserCircle } from "react-icons/fa";
 import { Img } from "react-image";
 import Skeleton from "react-loading-skeleton";
 import Cookies from "js-cookie";
-import { API } from "../../../Api/Api";
-const ChatSidebar = ({ setSelectedChat }) => {
+import { useDispatch, useSelector } from "react-redux";
+import { getMyChats, setActiveChat } from "../../../Redux/slices/userChats";
+const ChatSidebar = ({ setSelectedChat, friendChat }) => {
   const userId = Cookies.get("userID");
-  const [myContacts, setMyContacts] = useState([]);
-  const [isActive, setIsActive] = useState(-1);
+  const {chats, status, error, activeChat} = useSelector((state) => state.userChats);
+  const dispatch = useDispatch();
+  console.log(chats);
   
+
   useEffect(() => {
-    const getFriends = async () => { 
-      try {
-        const res = await axios.get(API.getUsersInChat);
-        console.log(res);
-        setMyContacts(res.data.messages);
-      } catch (error) {
-        
-      }
-    }
-    if (userId) {
-      getFriends();
-    }
+    dispatch(getMyChats(friendChat));
   }, [userId]);
   
   const handleSetSelectedChat = (contact, index) => {
+    const id = (contact?.receiverId && userId  !== contact?.receiverId) ? contact?.receiverId : 
+    (contact?.senderId && userId  !== contact?.senderId) ? contact?.senderId : null;
     let contactSent = { 
-      _id: (userId  == contact.receiverId) ? contact.senderId : contact.receiverId ,
+      _id: id ,
       name: contact.receiverName,
     }
     setSelectedChat(contactSent);
-    setIsActive(index);
+    dispatch(setActiveChat(id));
   };
   
   return (
@@ -46,13 +40,16 @@ const ChatSidebar = ({ setSelectedChat }) => {
         />
       </div>
 
-      {/* Contacts List */}
+      {/* chats List */}
       <ul>
-        {myContacts.map((contact, index) => (
-          <li
-            key={contact.recieverId}
-            className={`flex items-center gap-3 p-3 ${isActive == index ? "bg-gray-200" : " hover:bg-gray-200"}  trans cursor-pointer `}
-            onClick={() => handleSetSelectedChat(contact, index)}
+        {chats.map((contact) =>{
+          const chatId = (contact?.receiverId && userId  !== contact?.receiverId) ? contact?.receiverId : 
+                          (contact?.senderId && userId  !== contact?.senderId) ? contact?.senderId : null;
+          return (
+            <li
+            key={chatId}
+            className={`flex items-center gap-3 p-3 ${activeChat == chatId ? "bg-gray-200" : " hover:bg-gray-200"}  trans cursor-pointer `}
+            onClick={() => handleSetSelectedChat(contact)}
           >
             { contact && contact.receiverProfilePicture ? (
               <Img
@@ -72,7 +69,8 @@ const ChatSidebar = ({ setSelectedChat }) => {
               <p className="text-sm text-gray-500">{contact.content}</p>
             </div>
           </li>
-        ))}
+          )
+        })}
       </ul>
     </div>
   );
