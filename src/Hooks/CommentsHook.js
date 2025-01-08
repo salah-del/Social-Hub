@@ -55,20 +55,77 @@ const CommentsActionsHook = () => {
     }
   };
 
-  const replyComment = async (data, setReplies, setRepliesCount) => {
-    setRepliesCount((prev) => prev + 1);
-    console.log("data = ", data);
+  const replyComment = async (data, setReplies) => {
+    setReplies((prevReplies) => [...prevReplies, data]);
+    const { user, ...cleanedData } = data;
+
+    // console.log("data = ", data);
 
     try {
-      const response = await axios.post(API.replyComment, data);
-      setReplies((prevReplies) => [...prevReplies, response.data.reply]);
-      console.log("response.data.reply = ", response.data);
+      const response = await axios.post(API.replyComment, cleanedData); // إرسال الطلب
+      // console.log("response.data = ", response.data);
+
+      // Replies تحويل البيانات المرجعة إلى نفس شكل
+      const newReply = {
+        category: response.data.reply.category,
+        desc: response.data.reply.desc,
+        objectId: response.data.reply._id,
+        replies: response.data.reply.replies || [],
+        replyTo: response.data.replyTo,
+        user: response.data.user,
+      };
+
+      // console.log("newReply = ", newReply);
+
+      setReplies((prevReplies) => {
+        const filteredReplies = prevReplies.filter(
+          (comment) => comment !== data
+        );
+        return [...filteredReplies, newReply];
+      });
 
       showToast("success", "Reply added successfully");
     } catch (error) {
-      setRepliesCount((prev) => prev - 1);
-      console.error(error);
+      setReplies((prevReplies) => {
+        const updatedReplies = [...prevReplies];
+        updatedReplies.pop();
+        return updatedReplies;
+      });
       showToast("error", "Failed to add reply");
+    }
+  };
+
+
+  const replyToReply = async (data, setReplies) => {
+    setReplies((prevReplies) => [...prevReplies, data]);
+    const { user, ...cleanedData } = data;
+  
+    try {
+      const response = await axios.post(API.replyComment, cleanedData);
+      const newReply = {
+        category: response.data.reply.category,
+        desc: response.data.reply.desc,
+        objectId: response.data.reply._id,
+        replies: response.data.reply.replies || [],
+        replyTo: response.data.reply.replyTo,
+        user: response.data.user,
+      };
+  
+      setReplies((prevReplies) => {
+        const filteredReplies = prevReplies.filter(
+          (comment) => comment !== data
+        );
+        return [...filteredReplies, newReply];
+      });
+  
+      showToast("success", "Reply to reply added successfully");
+    } catch (error) {
+      setReplies((prevReplies) => {
+        const updatedReplies = [...prevReplies];
+        updatedReplies.pop();
+        return updatedReplies;
+      });
+      showToast("error", "Failed to add reply to reply");
     }
   };
 
@@ -76,7 +133,7 @@ const CommentsActionsHook = () => {
     idComment,
     setComments,
     setCommentsCount,
-    setReplies,
+    setReplies
   ) => {
     let previousComments = [];
     let previousReplies = [];

@@ -1,17 +1,39 @@
 import { memo, useEffect, useState } from "react";
 import { FaTable, FaBookmark, FaUserFriends } from "react-icons/fa";
+import { MdHistory } from "react-icons/md";
 import { BiSolidVideos } from "react-icons/bi";
 import { Link } from "react-router-dom";
-const Tabs = memo(({openTab, id, edit}) => {
+const Tabs = memo(({ openTab, id, edit }) => {
   const [activeTab, setActiveTab] = useState(openTab || "posts");
-  useEffect(() => { 
-    setActiveTab(openTab || "posts")
-  }, [openTab,id]);
+  useEffect(() => {
+    setActiveTab(openTab || "posts");
+  }, [openTab, id]);
   const tabs = [
     { id: "posts", to: "", name: "POSTS", icon: <FaTable size={16} /> },
-    { id: "videos", to: "videos", name: "VIDEOS", icon: <BiSolidVideos size={18} /> },
-    { id: "friends", to: "friends" , name: "FRIENDS", icon: <FaUserFriends size={18} /> },
-    edit && { id: "saved", to: "saved", name: "SAVED", icon: <FaBookmark size={15} /> },
+    {
+      id: "videos",
+      to: "videos",
+      name: "VIDEOS",
+      icon: <BiSolidVideos size={18} />,
+    },
+    {
+      id: "friends",
+      to: "friends",
+      name: "FRIENDS",
+      icon: <FaUserFriends size={18} />,
+    },
+    edit && {
+      id: "saved",
+      to: "saved",
+      name: "SAVED",
+      icon: <FaBookmark size={15} />,
+    },
+    edit && {
+      id: "history",
+      to: "history",
+      name: "HISTORY",
+      icon: <MdHistory size={17} />,
+    },
   ];
   return (
     <div>
@@ -28,8 +50,8 @@ const Tabs = memo(({openTab, id, edit}) => {
                   : "hover:text-gray-700"
               }`}
             >
-              {tab.icon}
-              <span className="max-[385px]:hidden">{tab.name}</span>
+              <button title={tab.name}>{tab.icon}</button>
+              <span className="max-[490px]:hidden">{tab.name}</span>
             </Link>
           ))}
         </div>

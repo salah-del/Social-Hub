@@ -86,7 +86,7 @@ export const API = {
   /* ======= Reports ======= */
   AddReportUser: `${BASE_URL}/report/report`,
   getMyReports: `${BASE_URL}/report/user-reports`,
-  /* ======= Owners ======= */
+  /* ======= History ======= */
   /* ======= Premium ======= */
   subscribePlan: `${BASE_URL}/premium-plans/subscribe`,
   getUserPlanById: `${BASE_URL}/premium-plans/PlanType`, //     /:idUser

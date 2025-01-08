@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { AiOutlineSend, AiOutlineDelete } from "react-icons/ai";
 import { MdOutlineReply } from "react-icons/md";
 import profile from "../../../../../assets/profile.jpg";
@@ -20,7 +20,7 @@ const CommentCard = ({
   const [replyText, setReplyText] = useState("");
   const [showReplies, setShowReplies] = useState(false);
   const [replyToComment, setReplyToComment] = useState(false);
-  console.log(replies);
+  const [replyToUser, setReplyToUser] = useState("");
 
   useEffect(() => {
     if (repliesCount > 0) {
@@ -28,22 +28,37 @@ const CommentCard = ({
     }
   }, [repliesCount]);
 
-  const handleDeleteComment = async (commentId) => {
-    await deleteComment(commentId, setComments, setCommentsCount, setReplies);
-  };
-
   const { getRepliesOnComment, replyComment, deleteComment } =
     CommentsActionsHook();
 
   const handleReply = async (commentID) => {
     if (replyText.trim()) {
-      await replyComment(
-        { desc: replyText, commentId: commentID },
-        setReplies,
-        setRepliesCount
-      );
-      setReplyText("");
-      setReplyToComment(false);
+      let savedReply = replyText;
+      try {
+        setReplyText("");
+        setReplyToComment(false);
+        await replyComment(
+          {
+            desc: replyText,
+            commentId: commentID,
+            user: {
+              name: user?.name,
+              profilePicture: user?.profilePicture,
+            },
+          },
+          setReplies
+        );
+      } catch (error) {
+        setReplyText(savedReply);
+        setReplyToComment(true);
+      }
+    }
+  };
+
+  const handleKeyDown = (e, commentID) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleReply(commentID);
     }
   };
 
@@ -56,59 +71,47 @@ const CommentCard = ({
       />
       <div className={`flex-1 pb-1 ${borderB && "border-b"} border-gray-200`}>
         <div className="flex justify-between items-center">
-          {/* User Info */}
           <div className="space-y-1">
             <p className="text-sm font-medium">{comment.userId.name}</p>
             <p className="text-sm text-gray-600">{comment.desc}</p>
           </div>
-          {/* Reply, Delete Buttons */}
           <div className="flex items-center gap-2">
             <button
               className="text-gray-500 hover:text-gray-700"
               title="Reply"
-              onClick={() => setReplyToComment(!replyToComment)}
+              onClick={() => {
+                setReplyToComment(!replyToComment);
+                setReplyToUser(comment.userId.name);
+              }}
             >
               <MdOutlineReply size={16} />
             </button>
             <button
               className="text-gray-500 hover:text-red-600"
               title="Delete"
-              onClick={() => handleDeleteComment(comment._id)}
+              onClick={() => deleteComment(comment._id)}
             >
               <AiOutlineDelete size={16} />
             </button>
           </div>
         </div>
-        {/* Show Replies Button */}
-        {replies && replies.length > 0 && (
-          <button
-            className="text-sm text-sec-color mt-2"
-            onClick={() => setShowReplies(!showReplies)}
-          >
-            {showReplies
-              ? "Hide Replies"
-              : `${replies && replies.length} Replies`}
-          </button>
-        )}
 
-        {/* Show Replies */}
         {showReplies && (
-          <div className="mt-4 space-y-4">
+          <div className="mt-4 space-y-5">
             {replies.map((reply, index) => (
               <ReplyCard
                 key={index}
                 reply={reply}
-                handleDeleteComment={handleDeleteComment}
-                replyToComment={replyToComment}
-                setReplyToComment={setReplyToComment}
+                handleDeleteComment={deleteComment}
+                borderB={index !== replies.length - 1}
+                user={user}
               />
             ))}
           </div>
         )}
 
-        {/* Reply Input */}
         {replyToComment && (
-          <div className="flex items-center py-4 gap-3 rounded-b-lg ">
+          <div className="flex items-center py-4 gap-3 rounded-b-lg">
             <img
               src={user.profilePicture}
               alt={user.name}
@@ -116,9 +119,15 @@ const CommentCard = ({
             />
             <input
               type="text"
-              placeholder="Write a reply..."
+              placeholder={`Replying to ${replyToUser}...`}
               value={replyText}
               onChange={(e) => setReplyText(e.target.value)}
+              onFocus={() => {
+                if (replyToUser && !replyText.includes(`@${replyToUser}:`)) {
+                  setReplyText(`@${replyToUser}: `);
+                }
+              }}
+              onKeyDown={(e) => handleKeyDown(e, comment._id)}
               className="flex-1 px-4 max-md:px-0 max-md:pl-1 py-2 border rounded-lg focus:outline-none focus:ring-1 ring-gray-400"
             />
             <button

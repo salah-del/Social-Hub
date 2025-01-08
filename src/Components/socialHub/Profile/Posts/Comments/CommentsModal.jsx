@@ -12,6 +12,7 @@ const CommentsModal = ({ post, user, setModalOpen, setCommentsCount }) => {
   const [comments, setComments] = useState([]);
   const [loadingComments, setLoadingComments] = useState(false);
   const [newComment, setNewComment] = useState("");
+  console.log(comments);
 
   useEffect(() => {
     if (post?._id) {
@@ -20,9 +21,9 @@ const CommentsModal = ({ post, user, setModalOpen, setCommentsCount }) => {
     }
   }, [post]);
 
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
   const handleAddComment = async () => {
-    setCount(count + 1)
+    setCount(count + 1);
     if (newComment.trim()) {
       const savedComment = newComment;
       setNewComment("");
@@ -45,6 +46,13 @@ const CommentsModal = ({ post, user, setModalOpen, setCommentsCount }) => {
         console.log("Error handleAddComment");
         setNewComment(savedComment);
       }
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleAddComment();
     }
   };
 
@@ -130,6 +138,7 @@ const CommentsModal = ({ post, user, setModalOpen, setCommentsCount }) => {
             placeholder="Write a comment..."
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
+            onKeyDown={handleKeyPress}
             className="flex-1 px-4 max-md:px-0 max-md:pl-1 py-2 border rounded-lg focus:outline-none focus:ring-1 ring-gray-400"
           />
           <button

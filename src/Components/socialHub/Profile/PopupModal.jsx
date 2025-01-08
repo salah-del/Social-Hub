@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { useSelector } from "react-redux";
 import profile from "../../../assets/profile.jpg";
-import LazyImage from "../../../Utils/LazyImage";
 import { Link } from "react-router-dom";
 import { API } from "../../../Api/Api";
 import axios from "axios";
@@ -29,7 +28,7 @@ function PopupModal({ count, title, usersId }) {
               const response = await axios.get(`${API.getUserById}/${id}`);
               return response.data; // استخدم البيانات المسترجعة
             } catch (error) {
-              console.error("Error fetching user data", error);
+              // console.error("Error fetching user data", error);
             }
           })
         );
@@ -92,10 +91,10 @@ function PopupModal({ count, title, usersId }) {
                 users.map((value, index) => (
                   <Link key={index} to={`/socialHub/profile/${value._id}`}>
                     <li className="flex items-center gap-3 hover:bg-gray-100 rounded-lg p-2 transition cursor-pointer">
-                      <LazyImage
+                      <img
                         src={value?.profilePicture || profile}
                         alt="profile"
-                        className="w-10 h-10 rounded-full cursor-pointer"
+                        className="w-10 h-10 rounded-full cursor-pointer border border-gray-200"
                       />
                       <span className="text-gray-700 font-medium cursor-pointer">
                         {value.name}

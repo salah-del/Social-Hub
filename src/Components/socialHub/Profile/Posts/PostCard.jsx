@@ -122,7 +122,7 @@ function PostCard({ post, user, edit, openComments }) {
           <img
             src={post.imgUrl}
             alt="Post content"
-            className="w-full max-h-[450px] object-cover rounded-lg mb-4"
+            className="w-full h-[450px] object-cover rounded-lg mb-4"
           />
         ) : (
           <div className="w-full h-80 flex items-center justify-center bg-gray-100 rounded-lg mb-4">

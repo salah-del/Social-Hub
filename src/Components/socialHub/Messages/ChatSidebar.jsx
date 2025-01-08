@@ -3,14 +3,13 @@ import React, { useEffect } from "react";
 import { FaUserCircle } from "react-icons/fa";
 import { Img } from "react-image";
 import Skeleton from "react-loading-skeleton";
-
-import Cookies from "js-cookie";
-
+import { useDispatch, useSelector } from "react-redux";
+import { getMyChats, setActiveChat } from "../../../Redux/slices/userChats";
+import checkImageUrl from './../../../Utils/checkImageUrl';
 const ChatSidebar = ({ setSelectedChat, friendChat }) => {
   const userId = Cookies.get("userID");
   const {chats, status, error, activeChat} = useSelector((state) => state.userChats);
   const dispatch = useDispatch();
-
   
 
   useEffect(() => {
@@ -58,7 +57,6 @@ const ChatSidebar = ({ setSelectedChat, friendChat }) => {
       {/* chats List */}
       <ul>
         {status == "succeeded" && chats.map((contact) =>{
-
           const chatId = (contact?.receiverId && userId  !== contact?.receiverId) ? contact?.receiverId : 
                           (contact?.senderId && userId  !== contact?.senderId) ? contact?.senderId : null;
           return (

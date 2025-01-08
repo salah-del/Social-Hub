@@ -22,21 +22,18 @@ const Reports = lazy(() => import("./Pages/socialHub/Reports"));
 const Trending = lazy(() => import("./Pages/socialHub/Trending"));
 const VideoPlayer = lazy(() => import("./Pages/socialHub/VideoPlayer"));
 
-
-
 const BetaBotAi = lazy(() => import("./Pages/socialHub/BetaBotAi"));
 const NotFound = lazy(() => import("./Pages/NotFound"));
-import ProfileVideos from './Components/socialHub/Profile/ProfileVideos/ProfileVideos';
-import Profile from './Pages/socialHub/Profile/Profile';
-import Posts from './Components/socialHub/Profile/Posts/Posts';
-import Saved from './Components/socialHub/Profile/Saved/Saved';
-import Friends from './Components/socialHub/Profile/Friends/Friends';
+import ProfileVideos from "./Components/socialHub/Profile/ProfileVideos/ProfileVideos";
+import Profile from "./Pages/socialHub/Profile/Profile";
+import Posts from "./Components/socialHub/Profile/Posts/Posts";
+import Saved from "./Components/socialHub/Profile/Saved/Saved";
+import Friends from "./Components/socialHub/Profile/Friends/Friends";
+import History from "./Components/socialHub/Profile/History/History";
 
 const App = () => {
   const userID = Cookies.get("userID");
   const isAuthenticated = Boolean(userID); // if user has value (isAuth = true) else (isAuth = false)
-  
-  
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -247,32 +244,13 @@ const App = () => {
             />
 
             <Route path="profile/:id" element={<Profile />}>
-                  <Route
-                    index
-                    element={
-                        <Posts />
-                    }
-                  />
-                  <Route
-                    path="videos"
-                    element={
-                        <ProfileVideos />
-                    }
-                  />
-                  <Route
-                    path="friends"
-                    element={
-                        <Friends />
-                    }
-                  />
-                  <Route
-                    path="saved"
-                    element={
-                        <Saved />
-                    }
-                  />
-                </Route>
+              <Route index element={<Posts />} />
+              <Route path="videos" element={<ProfileVideos />} />
+              <Route path="friends" element={<Friends />} />
+              <Route path="saved" element={<Saved />} />
+              <Route path="history" element={<History />} />
             </Route>
+          </Route>
 
           <Route
             path="*"
