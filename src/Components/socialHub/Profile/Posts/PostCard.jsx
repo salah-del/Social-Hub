@@ -6,10 +6,12 @@ import checkImageUrl from "../../../../Utils/checkImageUrl";
 import { usePosts } from "../../../../Hooks/usePosts";
 import CommentsModal from "../Posts/Comments/CommentsModal";
 import profile from "../../../../assets/profile.jpg";
+import LazyImage from "../../../../Utils/LazyImage";
+import Loader from "../../../../Utils/Loader";
+import Skeleton from "react-loading-skeleton";
 function PostCard({ post, user, edit, openComments }) {
   const [showActions, setShowActions] = useState(false);
   const [isValidImage, setIsValidImage] = useState(true);
-  // console.log(post);
 
   useEffect(() => {
     if (post.imgUrl) {
@@ -114,15 +116,19 @@ function PostCard({ post, user, edit, openComments }) {
           )}
         </div>
       </div>
-
-      <p className="mb-0 text-lg text-gray-900 font-semibold">{post.title}</p>
-      <p className="mb-4 text-sm text-gray-500">{post.desc}</p>
+      <p className="text- font-bold text-gray-900 mb-2 overflow-wrap break-words">
+        {post.title}
+      </p>
+      <p className="text-base  text-gray-600 leading-relaxed mb-3 overflow-wrap break-words">
+        {post.desc}
+      </p>
       {post.imgUrl &&
         (isValidImage ? (
-          <img
+          <LazyImage
             src={post.imgUrl}
             alt="Post content"
-            className="w-full h-[450px] object-cover rounded-lg mb-4"
+            className="w-full max-h-[450px] object-cover rounded-lg mb-4"
+            loader={<Skeleton height={450} width={"100%"} />}
           />
         ) : (
           <div className="w-full h-80 flex items-center justify-center bg-gray-100 rounded-lg mb-4">

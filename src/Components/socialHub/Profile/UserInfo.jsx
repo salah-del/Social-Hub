@@ -4,7 +4,7 @@ import PopupModal from "./PopupModal";
 import UserInformation from "./Update/UserInformation";
 import { usePosts } from "../../../Hooks/usePosts";
 import { useEffect, useState } from "react";
-const UserInfo = ({ user, loading, edit }) => {
+const UserInfo = ({ user, loading, edit ,fetchUserById }) => {
   const { posts, status } = usePosts();
   const [nameUser, setnameUser] = useState("");
 
@@ -22,7 +22,7 @@ const UserInfo = ({ user, loading, edit }) => {
         <div className="flex items-center max-[450px]:items-start gap-3 max-[450px]:flex-col">
           <h2 className="text-2xl font-bold text-gray-800">{nameUser}</h2>
           {/* Update User */}
-          <UserInformation user={user} edit={edit} setnameUser={setnameUser} />
+          <UserInformation user={user} edit={edit} setnameUser={setnameUser} fetchUserById={fetchUserById} />
         </div>
       )}
       <ul className="flex gap-5 max-sm:gap-2">

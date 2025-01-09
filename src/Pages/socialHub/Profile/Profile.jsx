@@ -19,7 +19,6 @@ const Profile = () => {
     () => location.pathname.split("/"),
     [location.pathname, id]
   );
-  
 
   const edit = useMemo(() => id === Cookies.get("userID"), [id]);
 
@@ -40,16 +39,20 @@ const Profile = () => {
     fetchUserById();
   }, [id]);
   console.log(user);
-  
 
   const currentTab = useMemo(() => pathSegments[4] || null, [pathSegments]);
 
   return (
     <div className="-m-2">
       <ProfileAndCover user={user} loading={loading} edit={edit} />
-      <UserInfo user={user} loading={loading} edit={edit} />
+      <UserInfo
+        user={user}
+        loading={loading}
+        edit={edit}
+        fetchUserById={fetchUserById}
+      />
       <Tabs openTab={currentTab} id={id} edit={edit} />
-      <Outlet context={{ user, edit, loading ,fetchUserById }} />
+      <Outlet context={{ user, edit, loading, fetchUserById }} />
     </div>
   );
 };

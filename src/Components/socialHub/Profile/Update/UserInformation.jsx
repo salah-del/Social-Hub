@@ -8,7 +8,8 @@ import { useUsers } from "../../../../Hooks/useUsers";
 import { useDispatch } from "react-redux";
 import { getCurrUser } from "../../../../Redux/slices/userSlice";
 import LoaderW from "../../../../Utils/LoaderW";
-function UserInformation({ user, edit, setnameUser }) {
+import GhostMode from "../GhostMode";
+function UserInformation({ user, edit, setnameUser , fetchUserById }) {
   console.log(user);
 
   const dispatch = useDispatch();
@@ -89,11 +90,14 @@ function UserInformation({ user, edit, setnameUser }) {
   return (
     <>
       {edit ? (
+        <div className="flex items-center gap-3">
         <div
-          className={`px-3 py-1 -mb-1 bg-gray-500 hover:bg-gray-600 rounded-full text-c-white transition-colors duration-200 cursor-pointer`}
-          onClick={toggleModal}
+        className={`px-3 py-1 -mb-1 bg-gray-500 hover:bg-gray-600 rounded-full text-c-white transition-colors duration-200 cursor-pointer`}
+        onClick={toggleModal}
         >
-          Edit Profile
+        Edit Profile
+        </div>
+        <GhostMode user={user} fetchUserById={fetchUserById} />
         </div>
       ) : isFollow ? (
         <div

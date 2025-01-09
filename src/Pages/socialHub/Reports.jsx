@@ -169,9 +169,9 @@ const Reports = () => {
         <h2 className="text-xl font-semibold text-gray-700 mb-4">My Reports</h2>
         {myReports.length > 0 ? (
           <ul className="divide-y divide-gray-200">
-            {myReports.map((report) => (
+            {myReports.map((report , index) => (
               <li
-                key={report._id}
+                key={index}
                 className="flex justify-between items-start py-4 max-md:flex-col max-sm:space-y-5"
               >
                 <div className="flex items-start space-x-4">

@@ -24,7 +24,7 @@ export const API = {
   addComment: `${BASE_URL}/comments`,
   replyComment: `${BASE_URL}/comments/addReply`,
   getComments: `${BASE_URL}/comments`, //     /:idPost
-  RepliesOnComment : `${BASE_URL}/comments/replies`,//     /:idComment
+  RepliesOnComment: `${BASE_URL}/comments/replies`, //     /:idComment
   deleteComment: `${BASE_URL}/comments`, //     /:idComment
   /* ======= Videos ======= */
   addVideo: `${BASE_URL}/videos`,
@@ -42,7 +42,7 @@ export const API = {
   unSaveVideo: `${BASE_URL}/videos/unsave`, //   /:videoId
   likeVideo: `${BASE_URL}/users/like`, //   /:videoId
   disLikeVideo: `${BASE_URL}/users/dislike`, //   /:videoId
-  getSavedVideos : `${BASE_URL}/videos/getSavedVideos`,
+  getSavedVideos: `${BASE_URL}/videos/getSavedVideos`,
   /* ======= Users ======= */
   getAllUsers: `${BASE_URL}/users/getRandomUsers`,
   searchByName: `${BASE_URL}/users/Search_Users_Name`,
@@ -87,9 +87,10 @@ export const API = {
   AddReportUser: `${BASE_URL}/report/report`,
   getMyReports: `${BASE_URL}/report/user-reports`,
   /* ======= History ======= */
+  SeeYourHistory: `${BASE_URL}/history/getmyhistory`,
   /* ======= Premium ======= */
   subscribePlan: `${BASE_URL}/premium-plans/subscribe`,
   getUserPlanById: `${BASE_URL}/premium-plans/PlanType`, //     /:idUser
   currentUserPlanExpiration: `${BASE_URL}/premium-plans/premium/expiration`,
-  /* ======= Test 222 ======= */
+  ghostMode: `${BASE_URL}/premium-plans/ghost-mode`,
 };

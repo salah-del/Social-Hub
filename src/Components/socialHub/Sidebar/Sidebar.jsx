@@ -18,14 +18,24 @@ import { useDispatch } from "react-redux";
 import sweetalert from "./../../../Utils/sweetalert";
 import { logUserOut } from "../../../Redux/slices/userSlice";
 import React from "react";
-
+import { useSelector } from "react-redux";
 const Sidebar = React.memo(({ isOpen, onClose }) => {
+  const { user } = useSelector((state) => state.user);
+  console.log(user);
+
   const location = useLocation();
 
   const dispatch = useDispatch();
   const handleLogout = async () => {
-    const result = await sweetalert.logout();
-    if (result.isConfirmed) dispatch(logUserOut());
+    if (user.isGhost) {
+      sweetalert.info(
+        "You cannot log out currently because you are in ghost mode. Please turn off ghost mode to be able to log out."
+      );
+      return;
+    } else {
+      const result = await sweetalert.logout();
+      if (result.isConfirmed) dispatch(logUserOut());
+    }
   };
 
   const menuItems = [

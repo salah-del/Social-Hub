@@ -95,7 +95,7 @@ export const getCurrUser = createAsyncThunk(
   "user/getCurrUser",
   async (id, { rejectWithValue }) => {
     try {
-      const userData = await axios.get(`${API.getUserById}/${id}`);
+      const userData = await axios.get(`${API.getUserById}/${id}`);      
       if (userData.status !== 200) {
         throw new Error(
           response.data.message || "Something went wrong with the backend."

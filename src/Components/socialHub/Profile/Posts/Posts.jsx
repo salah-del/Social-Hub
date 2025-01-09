@@ -9,13 +9,7 @@ function Posts() {
   const { user, edit, loading } = useOutletContext();
   const { fetchUserPosts, posts, status, error, resetPosts } = usePosts();
   const [isAddNewPostModalOpen, setIsAddNewPostModalOpen] = useState(false);
-
-  // console.log(posts);
-
-  const deletePostLocally = (id) => {
-    const updatedPosts = posts.filter((post) => post._id !== id);
-  };
-
+  
   const handlefetchUserPosts = async (id) => {
     resetPosts();
     await fetchUserPosts(id);
