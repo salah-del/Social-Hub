@@ -29,7 +29,7 @@ const Sidebar = React.memo(({ isOpen, onClose }) => {
   const handleLogout = async () => {
     if (user.isGhost) {
       sweetalert.info(
-        "You cannot log out currently because you are in ghost mode. Please turn off ghost mode to be able to log out."
+        "You cannot log out currently because you are in Ghost mode. Please turn off (Ghost) mode to be able to log out."
       );
       return;
     } else {
@@ -72,7 +72,7 @@ const Sidebar = React.memo(({ isOpen, onClose }) => {
     },
     {
       icon: TbMessagePlus,
-      text: "Beta Bot AI",
+      text: "Chatgpt 3.5",
       path: "betaBotAi",
       scr: "/socialHub/betaBotAi",
     },

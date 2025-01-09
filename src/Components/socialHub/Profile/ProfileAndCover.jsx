@@ -16,6 +16,9 @@ const ProfileAndCover = ({ user, loading, edit }) => {
       setProfilePicture(user.profilePicture);
     }
   }, [user]);
+
+  const isGhost = user?.isGhost;
+
   return (
     <div>
       {/* Cover Image */}
@@ -24,7 +27,7 @@ const ProfileAndCover = ({ user, loading, edit }) => {
           <Skeleton height={155} />
         ) : (
           <img
-            src={isValidUrl(coverPicture) ? coverPicture :  cover}
+            src={isValidUrl(coverPicture) ? coverPicture : cover}
             alt="Something Wrong With Cover Picture"
             className="w-full h-[155px] object-cover"
           />
@@ -42,7 +45,9 @@ const ProfileAndCover = ({ user, loading, edit }) => {
           <img
             src={isValidUrl(profilePicture) ? profilePicture : profile}
             alt="profile"
-            className="mr-5 Cover Picture -mt-11 w-20 h-20 sm:-mt-12 sm:w-[105px] sm:h-[105px] lg:w-36 lg:h-36 lg:-mt-20 rounded-full border-2 border-gray-300"
+            className={`mr-5 Cover Picture -mt-11 w-20 h-20 sm:-mt-12 sm:w-[105px] sm:h-[105px] lg:w-36 lg:h-36 lg:-mt-20 rounded-full border-2 border-gray-300 ${
+              isGhost ? "border-red-500 animate-pulse" : ""
+            }`}
           />
         )}
         {edit && (
