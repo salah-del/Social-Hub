@@ -72,7 +72,7 @@ const Sidebar = React.memo(({ isOpen, onClose }) => {
     },
     {
       icon: TbMessagePlus,
-      text: "Chatgpt 3.5",
+      text: "AI Chat 3.5",
       path: "betaBotAi",
       scr: "/socialHub/betaBotAi",
     },

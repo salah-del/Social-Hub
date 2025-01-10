@@ -47,7 +47,7 @@ const BetaBotAI = () => {
     <div className="relative max-w-full mx-auto mt-8 bg-gradient-to-r from-blue-50 to-white rounded-lg shadow-lg p-6">
       <div className="relative bg-gradient-to-r from-blue-200 to-gray-100 border border-gray-300 rounded-lg p-4 shadow-xl">
         <h1 className="text-4xl font-extrabold text-gray-900 mb-4 text-center">
-          Chatgpt 3.5 Beta
+          AI Chat 4.O
           <span className="text-red-500 italic text-lg ml-2 border border-red-500 rounded-full px-3 py-1 bg-white shadow-sm">
             New
           </span>
